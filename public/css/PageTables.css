@@ -1,0 +1,219 @@
+    /* Estilos generales de la tabla */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Encabezado de la tabla */
+    th {
+        background-color: #4c59af;
+        color: white;
+        padding: 10px;
+        text-align: left;
+    }
+
+    /* Filas de la tabla */
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Fila cuando el ratón pasa sobre ella */
+    tr:hover {
+        background-color: #f2f2f2;
+    }
+
+    /* Estilo de las celdas de acción */
+    td:last-child {
+        text-align: center;
+    }
+
+    /* Estilos para la tabla cuando tiene contenido */
+    tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    /* Estilos de borde en las celdas */
+    td,
+    th {
+        border: 1px solid #ddd;
+    }
+
+    /* Estilos para el buscador de DataTable */
+    .dataTables_filter {
+        float: left;
+        text-align: right;
+        margin-right: 10px;
+        margin-top: 5px;
+
+    }
+
+    .dataTables_filter label {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .dataTables_filter input {
+        padding: 6px;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    /* Estilos para la paginación de DataTable */
+    .dataTables_paginate {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 6px 12px;
+        margin: 0 3px;
+        background-color: #4c59af;
+        color: white;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background-color: #6c7bdb;
+    }
+
+    .dataTables_paginate .paginate_button:disabled {
+        background-color: #ddd;
+        color: #888;
+    }
+
+    /* Estilos para los botones en las celdas de acción */
+    .action-buttons {
+        display: flex;
+        /* Utiliza flexbox */
+        justify-content: center;
+        /* Centra los botones horizontalmente */
+        gap: 10px;
+        /* Espacio entre los botones */
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    /* Estilos responsivos */
+    @media (max-width: 768px) {
+
+        /* Apilar las celdas de la tabla en dispositivos pequeños */
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+            display: block;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: right;
+            padding: 10px;
+            position: relative;
+        }
+
+        td {
+            border: none;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        td:before {
+            content: attr(data-title);
+            font-weight: bold;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            /* Apila los botones */
+            gap: 5px;
+        }
+
+        /* Ajusta los botones */
+        .btn {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        .dataTables_filter {
+            float: none;
+            text-align: left;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .dataTables_paginate {
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        /* Reducción de los márgenes y padding para pantallas muy pequeñas */
+        td,
+        th {
+            padding: 6px;
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 6px 10px;
+        }
+    }
+
+    .add-form {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #4caf4c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }

@@ -1,0 +1,67 @@
+
+@media (max-width: 768px) {
+    .container-graph {
+        width: 90%;
+    }
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    justify-items: center;
+    gap: 10px; /* Espacio entre los gráficos */
+    margin: 10px; /* Espacio alrededor del contenedor */
+}
+
+.container-graph h3 {
+    margin: 0px;
+}
+
+.container-graph {
+    width: 80%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.content-data {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta automáticamente las columnas */
+    gap: 1rem; /* Espacio entre tarjetas */
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.data {
+
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.data h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.data p {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.espera {
+ background-color: #5d6d7e ;
+}
+
+.progreso {
+    background-color: #e67e22;
+}
+
+.finalizado {
+    background-color: #28b463;
+}

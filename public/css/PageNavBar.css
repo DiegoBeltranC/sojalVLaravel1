@@ -1,0 +1,113 @@
+.navbar-content {
+    position: fixed;
+    width: 100%;
+    height: 3.5rem;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+}
+
+.logo {
+    height: 70%;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+
+.settings {
+    border-radius: 0px;
+    margin-top: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.enlace-button{
+    margin-bottom: 5px;
+}
+
+.button-red {
+    border-radius: 0px;
+    width: 100%;
+    margin: 0px;
+}
+
+.title {
+    color: black;
+}
+
+.menu-icon {
+    margin-left: 1.5%;
+    height: 55%;
+    cursor: pointer;
+   /* filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) brightness(100%) contrast(100%);*/
+}
+
+.photo {
+    height: 70%;
+    background-color: white;
+    border-radius: 50%;
+    margin-right: 2%;
+    cursor: pointer;
+}
+
+.notification {
+    height: 40%;
+    margin-left: auto;
+    margin-right: 1rem;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    filter: brightness(0) saturate(100%) invert(54%) sepia(17%) saturate(20%) hue-rotate(347deg) brightness(94%) contrast(92%);
+}
+.notification:hover {
+    background-color: #c6c6c62e;
+}
+
+.photo-profile {
+    height: 40%;
+    border-radius: 50%;
+}
+
+.profile-content {
+    position: fixed;
+    width: 14rem;
+    height: 17rem;
+    right: 1rem;
+    margin-top: 4rem;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: small;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+hr {
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.profile-content p {
+    margin: 0px;
+}
+
+.profile-content strong {
+    margin: 0px;
+    color: rgb(28, 28, 28);
+}
+
+.content-info {
+    margin-top: 0.8rem;
+    text-align: center;
+}
+
+.profile-content.active {
+    display: flex;
+}
+

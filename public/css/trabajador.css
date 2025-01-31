@@ -1,0 +1,96 @@
+/*A la clase modal le pone un color de fondo beige, esta clase se usa en el body de la pagina del formulario*/
+input[type=text], select, textarea {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+}
+
+/*Regla con selector pseudo-elemento, aplica para los elementos input de tipo
+submit*/
+input[type=submit] {
+    /*Elimina los bordes*/
+    border: none; 
+    /*Define el color de las letras en blanco*/
+    color: white; 
+    /*Asigna los valores de padding vertical en 14px y en horizontal en 28px*/
+    padding: 14px 28px; 
+    /*Cambia la forma del cursos cuando pasa encima*/
+    cursor: pointer; 
+    /*Redondea los bordes*/
+    border-radius: 5px; 
+    /*Pone color azul de fondo en el boton*/
+    background-color: #007bff;
+    /*Alinea el texto al centro*/
+    text-align: center;
+    /*Lo mantiene del lado derecho de la pagina*/
+    float: right;
+}
+
+h3{
+    text-align: center;
+}
+
+/*Regla con selector por clase, que aplica a los elementos que pertenecen a la
+clase col-50* los cuales son las fechas*/
+.col-derecha {
+    /*Lo mantiene fijo a la izquierda*/
+    float: right;
+    /*Ocupa el 50% del espacio total*/
+    width: 47%;
+    margin-top: 6px;
+}
+
+.col-izquierda {
+    /*Lo mantiene fijo a la izquierda*/
+    float: left;
+    /*Ocupa el 50% del espacio total*/
+    width: 47%;
+    margin-top: 6px;
+}
+
+.col-70 {
+    /*Lo mantiene fijo a la izquierda*/
+    float: left;
+    /*Ocupa el 50% del espacio total*/
+    width: 70%;
+    margin-top: 6px;
+}
+
+.col-30 {
+    /*Lo mantiene fijo a la izquierda*/
+    float: left;
+    /*Ocupa el 50% del espacio total*/
+    width: 25%;
+    margin-top: 6px;
+}
+
+
+/* Limpiar floats después de las columnas. */
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+.content-input input[type=radio] {
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    left: 15px;
+   }
+
+
+@media screen and (max-width: 900px) {
+    .col-derecha, .col-izquierda, input[type=submit] {
+    width: 100%;
+   margin-top: 0;
+    }
+
+    .col-70, .col-30, input[type=submit] {
+        width: 100%;
+       margin-top: 0;
+        }
+}

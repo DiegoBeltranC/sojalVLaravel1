@@ -1,0 +1,34 @@
+.home-container {
+    display: flex; /* Utiliza flexbox para alinear la sidebar y el contenido */
+    /* Ocupa toda la altura de la ventana */
+    background-color: #f2f2f2;
+}
+
+
+.content {
+    margin-left: 20%; /* Alinea el contenido a la derecha de la sidebar */
+    width: 80%; /* Opción: Se puede dejar así, o quitar para que ocupe el espacio restante */
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 100%;
+    margin-top: 3.5rem;
+    transition: margin-left 0.3s ease, width 0.3s ease; /* Transiciones para margen, ancho y color de fondo */
+}
+
+.home-container.active .content {
+    margin-left: 5%;
+    width: 95%; 
+   
+}
+
+@media (max-width: 768px) {
+    .content {
+        margin-top: 10%;
+    }
+    .home-container.active .content {
+        margin-left: 15%;
+        width: 85%; 
+       
+    }    
+
+}

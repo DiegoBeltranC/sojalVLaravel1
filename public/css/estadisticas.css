@@ -1,0 +1,29 @@
+
+.graphic-container{
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.graphic-div{
+    width: 30%;
+    height: 300px;
+    margin: 12px;
+    border: 1px solid black;
+    display: flex;
+}
+
+.graphic-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.graphic-img img{
+    width: 70%;
+}
+
+.graphic-text{
+    padding: 12px;
+}

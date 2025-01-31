@@ -1,0 +1,212 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+/* Contenedor principal */
+.contenedor-principal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #f4f4f4;
+    margin-bottom: 5rem;
+}
+
+.contenedor-inf {
+    flex: 1 1 45%;
+    padding: 1rem;
+}
+
+.contenedor-inf h1 {
+    font-size: 2.5rem;
+    color: #006d5b; /* Verde azulado oscuro */
+    margin-bottom: 1rem;
+}
+
+.contenedor-inf p {
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.8;
+}
+
+.img {
+    flex: 1 1 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.img img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Sección: ¿Quiénes somos? */
+.section-info {
+    padding: 3rem 1rem;
+    background-color: #dff6f0; /* Verde claro suave */
+    text-align: center;
+    margin-top: 5rem;
+}
+
+.section-info h2 {
+    font-size: 2rem;
+    color: #006d5b; /* Verde azulado oscuro */
+    margin-bottom: 1.5rem;
+}
+
+.section-info p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 800px;
+    
+}
+/* Estilo general para las tarjetas del equipo */
+.team-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.team-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 1.5rem;
+    width: 200px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.team-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.team-card h3 {
+    font-size: 1.2rem;
+    color: #006d5b; /* Verde azulado oscuro */
+    margin-bottom: 0.5rem;
+}
+
+.team-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+
+/* Sección: Descargar App */
+.descargar-app .descargar-links {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btn-download {
+    text-decoration: none;
+    font-size: 1rem;
+    color: white;
+    background-color: #00796b; /* Verde azulado intermedio */
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-download:hover {
+    background-color: #004d40; /* Verde azulado oscuro */
+}
+
+.btn-disabled {
+    background-color: #bbb;
+    pointer-events: none;
+}
+
+
+/* Sección: Beneficios */
+.features {
+    padding: 3rem 1rem;
+    text-align: center;
+    background-color: #e8f8f5; /* Verde muy tenue */
+    margin-top: 5rem;
+}
+
+.features h2 {
+    font-size: 2rem;
+    color: #006d5b; /* Verde azulado oscuro */
+    margin-bottom: 5rem;
+}
+
+.container-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    max-width: 300px;
+    text-align: center;
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    color: #006d5b; /* Verde azulado oscuro */
+    margin-bottom: 1rem;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+    background-color: #004d40; /* Verde oscuro */
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.footer a {
+    color: #80cbc4; /* Verde claro */
+    text-decoration: none;
+    margin: 0 0.5rem;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
