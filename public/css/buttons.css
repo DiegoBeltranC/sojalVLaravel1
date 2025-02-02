@@ -2,7 +2,7 @@
   background-color: rgb(159, 240, 159);
   color: #253a25;
   font-weight: 600;
-  
+
 }
 
 .add .button-icon {
@@ -15,11 +15,11 @@
 }
 
 button {
-    
+
     cursor: pointer;
     border: none;
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease;
     border-radius: 5%;
@@ -32,7 +32,8 @@ button {
 }
 
 .button-red {
-        height: 100%;
+    height: 100%;
+    width: 100%;
      background-color: transparent;
      color: #d63b3b;
      border: 2px solid #d63b3b;
@@ -47,7 +48,7 @@ button {
 .button-text {
     margin-right: 2px;
 }
-  
+
 .button-icon {
     width: 25%;
 }

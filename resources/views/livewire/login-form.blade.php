@@ -3,7 +3,7 @@
         <div id="loginForm">
             <form wire:submit.prevent="login" id="formsesion" class="formulario">
                 <div class="container">
-                    <a id="btnCancelar" wire:click="closeModal">
+                    <a id="btnCancelar" >
                         <img src="{{ asset('images/cancelar.png') }}" width="6%" alt="Cancelar">
                     </a>
                 </div>
@@ -42,5 +42,9 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 

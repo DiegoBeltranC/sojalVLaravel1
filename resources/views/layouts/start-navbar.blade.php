@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ViewHome.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ViewLogin.css') }}" />
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    @livewireStyles
   </head>
   <body>
 
@@ -41,7 +41,19 @@
             var div = document.querySelector('.body');
             div.style.display = 'none';
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+        Livewire.on('loginError', () => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Credenciales incorrectas o no eres admin.',
+            });
+        });
+    });
     </script>
+    @vite('resources/js/app.js')
 
     @livewireScripts
   </body>
