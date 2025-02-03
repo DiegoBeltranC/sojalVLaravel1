@@ -1,12 +1,12 @@
 <link rel="stylesheet" href="{{ asset('css/ViewSidebar.css') }}" />
 <div class="sidebar">
     <ol>
-      <a href="#">
-        <li class="option">
-          <img class="mi-svg" src="{{ asset('images/Icons/grafico-circular.svg') }}" alt="icon"/>
-          <p>Estadísticas</p>
-        </li>
-      </a>
+        <a href="{{ route('estadisticas') }}">
+            <li class="option {{ request()->routeIs('estadisticas') ? 'active' : '' }}">
+              <img class="mi-svg" src="{{ asset('images/Icons/grafico-circular.svg') }}" alt="icon"/>
+              <p>Estadísticas</p>
+            </li>
+          </a>
       <a href="#">
         <li class="option">
           <img class="mi-svg" src="{{ asset('images/Icons/lista.svg') }}" alt="Mi SVG feliz"/>
@@ -25,7 +25,7 @@
           <p>Trayectos</p>
         </li>
       </a>
-      <a href="#">
+      <a href="{{ route('usuarios') }}">
         <li class="option">
           <img class="mi-svg" src="{{ asset('images/Icons/usuarios.svg') }}" alt="Mi SVG feliz"/>
           <p>Usuarios</p>
@@ -37,9 +37,9 @@
           <p>Asignación</p>
         </li>
       </a>
-      <a href="#">
-        <li class="option">
-          <img class="mi-svg" src="{{ asset('images/Icons/trabajador.svg') }}" alt="Mi SVG feliz"/>
+      <a href="{{ route('trabajadores') }}">
+        <li class="option {{ request()->routeIs('trabajadores') ? 'active' : '' }}">
+          <img class="mi-svg" src="{{ asset('images/Icons/trabajador.svg') }}" alt="icon"/>
           <p>Trabajadores</p>
         </li>
       </a>

@@ -23,17 +23,24 @@ class LoginForm extends Component
 
 public function login()
 {
-    $this->validate();
-    $user = User::where('correo', $this->correo)->first();
-    // Verificar que el usuario fue encontrado y sus dato
-    if ($user && $user->rol === 'admin' && Hash::check($this->password, $user->password)) {
-        Auth::login($user);
-        session()->flash('success', 'Inicio de sesión exitoso.');
-        return redirect()->route('estadisticas');  // Redirigir a /estadisticas
-    }
+    try {
+        $this->validate(); // Realiza la validación
 
-    $this->dispatch('loginError');
+        $user = User::where('correo', $this->correo)->first();
+
+        if ($user && $user->rol === 'admin' && Hash::check($this->password, $user->password)) {
+            Auth::login($user);
+
+            return redirect()->to(route('estadisticas'));
+        }
+            session()->flash('error', 'Credenciales incorrectas o no eres admin.');
+            $this->dispatch('loginError'); // Emitir evento si las credenciales no son correctas
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        $this->dispatch('loginError'); // Emitir evento si falla la validación
+        throw $e; 
+    }
 }
+
 
 
 

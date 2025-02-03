@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/PageNavBar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/buttons.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Page.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/PageTables.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="navbar-content">
@@ -37,5 +40,6 @@
         @include('layouts.admin-sidebar')
         @yield('content')
     </div>
+    @yield('scripts')
 </body>
 </html>

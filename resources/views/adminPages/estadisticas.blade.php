@@ -1,6 +1,5 @@
 @extends('layouts.admin-navbar')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="{{ asset('css/Page.css') }}">
 <link rel="stylesheet" href="{{ asset('css/ViewEstadisticas.css') }}">
 
 @section('content')
