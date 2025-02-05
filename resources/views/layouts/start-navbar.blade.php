@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ViewHome.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/ViewLogin.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireStyles
   </head>
   <body>
@@ -43,7 +44,6 @@
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-
         Livewire.on('loginError', () => {
             Swal.fire({
                 icon: 'error',
@@ -53,7 +53,7 @@
         });
     });
     </script>
-    @vite('resources/js/app.js')
+
 
     @livewireScripts
   </body>

@@ -17,35 +17,31 @@ Route::get('/login', function () {
 // Logout (ya solo una vez)
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Ruta protegida para admin
-Route::get('/estadisticas', function () {
-    // Verifica si el usuario está autenticado
-    if (Auth::check()) {
+Route::middleware('auth')->prefix('admin')->group(function () {
+    // Estadísticas
+    Route::get('/estadisticas', function () {
         return view('adminPages.estadisticas');
-    } else {
-        // Si no está autenticado, redirige a la página principal
-        return redirect('/')->with('error', 'Debes iniciar sesión para acceder a esta página.');
-    }
-})->name('estadisticas')->middleware('auth');
+    })->name('admin.estadisticas');
 
-Route::get('/usuarios', function () {
-    // Verifica si el usuario está autenticado
-    if (Auth::check()) {
+    // Usuarios
+    Route::get('/usuarios', function () {
         return view('adminPages.usuarios');
-    } else {
-        // Si no está autenticado, redirige a la página principal
-        return redirect('/')->with('error', 'Debes iniciar sesión para acceder a esta página.');
-    }
-})->name('usuarios')->middleware('auth');
+    })->name('admin.usuarios');
 
-Route::get('/trabajadores', function () {
-    // Verifica si el usuario está autenticado
-    if (Auth::check()) {
-        return view('adminPages.trabajadores');
-    } else {
-        // Si no está autenticado, redirige a la página principal
-        return redirect('/')->with('error', 'Debes iniciar sesión para acceder a esta página.');
-    }
-})->name('trabajadores')->middleware('auth');
+    // Trabajadores (API o recurso)
+    Route::get('/trabajadores/api', [TrabajadorController::class, 'data'])
+        ->name('admin.trabajadores.data');
 
-Route::get('trabajadores/api', [TrabajadorController::class, 'data'])->name('trabajadores.data');
+    // Rutas RESTful para "trabajadores"
+    Route::resource('trabajadores', TrabajadorController::class)
+        ->names([
+            'index'   => 'admin.trabajadores.index',
+            'create'  => 'admin.trabajadores.create',
+            'store'   => 'admin.trabajadores.store',
+            'show'    => 'admin.trabajadores.show',
+            'edit'    => 'admin.trabajadores.edit',
+            'update'  => 'admin.trabajadores.update',
+            'destroy' => 'admin.trabajadores.destroy',
+        ]);
+});
+

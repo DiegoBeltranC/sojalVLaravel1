@@ -31,13 +31,13 @@ public function login()
         if ($user && $user->rol === 'admin' && Hash::check($this->password, $user->password)) {
             Auth::login($user);
 
-            return redirect()->to(route('estadisticas'));
+            return redirect()->to(route('admin.estadisticas'));
         }
             session()->flash('error', 'Credenciales incorrectas o no eres admin.');
             $this->dispatch('loginError'); // Emitir evento si las credenciales no son correctas
     } catch (\Illuminate\Validation\ValidationException $e) {
         $this->dispatch('loginError'); // Emitir evento si falla la validación
-        throw $e; 
+        throw $e;
     }
 }
 
