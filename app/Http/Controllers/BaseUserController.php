@@ -13,6 +13,9 @@ abstract class BaseUserController extends Controller
 
     public function index()
     {
+        if($this->role == 'ciudadano'){
+            return view('adminPages.ciudadanos');
+        }
         return view('adminPages.' . $this->role . 'es');
     }
 

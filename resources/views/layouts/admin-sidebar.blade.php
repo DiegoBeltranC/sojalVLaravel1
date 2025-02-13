@@ -25,10 +25,10 @@
           <p>Trayectos</p>
         </li>
       </a>
-      <a href="{{ route('admin.usuarios.index') }}">
-        <li li class="option {{ request()->routeIs('admin.usuarios.index') ? 'active' : '' }}">
+      <a href="{{ route('admin.ciudadanos.index') }}">
+        <li li class="option {{ request()->routeIs('admin.ciudadanos.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/usuarios.svg') }}" alt="Mi SVG feliz"/>
-          <p>Usuarios</p>
+          <p>Ciudadanos</p>
         </li>
       </a>
       <a href="#">

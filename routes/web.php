@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\AdministradorController;
+use App\Http\Controllers\CiudadanoController;
 use Illuminate\Support\Facades\Auth;
 
 // Ruta principal
@@ -23,9 +24,18 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     })->name('admin.estadisticas');
 
     // Usuarios
-    Route::get('/usuarios', function () {
-        return view('adminPages.usuarios');
-    })->name('admin.usuarios');
+    Route::get('/ciudadanos/api', [CiudadanoController::class, 'data'])
+         ->name('admin.ciudadanos.data');
+    Route::resource('ciudadanos', CiudadanoController::class)
+         ->names([
+             'index'   => 'admin.ciudadanos.index',
+             'create'  => 'admin.ciudadanos.create',
+             'store'   => 'admin.ciudadanos.store',
+             'show'    => 'admin.ciudadanos.show',
+             'edit'    => 'admin.ciudadanos.edit',
+             'update'  => 'admin.ciudadanos.update',
+             'destroy' => 'admin.ciudadanos.destroy',
+         ]);
 
     Route::get('/administradores/api', [AdministradorController::class, 'data'])
          ->name('admin.administradores.data');

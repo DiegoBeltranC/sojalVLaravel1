@@ -38,10 +38,10 @@
         </ul>
     </div>
 @endif
-    <h2>USUARIOS</h2>
+    <h2>CIUDADANOS</h2>
 
     <!-- Tabla de administradores -->
-    <table id="usuariosTable" style="width: 100%;">
+    <table id="ciudadanosTable" style="width: 100%;">
         <thead>
             <tr>
                 <th>ID</th>
@@ -60,10 +60,13 @@
 
 @section('scripts')
 <script>
-
+    $(document).ready(function () {
+        cargarTabla();
+    });
+    
     function cargarTabla() {
-        $('#administradoresTable').DataTable({
-            "ajax": "{{ route('admin.administradores.data') }}", // Llama a la ruta que retorna los datos
+        $('#ciudadanosTable').DataTable({
+            "ajax": "{{ route('admin.ciudadanos.data') }}", // Llama a la ruta que retorna los datos
             "columns": [
                 { "data": "id" },
                 {
@@ -99,22 +102,7 @@
                     "previous": "Anterior"
                 },
                 "search": "Buscar: "
-            },
-            "dom": '<"top"f>rt<"bottom"p><"clear">',
-            "initComplete": function (settings, json) {
-                // Agrega un botón "Nuevo Trabajador" antes de la tabla
-                var nuevoAdministrador = $('<button>', {
-                    text: 'Nuevo Administrador',
-                    class: 'add-form',
-                    id: 'openModalBtn',
-                    click: function () {
-                        // Aquí puedes abrir un modal o redirigir a una ruta para crear un nuevo trabajador
-                        modal.style.display = 'flex';
-                    }
-                });
-                $('#administradoresTable').before(nuevoAdministrador);
-            }
-        });
+            }});
     }
 
 
