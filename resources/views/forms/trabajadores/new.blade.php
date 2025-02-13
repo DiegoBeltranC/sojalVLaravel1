@@ -1,7 +1,6 @@
 <link rel="stylesheet" href="{{ asset('css/forms/newForm.css') }}">
 
 <div id="modal" class="modal">
-
         <div class="modal-content">
             <span id="closeModalBtn" class="close-btn">&times;</span>
             <h2>Registrar Trabajador</h2>

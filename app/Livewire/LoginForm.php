@@ -28,7 +28,7 @@ public function login()
 
         $user = User::where('correo', $this->correo)->first();
 
-        if ($user && $user->rol === 'admin' && Hash::check($this->password, $user->password)) {
+        if ($user && $user->rol === 'administrador' && Hash::check($this->password, $user->password)) {
             Auth::login($user);
 
             return redirect()->to(route('admin.estadisticas'));
@@ -41,12 +41,8 @@ public function login()
     }
 }
 
-
-
-
-
-    public function render()
-    {
-        return view('livewire.login-form');
-    }
+public function render()
+{
+    return view('livewire.login-form');
+}
 }

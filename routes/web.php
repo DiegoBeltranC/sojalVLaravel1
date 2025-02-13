@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TrabajadorController;
-
+use App\Http\Controllers\AdministradorController;
 use Illuminate\Support\Facades\Auth;
 
 // Ruta principal
@@ -18,7 +18,6 @@ Route::get('/login', function () {
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->prefix('admin')->group(function () {
-    // Estadísticas
     Route::get('/estadisticas', function () {
         return view('adminPages.estadisticas');
     })->name('admin.estadisticas');
@@ -28,20 +27,33 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         return view('adminPages.usuarios');
     })->name('admin.usuarios');
 
-    // Trabajadores (API o recurso)
-    Route::get('/trabajadores/api', [TrabajadorController::class, 'data'])
-        ->name('admin.trabajadores.data');
+    Route::get('/administradores/api', [AdministradorController::class, 'data'])
+         ->name('admin.administradores.data');
+    Route::resource('administradores', AdministradorController::class)
+         ->names([
+             'index'   => 'admin.administradores.index',
+             'create'  => 'admin.administradores.create',
+             'store'   => 'admin.administradores.store',
+             'show'    => 'admin.administradores.show',
+             'edit'    => 'admin.administradores.edit',
+             'update'  => 'admin.administradores.update',
+             'destroy' => 'admin.administradores.destroy',
+         ]);
 
-    // Rutas RESTful para "trabajadores"
+    // Rutas para trabajadores
+    Route::get('/trabajadores/api', [TrabajadorController::class, 'data'])
+         ->name('admin.trabajadores.data');
     Route::resource('trabajadores', TrabajadorController::class)
-        ->names([
-            'index'   => 'admin.trabajadores.index',
-            'create'  => 'admin.trabajadores.create',
-            'store'   => 'admin.trabajadores.store',
-            'show'    => 'admin.trabajadores.show',
-            'edit'    => 'admin.trabajadores.edit',
-            'update'  => 'admin.trabajadores.update',
-            'destroy' => 'admin.trabajadores.destroy',
-        ]);
+         ->names([
+             'index'   => 'admin.trabajadores.index',
+             'create'  => 'admin.trabajadores.create',
+             'store'   => 'admin.trabajadores.store',
+             'show'    => 'admin.trabajadores.show',
+             'edit'    => 'admin.trabajadores.edit',
+             'update'  => 'admin.trabajadores.update',
+             'destroy' => 'admin.trabajadores.destroy',
+         ]);
+
 });
+
 

@@ -19,11 +19,8 @@ class User extends Authenticatable
         'rol',
         'telefono',
         'fecha_nacimiento',
-        'foto_perfil',
         'curp',
         'rfc',
-        'camiones_asignados',
-        'reportes_activos',
         'fecha_creacion'
     ];
 

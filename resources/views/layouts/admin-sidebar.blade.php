@@ -25,8 +25,8 @@
           <p>Trayectos</p>
         </li>
       </a>
-      <a href="{{ route('admin.usuarios') }}">
-        <li class="option">
+      <a href="{{ route('admin.usuarios.index') }}">
+        <li li class="option {{ request()->routeIs('admin.usuarios.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/usuarios.svg') }}" alt="Mi SVG feliz"/>
           <p>Usuarios</p>
         </li>
@@ -49,9 +49,9 @@
           <p>Camiones</p>
         </li>
       </a>
-      <a href="#">
-        <li class="option">
-          <img class="mi-svg" src="{{ asset('images/Icons/ajustes.svg') }}" alt="Mi SVG feliz"/>
+      <a href="{{ route('admin.administradores.index') }}">
+        <li class="option {{ request()->routeIs('admin.administradores.index') ? 'active' : '' }}">
+          <img class="mi-svg" src="{{ asset('images/Icons/ajustes.svg') }}" alt="icon"/>
           <p>Administradores</p>
         </li>
       </a>

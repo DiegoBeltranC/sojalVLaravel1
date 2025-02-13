@@ -1,21 +1,21 @@
 @extends('layouts.admin-navbar')
 
 @section('content')
-@if(session('trabajadorGuardado'))
+@if(session('administradorGuardado'))
     <script>
         Swal.fire({
             title: '¡Éxito!',
-            text: "{{ session('trabajadorGuardado') }}",
+            text: "{{ session('administradorGuardado') }}",
             icon: 'success',
             confirmButtonText: 'Aceptar'
         });
     </script>
 @endif
-@if(session('trabajadorActualizado'))
+@if(session('administradorActualizado'))
     <script>
         Swal.fire({
             title: '¡Éxito!',
-            text: "{{ session('trabajadorActualizado') }}",
+            text: "{{ session('administradorActualizado') }}",
             icon: 'success',
             confirmButtonText: 'Aceptar'
         });
@@ -38,10 +38,10 @@
         </ul>
     </div>
 @endif
-    <h2>TRABAJADORES</h2>
+    <h2>ADMINISTRADORES</h2>
 
-    <!-- Tabla de trabajadores -->
-    <table id="trabajadoresTable" style="width: 100%;">
+    <!-- Tabla de administradores -->
+    <table id="administradoresTable" style="width: 100%;">
         <thead>
             <tr>
                 <th>ID</th>
@@ -55,18 +55,13 @@
         </tbody>
     </table>
 </div>
-@include('forms.trabajadores.new')
-@include('forms.trabajadores.view')
-@include('forms.trabajadores.edit')
+@include('forms.administrador.new')
+@include('forms.administrador.view')
+@include('forms.administrador.edit')
 @endsection
 
 @section('scripts')
-    <!-- Cargar jQuery y DataTables -->
-
-
-
-    <script>
-
+<script>
     const modal = document.getElementById('modal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     closeModalBtn.addEventListener('click', () => {
@@ -85,15 +80,13 @@
         modalEdit.style.display = 'none';
     });
 
-
-
     $(document).ready(function () {
         cargarTabla();
     });
 
     function cargarTabla() {
-        $('#trabajadoresTable').DataTable({
-            "ajax": "{{ route('admin.trabajadores.data') }}", // Llama a la ruta que retorna los datos
+        $('#administradoresTable').DataTable({
+            "ajax": "{{ route('admin.administradores.data') }}", // Llama a la ruta que retorna los datos
             "columns": [
                 { "data": "id" },
                 {
@@ -133,8 +126,8 @@
             "dom": '<"top"f>rt<"bottom"p><"clear">',
             "initComplete": function (settings, json) {
                 // Agrega un botón "Nuevo Trabajador" antes de la tabla
-                var nuevoTrabajador = $('<button>', {
-                    text: 'Nuevo Trabajador',
+                var nuevoAdministrador = $('<button>', {
+                    text: 'Nuevo Administrador',
                     class: 'add-form',
                     id: 'openModalBtn',
                     click: function () {
@@ -142,15 +135,14 @@
                         modal.style.display = 'flex';
                     }
                 });
-                $('#trabajadoresTable').before(nuevoTrabajador);
+                $('#administradoresTable').before(nuevoAdministrador);
             }
         });
     }
 
-    // Funciones para las acciones (debes implementarlas según tus necesidades)
     function ver(userId) {
         $.ajax({
-            url: 'trabajadores/' + userId, // Usamos la ruta de Laravel con el ID
+            url: 'administradores/' + userId, // Usamos la ruta de Laravel con el ID
             type: 'GET',
             dataType: 'json',
             success: function(response) {
@@ -176,9 +168,42 @@
             }
         });
     }
+
+    function eliminar(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `administradores/${id}`,  // Laravel ya genera esta ruta
+                    type: "DELETE",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Token CSRF
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire('¡Eliminado!', response.message, 'success');
+                            $('#administradoresTable').DataTable().ajax.reload();  // Recargar tabla
+                        } else {
+                            Swal.fire('¡Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('¡Error!', 'No se pudo eliminar el administrador.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
     function verEdit(userId) {
         $.ajax({
-            url: 'trabajadores/' + userId,
+            url: 'administradores/' + userId,
             type: 'GET',
             dataType: 'json',
             success: function(response) {
@@ -195,7 +220,7 @@
                     $('#id').val(response.data.id);
                     $('#curpEdit').val(response.data.curp);
                     modalEdit.style.display = 'flex';
-                    $('#trabajadorFormEdit').attr('action', 'trabajadores/' + userId);
+                    $('#trabajadorFormEdit').attr('action', 'administradores/' + userId);
                 }
             },
             error: function() {
@@ -204,42 +229,10 @@
         });
     }
 
-    function eliminar(id) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `trabajadores/${id}`,  // Laravel ya genera esta ruta
-                    type: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Token CSRF
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire('¡Eliminado!', response.message, 'success');
-                            $('#trabajadoresTable').DataTable().ajax.reload();  // Recargar tabla
-                        } else {
-                            Swal.fire('¡Error!', response.message, 'error');
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('¡Error!', 'No se pudo eliminar el trabajador.', 'error');
-                    }
-                });
-            }
-        });
-    }
 
 
-    </script>
+</script>
 
 
 
 @endsection
-
