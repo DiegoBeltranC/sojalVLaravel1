@@ -1,0 +1,25 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#6693
+    [34mnombre[39m: "[32mJuan[39m",
+    [34mapellidos[39m: [
+      "[34mpaterno[39m" => "[32mPerez[39m",
+      "[34mmaterno[39m" => "[32mGomez[39m",
+    ],
+    [34mcorreo[39m: "[32mjuan@example.com[39m",
+    #[33mpassword[39m: "[32m$2y$12$8Cyt39EU69kRS7zpnRTZguoZcn39rHybGo1S13wcOC9VNqfUxH9Re[39m",
+    [34mrol[39m: "[32mciudadano[39m",
+    [34mtelefono[39m: "[32m5551112233[39m",
+    [34mfecha_nacimiento[39m: "[32m1995-05-15[39m",
+    [34mcurp[39m: "[32mJUAN950515HDFRZZ02[39m",
+    [34mrfc[39m: "[32mJUAN950515XXX[39m",
+    [34mfecha_creacion[39m: [34;4mIlluminate\Support\Carbon @1739466324[39;24m {#6683
+      [34mdate[39m: [36m2025-02-13 17:05:24.291141 UTC (+00:00)[39m,
+    },
+    [34mupdated_at[39m: [34;4mMongoDB\BSON\UTCDateTime[39;24m {#6737
+      +"[1mmilliseconds[22m": "[32m1739466324520[39m",
+    },
+    [34mcreated_at[39m: [34;4mMongoDB\BSON\UTCDateTime[39;24m {#6737},
+    [34m_id[39m: [34;4mMongoDB\BSON\ObjectId[39;24m {#6537
+      +"[1moid[22m": "[32m67ae265544907f2896034f12[39m",
+    },
+  }
+

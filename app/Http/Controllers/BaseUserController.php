@@ -150,7 +150,10 @@ abstract class BaseUserController extends Controller
         $user->rfc = $rfc;
 
         $user->save();
-
+        if($user->rol== 'ciudadano' ){
+            return redirect()->route('admin.ciudadanos.index')
+            ->with($this->role . 'Actualizado', ucfirst($this->role) . ' actualizado correctamente.');
+        }
         return redirect()->route('admin.' . $this->role . 'es.index')
                          ->with($this->role . 'Actualizado', ucfirst($this->role) . ' actualizado correctamente.');
     }

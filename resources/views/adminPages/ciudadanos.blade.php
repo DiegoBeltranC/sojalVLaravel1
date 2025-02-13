@@ -1,21 +1,12 @@
 @extends('layouts.admin-navbar')
 
 @section('content')
-@if(session('administradorGuardado'))
+
+@if(session('ciudadanoActualizado'))
     <script>
         Swal.fire({
             title: '¡Éxito!',
-            text: "{{ session('administradorGuardado') }}",
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-        });
-    </script>
-@endif
-@if(session('administradorActualizado'))
-    <script>
-        Swal.fire({
-            title: '¡Éxito!',
-            text: "{{ session('administradorActualizado') }}",
+            text: "{{ session('ciudadanoActualizado') }}",
             icon: 'success',
             confirmButtonText: 'Aceptar'
         });
@@ -55,15 +46,33 @@
         </tbody>
     </table>
 </div>
+@include('forms.administrador.new') <!--Esta linea solo existe por un bug, si se quita, el flujo de las vistas se pierde-->
+@include('forms.ciudadanos.view')
+@include('forms.ciudadanos.edit')
 
 @endsection
 
 @section('scripts')
 <script>
-    $(document).ready(function () {
-        cargarTabla();
+    const modalView = document.getElementById('modalView');
+    const modalViewclose = document.getElementById('closeModalBtnView');
+    modalViewclose.addEventListener('click', () => {
+        modalView.style.display = 'none';
+    });
+
+    const modalEdit = document.getElementById('modalEdit');
+    const modalEditclose = document.getElementById('closeModalBtnEdit')
+    modalEditclose.addEventListener('click', () => {
+        modalEdit.style.display = 'none';
     });
     
+    $(document).ready(function () {
+        cargarTabla();
+        $('#searchInput').on('keyup', function() {
+            table.search(this.value).draw();
+        });
+    });
+
     function cargarTabla() {
         $('#ciudadanosTable').DataTable({
             "ajax": "{{ route('admin.ciudadanos.data') }}", // Llama a la ruta que retorna los datos
@@ -105,6 +114,91 @@
             }});
     }
 
+    function ver(userId) {
+        $.ajax({
+            url: 'ciudadanos/' + userId, // Usamos la ruta de Laravel con el ID
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.error) {
+                    alert('Error: ' + response.error);
+                } else {
+                    // Actualizar el modal con los datos del trabajador
+                    $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
+                    $('#fechaView').text(response.data.fechaNacimiento);
+                    $('#telefonoView').text(response.data.telefono);
+                    $('#correoView').text(response.data.correo);
+                    $('#fechaView').text(response.data.fecha_nacimiento);
+                    $('#curpView').text(response.data.curp);
+
+                    // Mostrar el modal
+                    modalView.style.display = 'flex';
+                }
+            },
+            error: function() {
+
+                alert('Ocurrió un error al cargar los datos.');
+            }
+        });
+    }
+
+    function eliminar(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `ciudadanos/${id}`,  // Laravel ya genera esta ruta
+                    type: "DELETE",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Token CSRF
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire('¡Eliminado!', response.message, 'success');
+                            $('#ciudadanosTable').DataTable().ajax.reload();  // Recargar tabla
+                        } else {
+                            Swal.fire('¡Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('¡Error!', 'No se pudo eliminar el ciudadano.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function verEdit(userId) {
+        $.ajax({
+            url: 'ciudadanos/' + userId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.error) {
+                    alert('Error: ' + response.error);
+                } else {
+                    $('#nombreEdit').val(response.data.nombre);
+                    $('#apellidoPEdit').val(response.data.apellidoP);
+                    $('#apellidoMEdit').val(response.data.apellidoM);
+                    $('#fechaEdit').val(response.data.fecha_nacimiento);
+                    $('#telefonoEdit').val(response.data.telefono);
+                    $('#correoEdit').val(response.data.correo);
+                    $('#id').val(response.data.id);
+                    modalEdit.style.display = 'flex';
+                    $('#trabajadorFormEdit').attr('action', 'ciudadanos/' + userId);
+                }
+            },
+            error: function() {
+                alert('Ocurrió un error al cargar los datos.');
+            }
+        });
+    }
 
 
 </script>
