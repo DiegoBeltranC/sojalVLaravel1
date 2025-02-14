@@ -81,7 +81,7 @@ abstract class BaseUserController extends Controller
         ]);
 
         return redirect()->route('admin.' . $this->role . 'es.index')
-                         ->with($this->role . 'Guardado', ucfirst($this->role) . ' registrado exitosamente.');
+        ->with($this->role . 'Guardado', ucfirst($this->role) . ' registrado exitosamente.');
     }
 
     public function show($id)
