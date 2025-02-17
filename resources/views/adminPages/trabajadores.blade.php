@@ -29,15 +29,7 @@
 </style>
 
 <div class="content">
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+
     <h2>TRABAJADORES</h2>
 
     <!-- Tabla de trabajadores -->
@@ -62,10 +54,16 @@
 
 @section('scripts')
     <!-- Cargar jQuery y DataTables -->
-
-
-
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if ($errors->any())
+                @if (session('typeFormErrors') == 'store')
+                    document.getElementById("modal").style.display = "flex";
+                @elseif (session('typeFormErrors') == 'edit')
+                    document.getElementById("modalEdit").style.display = "flex";
+                @endif
+            @endif
+        });
 
     const modal = document.getElementById('modal');
     const closeModalBtn = document.getElementById('closeModalBtn');

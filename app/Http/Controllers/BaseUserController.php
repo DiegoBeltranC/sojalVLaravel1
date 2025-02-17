@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -36,14 +35,16 @@ abstract class BaseUserController extends Controller
 
     public function store(Request $request)
     {
+        session(['typeFormErrors' => 'store']);
+
         // Validación. Nota: si en algún caso (por ejemplo, en ciudadanos) no se requieren
         // ciertos campos, puedes ajustar la validación según el rol.
         $rules = [
-            'nombre'        => 'required|string|max:255',
-            'apellidoP'     => 'required|string|max:255',
-            'apellidoM'     => 'required|string|max:255',
+            'nombre' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+            'apellidoP' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+            'apellidoM' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
             'fechaNacimiento' => 'required|date',
-            'telefono'      => 'required|string|max:15',
+            'telefono' => 'required|digits_between:8,15',
             'correo'        => 'required|email|unique:users,correo',
         ];
 
@@ -108,6 +109,8 @@ abstract class BaseUserController extends Controller
 
     public function update(Request $request, $id)
     {
+        session(['typeFormErrors' => 'edit']);
+
         $user = User::find($id);
 
         if (!$user || $user->rol !== $this->role) {
