@@ -109,7 +109,7 @@ abstract class BaseUserController extends Controller
 
     public function update(Request $request, $id)
     {
-        session(['typeFormErrors' => 'edit']);
+        session(['typeFormErrors' => 'update']);
 
         $user = User::find($id);
 
@@ -118,11 +118,11 @@ abstract class BaseUserController extends Controller
         }
 
         $rules = [
-            'nombre'        => 'required|string|max:255',
-            'apellidoP'     => 'required|string|max:255',
-            'apellidoM'     => 'required|string|max:255',
+            'nombre' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+            'apellidoP' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+            'apellidoM' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
             'fechaNacimiento' => 'required|date',
-            'telefono'      => 'required|string|max:15',
+            'telefono' => 'required|digits_between:8,15',
             'correo'        => 'required|email|unique:users,correo,' . $id,
         ];
 

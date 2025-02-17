@@ -21,15 +21,18 @@
 
 <div class="content">
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+    @if (session('typeFormErrors') == 'update')
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 @endif
     <h2>CIUDADANOS</h2>
+
 
     <!-- Tabla de administradores -->
     <table id="ciudadanosTable" style="width: 100%;">
@@ -65,7 +68,7 @@
     modalEditclose.addEventListener('click', () => {
         modalEdit.style.display = 'none';
     });
-    
+
     $(document).ready(function () {
         cargarTabla();
         $('#searchInput').on('keyup', function() {

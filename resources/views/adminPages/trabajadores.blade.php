@@ -22,6 +22,7 @@
     </script>
 @endif
 
+
 <style>
     .content {
         height: 91.5vh;
@@ -31,6 +32,17 @@
 <div class="content">
 
     <h2>TRABAJADORES</h2>
+@if ($errors->any())
+    @if (session('typeFormErrors') == 'update')
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+@endif
 
     <!-- Tabla de trabajadores -->
     <table id="trabajadoresTable" style="width: 100%;">
@@ -59,8 +71,6 @@
             @if ($errors->any())
                 @if (session('typeFormErrors') == 'store')
                     document.getElementById("modal").style.display = "flex";
-                @elseif (session('typeFormErrors') == 'edit')
-                    document.getElementById("modalEdit").style.display = "flex";
                 @endif
             @endif
         });

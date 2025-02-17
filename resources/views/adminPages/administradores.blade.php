@@ -30,13 +30,15 @@
 
 <div class="content">
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+    @if (session('typeFormErrors') == 'update')
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 @endif
     <h2>ADMINISTRADORES</h2>
 
@@ -62,6 +64,14 @@
 
 @section('scripts')
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+            @if ($errors->any())
+                @if (session('typeFormErrors') == 'store')
+                    document.getElementById("modal").style.display = "flex";
+                @endif
+            @endif
+    });
+
     const modal = document.getElementById('modal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     closeModalBtn.addEventListener('click', () => {
