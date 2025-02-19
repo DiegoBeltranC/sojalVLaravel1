@@ -43,8 +43,8 @@
           <p>Trabajadores</p>
         </li>
       </a>
-      <a href="#">
-        <li class="option">
+      <a href="{{ route('admin.trucks.index') }}">
+        <li class="option" {{ request()->routeIs('admin.trucks') ? 'active' : '' }}>
           <img class="mi-svg" src="{{ asset('images/Icons/camion-de-la-basura.svg') }}" alt="Mi SVG feliz"/>
           <p>Camiones</p>
         </li>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\CiudadanoController;
+use App\Http\Controllers\TruckController;
 use Illuminate\Support\Facades\Auth;
 
 // Ruta principal
@@ -51,6 +52,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
          ]);
 
     // Rutas para trabajadores
+    
     Route::get('/trabajadores/api', [TrabajadorController::class, 'data'])
          ->name('admin.trabajadores.data');
     Route::resource('trabajadores', TrabajadorController::class)
@@ -63,6 +65,20 @@ Route::middleware('auth')->prefix('admin')->group(function () {
              'update'  => 'admin.trabajadores.update',
              'destroy' => 'admin.trabajadores.destroy',
          ]);
+
+    // Rutas para camiones
+     Route::get('/trucks/api', [TruckController::class, 'data'])
+     ->name('admin.trucks.data');
+Route::resource('trucks', TruckController::class)
+     ->names([
+         'index'   => 'admin.trucks.index',
+         'create'  => 'admin.trucks.create',
+         'store'   => 'admin.trucks.store',
+         'show'    => 'admin.trucks.show',
+         'edit'    => 'admin.trucks.edit',
+         'update'  => 'admin.trucks.update',
+         'destroy' => 'admin.trucks.destroy',
+     ]);     
 
 });
 
