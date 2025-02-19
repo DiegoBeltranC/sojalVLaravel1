@@ -43,15 +43,26 @@
             div.style.display = 'none';
         });
 
+        function accionDespuesDeOk() {
+            document.querySelector('.body').style.display = "block"; // Muestra un div oculto
+        }
+
+
         document.addEventListener("DOMContentLoaded", function () {
-        Livewire.on('loginError', () => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Credenciales incorrectas o no eres admin.',
+            Livewire.on('loginError', () => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Credenciales incorrectas o no eres admin.',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        accionDespuesDeOk(); // Llamar la función después de presionar OK
+                    }
+                });;
             });
+
+
         });
-    });
     </script>
 
 
