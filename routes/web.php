@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\CiudadanoController;
+use App\Http\Controllers\RutasController;
 use App\Http\Controllers\TruckController;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,7 +53,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
          ]);
 
     // Rutas para trabajadores
-    
+
     Route::get('/trabajadores/api', [TrabajadorController::class, 'data'])
          ->name('admin.trabajadores.data');
     Route::resource('trabajadores', TrabajadorController::class)
@@ -64,6 +65,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
              'edit'    => 'admin.trabajadores.edit',
              'update'  => 'admin.trabajadores.update',
              'destroy' => 'admin.trabajadores.destroy',
+    ]);
          ]);
 
     // Rutas para camiones
@@ -78,7 +80,12 @@ Route::resource('trucks', TruckController::class)
          'edit'    => 'admin.trucks.edit',
          'update'  => 'admin.trucks.update',
          'destroy' => 'admin.trucks.destroy',
-     ]);     
+     ]);
+
+    Route::resource('rutas', RutasController::class)
+         ->names([
+        'index'   => 'admin.rutas.index',
+    ]);
 
 });
 

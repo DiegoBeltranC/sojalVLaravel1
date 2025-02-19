@@ -19,14 +19,14 @@
           <p>Notificaciones</p>
         </li>
       </a>
-      <a href="#">
-        <li class="option">
+      <a href="{{ route('admin.rutas.index') }}">
+        <li class="option {{ request()->routeIs('admin.rutas.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/RutaIcon.svg') }}" alt="Mi SVG feliz"/>
-          <p>Trayectos</p>
+          <p>Rutas</p>
         </li>
       </a>
       <a href="{{ route('admin.ciudadanos.index') }}">
-        <li li class="option {{ request()->routeIs('admin.ciudadanos.index') ? 'active' : '' }}">
+        <li class="option {{ request()->routeIs('admin.ciudadanos.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/usuarios.svg') }}" alt="Mi SVG feliz"/>
           <p>Ciudadanos</p>
         </li>
