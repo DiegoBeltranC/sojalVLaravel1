@@ -81,9 +81,13 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             'destroy' => 'admin.trucks.destroy',
         ]);
 
+        Route::get('/rutas/api', [RutasController::class, 'getRutas'])
+        ->name('admin.rutas.getRutas');
        Route::resource('rutas', RutasController::class)
             ->names([
            'index'   => 'admin.rutas.index',
+           'store' => 'admin.rutas.store',
+           'destroy' => 'admin.rutas.destroy'
        ]);
 
 
