@@ -6,21 +6,24 @@ let polylineRuta = null;
 let markersRuta = []
 let colorRuta;
 
+
 window.addEventListener('click', (e) => {
     if (e.target === modal) {
         modal.style.display = 'none';
     }
-    cargarMapaAdd();
-    cargarRutasAdd();
 });
 
 function nuevaRuta() {
     modal.style.display = 'flex';
+    cargarMapaAdd();
+    cargarRutasAdd();
+    cargarReportesAdd()
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     cargarMapa();
     cargarRutas();
+    cargarReportes()
 });
 
 async function cargarMapa (){
@@ -32,6 +35,7 @@ async function cargarMapa (){
     }).addTo(map);
 
 }
+
 async function cargarMapaAdd() {
     // Inicializa el mapa del modal solo si no se ha inicializado aún
     mapAdd = L.map('mapAdd').setView([18.5267782, -88.3094386], 13);
@@ -86,8 +90,78 @@ document.getElementById('deletePoint').addEventListener('click', function () {
     }
 });
 
+function limpiarRutasModal() {
+    mapAdd.eachLayer(layer => {
+        // Evita eliminar la capa base (TileLayer)
+        if (!(layer instanceof L.TileLayer) &&
+            (layer instanceof L.Polyline || layer instanceof L.Marker)) {
+            mapAdd.removeLayer(layer);
+        }
+    });
+}
+
+async function cargarReportes() {
+    try {
+        const response = await fetch('/admin/reportes/getPoints');
+        const reportes = await response.json();
+
+        reportes.forEach(reporte => {
+            // Parsea la ubicación (si está como string)
+            const coordenadas = reporte.location; // Ej: [18.53474, -88.29878]
+
+            // Crea un círculo en lugar de un marcador
+            const circle = L.circle(coordenadas, {
+                color: '#ff0000',   // Color del borde (rojo para "sinAsignar")
+                fillColor: '#ff4444', // Color de relleno
+                fillOpacity: 1,    // Transparencia
+                radius: 40           // Radio en metros
+            }).addTo(map);
+
+            // Agrega un popup con información del reporte
+            circle.bindPopup(`
+                <b>Reporte #${reporte.id}</b><br>
+                ${reporte.descripcion}<br>
+                Estado: ${reporte.status}
+            `);
+        });
+
+    } catch (error) {
+        console.error("Error cargando reportes:", error);
+    }
+}
+async function cargarReportesAdd() {
+    try {
+        const response = await fetch('/admin/reportes/getPoints');
+        const reportes = await response.json();
+
+        reportes.forEach(reporte => {
+            // Parsea la ubicación (si está como string)
+            const coordenadas = reporte.location; // Ej: [18.53474, -88.29878]
+
+            // Crea un círculo en lugar de un marcador
+            const circle = L.circle(coordenadas, {
+                color: '#ff0000',   // Color del borde (rojo para "sinAsignar")
+                fillColor: '#ff4444', // Color de relleno
+                fillOpacity: 1,    // Transparencia
+                radius: 10           // Radio en metros
+            }).addTo(mapAdd);
+
+            // Agrega un popup con información del reporte
+            circle.bindPopup(`
+                <b>Reporte #${reporte.id}</b><br>
+                ${reporte.descripcion}<br>
+                Estado: ${reporte.status}
+            `);
+        });
+
+    } catch (error) {
+        console.error("Error cargando reportes:", error);
+    }
+}
 async function cargarRutasAdd() {
     try {
+
+        limpiarRutasModal()
         const response = await fetch('/admin/rutas/api'); // Llamamos a la API de Laravel
         const rutas = await response.json();
 
@@ -112,6 +186,7 @@ async function cargarRutasAdd() {
 
 async function cargarRutas() {
     try {
+        //Recarga las rutas en dado caso que se elimine una ruta
         map.eachLayer(layer => {
             if (layer instanceof L.Polyline || layer instanceof L.Marker) {
                 map.removeLayer(layer);
@@ -236,7 +311,6 @@ function confirmarEliminacion(rutaId) {
                     Swal.fire('Eliminada', 'La ruta ha sido eliminada.', 'success');
                     // Opcional: refrescar el mapa para quitar la ruta eliminada
                     setTimeout(() => {
-                        cargarMapa();
                         cargarRutas(); // Asegúrate de que esta función recargue correctamente las rutas en el mapa
                     }, 1000);
                 } else {

@@ -7,6 +7,7 @@ use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\CiudadanoController;
 use App\Http\Controllers\RutasController;
 use App\Http\Controllers\TruckController;
+use App\Http\Controllers\ReporteController;
 use Illuminate\Support\Facades\Auth;
 
 // Ruta principal
@@ -89,6 +90,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'store' => 'admin.rutas.store',
            'destroy' => 'admin.rutas.destroy'
        ]);
+
+       Route::get('/reportes/getPoints', [ReporteController::class, 'getPoints'])
+       ->name('admin.reportes.getPoints');
+
 
 
 });
