@@ -7,6 +7,7 @@ use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\CiudadanoController;
 use App\Http\Controllers\RutasController;
 use App\Http\Controllers\TruckController;
+use App\Http\Controllers\ReporteController;
 use Illuminate\Support\Facades\Auth;
 
 // Ruta principal
@@ -81,10 +82,18 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             'destroy' => 'admin.trucks.destroy',
         ]);
 
+        Route::get('/rutas/api', [RutasController::class, 'getRutas'])
+        ->name('admin.rutas.getRutas');
        Route::resource('rutas', RutasController::class)
             ->names([
            'index'   => 'admin.rutas.index',
+           'store' => 'admin.rutas.store',
+           'destroy' => 'admin.rutas.destroy'
        ]);
+
+       Route::get('/reportes/getPoints', [ReporteController::class, 'getPoints'])
+       ->name('admin.reportes.getPoints');
+
 
 
 });
