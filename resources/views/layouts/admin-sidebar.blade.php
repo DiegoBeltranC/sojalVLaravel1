@@ -13,14 +13,16 @@
           <p>Evaluar informes</p>
         </li>
       </a>
-      <a href="#">
-        <li class="option">
+      <a href="{{ route('admin.noticias.index') }}">
+          <li li class="option {{ request()->routeIs('admin.noticias.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/mensajes.svg') }}" alt="Mi SVG feliz"/>
-          <p>Notificaciones</p>
+          <p>Noticias</p>
         </li>
       </a>
       <a href="{{ route('admin.rutas.index') }}">
         <li class="option {{ request()->routeIs('admin.rutas.index') ? 'active' : '' }}">
+      <a href="">
+        <li class="option">
           <img class="mi-svg" src="{{ asset('images/Icons/RutaIcon.svg') }}" alt="Mi SVG feliz"/>
           <p>Rutas</p>
         </li>

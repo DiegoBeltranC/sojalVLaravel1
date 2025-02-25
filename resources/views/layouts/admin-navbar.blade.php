@@ -30,7 +30,7 @@
             <hr>
         </div>
 
-        <a href="" class="enlace-button">
+        <a href="{{ route('admin.configuracion.index') }}" class="enlace-button">
             <button class="settings">Configuración</button>
         </a>
 
