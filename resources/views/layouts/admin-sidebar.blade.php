@@ -21,8 +21,6 @@
       </a>
       <a href="{{ route('admin.rutas.index') }}">
         <li class="option {{ request()->routeIs('admin.rutas.index') ? 'active' : '' }}">
-      <a href="">
-        <li class="option">
           <img class="mi-svg" src="{{ asset('images/Icons/RutaIcon.svg') }}" alt="Mi SVG feliz"/>
           <p>Rutas</p>
         </li>
