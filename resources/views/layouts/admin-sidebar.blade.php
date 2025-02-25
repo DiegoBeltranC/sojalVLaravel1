@@ -65,6 +65,6 @@
       background-color: #26776d;
       color: white;
     }
-</style>p
+</style>
 
 
