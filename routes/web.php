@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\AdministradorController;
+use App\Http\Controllers\AsignacionController;
 use App\Http\Controllers\CiudadanoController;
 use App\Http\Controllers\RutasController;
 use App\Http\Controllers\TruckController;
@@ -28,7 +29,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         return view('adminPages.estadisticas');
     })->name('admin.estadisticas');
 
-    
+
 
     // Usuarios
     Route::get('/ciudadanos/api', [CiudadanoController::class, 'data'])
@@ -122,8 +123,14 @@ Route::middleware('auth')->prefix('admin')->group(function () {
              'update'  => 'admin.configuracion.update',
              'destroy' => 'admin.configuracion.destroy',
          ]);
-});  // Aquí se cierra correctamente el grupo de rutas
+// Aquí se cierra correctamente el grupo de rutas
 
 
+
+       Route::resource('asignacion', AsignacionController::class)
+            ->names([
+           'index'   => 'admin.asignacion.index',
+       ]);
+});
 
 

@@ -31,8 +31,8 @@
           <p>Ciudadanos</p>
         </li>
       </a>
-      <a href="#">
-        <li class="option">
+      <a href="{{ route('admin.asignacion.index') }}">
+        <li class="option {{ request()->routeIs('admin.asignacion.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/conjunto-de-habilidades.svg') }}" alt="Mi SVG feliz"/>
           <p>Asignación</p>
         </li>

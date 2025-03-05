@@ -9,12 +9,12 @@ class Truck extends Model
     protected $collection = 'trucks';
 
     protected $fillable = [
-        'plates', 
-        'brand', 
-        'model', 
-        'status', 
-        'year', 
-        ];
+        'plates',
+        'brand',
+        'model',
+        'status',
+        'year',
+    ];
 
     // MongoDB usa _id como clave primaria por defecto
     protected $primaryKey = '_id';
