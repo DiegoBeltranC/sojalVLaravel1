@@ -150,14 +150,9 @@
                     alert('Error: ' + response.error);
                 } else {
                     // Actualizar el modal con los datos del trabajador
-                    $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
-                    $('#fechaView').text(response.data.fechaNacimiento);
+                    $('#trabajador').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
+                    $('#').text(response.data.fechaNacimiento);
                     $('#telefonoView').text(response.data.telefono);
-                    $('#correoView').text(response.data.correo);
-                    $('#rfcView').text(response.data.rfc);
-                    $('#fechaView').text(response.data.fecha_nacimiento);
-                    $('#curpView').text(response.data.curp);
-
                     // Mostrar el modal
                     modalView.style.display = 'flex';
                 }

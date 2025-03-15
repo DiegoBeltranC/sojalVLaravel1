@@ -52,4 +52,18 @@ class RutasController extends Controller
         return response()->json(['success' => true, 'message' => 'Ruta eliminada correctamente']);
     }
 
+    public function show($id)
+    {
+        // Buscar la ruta en la base de datos
+        $ruta = Ruta::find($id);
+
+        // Si no existe, devolver error 404
+        if (!$ruta) {
+            return response()->json(['message' => 'Ruta no encontrada'], 404);
+        }
+
+        return response()->json($ruta);
+    }
+
+
 }

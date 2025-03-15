@@ -92,7 +92,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         ->names([
            'index'   => 'admin.rutas.index',
            'store'   => 'admin.rutas.store',
-           'destroy' => 'admin.rutas.destroy'
+           'destroy' => 'admin.rutas.destroy',
+           'show' => 'admin.rutas.show'
        ]);
 
     Route::get('/reportes/getPoints', [ReporteController::class, 'getPoints'])
@@ -126,10 +127,15 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 // Aquí se cierra correctamente el grupo de rutas
 
 
-
+    Route::get('/asignaciones/api', [AsignacionController::class, 'data'])
+        ->name('admin.asignaciones.data');
        Route::resource('asignacion', AsignacionController::class)
             ->names([
            'index'   => 'admin.asignacion.index',
+           'store' => 'admin.asignacion.store',
+           'show'    => 'admin.asignacion.show',
+           'update' => 'admin.asignacion.update',
+           'destroy' => 'admin.asignacion.destroy'
        ]);
 });
 
