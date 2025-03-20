@@ -1,0 +1,81 @@
+.profile-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 100%;
+    margin: 10px auto;
+}
+.button-container {
+    display: flex;
+    gap: 10px; /* Espaciado entre los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    margin-top: 20px; /* Espaciado superior opcional */
+}
+
+.avances, .asignar{
+    display: none;
+    width: 50%;
+    background-color: #3498db; /* Azul claro */
+    color: #fff; /* Texto blanco */
+    padding: 10px 20px; /* Tamaño del botón */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#mapAsignar {
+    width: 100%;
+    height: 10rem;
+}
+
+.avances:hover, .asignar:hover {
+    background-color: #2980b9; /* Azul más oscuro al pasar el cursor */
+}
+
+.finalizar {
+    width: 50%;
+    background-color: #e74c3c; /* Rojo claro */
+    color: #fff; /* Texto blanco */
+    padding: 10px 20px; /* Tamaño del botón */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.finalizar:hover {
+    background-color: #c0392b; /* Rojo más oscuro al pasar el cursor */
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #ccc;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.profile-date {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0 0 0;
+}

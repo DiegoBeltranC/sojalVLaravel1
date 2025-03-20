@@ -141,28 +141,32 @@
     }
 
     function ver(userId) {
-        $.ajax({
-            url: 'administradores/' + userId, // Usamos la ruta de Laravel con el ID
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.error) {
-                    alert('Error: ' + response.error);
-                } else {
-                    // Actualizar el modal con los datos del trabajador
-                    $('#trabajador').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
-                    $('#').text(response.data.fechaNacimiento);
-                    $('#telefonoView').text(response.data.telefono);
-                    // Mostrar el modal
-                    modalView.style.display = 'flex';
-                }
-            },
-            error: function() {
+    $.ajax({
+        url: 'administradores/' + userId, // Usamos la ruta de Laravel con el ID
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.error) {
+                alert('Error: ' + response.error);
+            } else {
+                // Actualizar el modal con los datos del administrador
+                $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
+                $('#fechaView').text(response.data.fecha_nacimiento);
+                $('#telefonoView').text(response.data.telefono);
+                $('#correoView').text(response.data.correo);
+                $('#rfcView').text(response.data.rfc ? response.data.rfc : 'Vacio');
+                $('#curpView').text(response.data.curp ? response.data.curp : 'Vacio');
 
-                alert('Ocurrió un error al cargar los datos.');
+                // Mostrar el modal
+                $('#modalView').css('display', 'flex');
             }
-        });
-    }
+        },
+        error: function() {
+            alert('Ocurrió un error al cargar los datos.');
+        }
+    });
+}
+
 
     function eliminar(id) {
         Swal.fire({

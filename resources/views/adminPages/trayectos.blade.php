@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/modalRuta.css') }}">
 <style>
     #map { height: 40rem; width: 100%; z-index: 1; }
+
 </style>
 @section('content')
 <div class="content">

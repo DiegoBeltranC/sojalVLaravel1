@@ -10,6 +10,7 @@ use App\Http\Controllers\RutasController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\NoticiasController;
+use App\Http\Controllers\evaluarController;
 use App\Http\Controllers\configuracionController;
 use Illuminate\Support\Facades\Auth;
 
@@ -136,7 +137,12 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'show'    => 'admin.asignacion.show',
            'update' => 'admin.asignacion.update',
            'destroy' => 'admin.asignacion.destroy'
-       ]);
+    ]);
+
+    Route::resource('evaluar', evaluarController::class)
+    ->names([
+        'index'   => 'admin.evaluar.index',
+    ]);
 });
 
 

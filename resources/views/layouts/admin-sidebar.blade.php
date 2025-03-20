@@ -7,8 +7,8 @@
               <p>Estadísticas</p>
             </li>
           </a>
-      <a href="#">
-        <li class="option">
+      <a href="{{ route('admin.evaluar.index') }}">
+        <li class="option {{ request()->routeIs('admin.evaluar.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/lista.svg') }}" alt="Mi SVG feliz"/>
           <p>Evaluar informes</p>
         </li>
