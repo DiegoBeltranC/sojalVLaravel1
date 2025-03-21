@@ -112,8 +112,6 @@ class TruckController extends Controller
     {
         $truck = Truck::find($id);
 
-       
-
         $truck->delete();
 
         return response()->json(['success' => true, 'message' => ' eliminado correctamente']);
