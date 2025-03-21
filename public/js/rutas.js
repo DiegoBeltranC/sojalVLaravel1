@@ -106,29 +106,40 @@ async function cargarReportes() {
         const reportes = await response.json();
 
         reportes.forEach(reporte => {
-            // Parsea la ubicación (si está como string)
-            const coordenadas = reporte.location; // Ej: [18.53474, -88.29878]
+            try {
+                // Asegurar que location es un objeto y no una cadena JSON
+                let ubicacion = reporte.location;
 
-            // Crea un círculo en lugar de un marcador
-            const circle = L.circle(coordenadas, {
-                color: '#ff0000',   // Color del borde (rojo para "sinAsignar")
-                fillColor: '#ff4444', // Color de relleno
-                fillOpacity: 1,    // Transparencia
-                radius: 40           // Radio en metros
-            }).addTo(map);
+                ubicacion = JSON.parse(ubicacion); // Decodifica si viene como string JSON
 
-            // Agrega un popup con información del reporte
-            circle.bindPopup(`
-                <b>Reporte #${reporte.id}</b><br>
-                ${reporte.descripcion}<br>
-                Estado: ${reporte.status}
-            `);
+                // Extrae las coordenadas en formato [latitud, longitud]
+                const coordenadas = [parseFloat(ubicacion.longitud),parseFloat(ubicacion.latitud)];
+
+                // Crea un marcador con el icono predeterminado de Leaflet
+                const circleMarker = L.circleMarker(coordenadas, {
+                    color: 'green',
+                    radius: 10
+                  }).addTo(map);
+
+
+                // Agrega un popup con información del reporte
+                circleMarker.bindPopup(`
+                    <b>Reporte #${reporte.id}</b><br>
+                    ${reporte.descripcion}<br>
+                    Estado: ${reporte.status}
+                `);
+            } catch (error) {
+                console.error(`Error procesando el reporte ${reporte._id}:`, error);
+            }
         });
 
     } catch (error) {
         console.error("Error cargando reportes:", error);
     }
 }
+
+
+
 async function cargarReportesAdd() {
     try {
         const response = await fetch('/admin/reportes/getPoints');
@@ -136,18 +147,20 @@ async function cargarReportesAdd() {
 
         reportes.forEach(reporte => {
             // Parsea la ubicación (si está como string)
-            const coordenadas = reporte.location; // Ej: [18.53474, -88.29878]
-
+            let ubicacion = reporte.location; // Ej: [18.53474, -88.29878]
+            ubicacion = JSON.parse(ubicacion);
             // Crea un círculo en lugar de un marcador
-            const circle = L.circle(coordenadas, {
-                color: '#ff0000',   // Color del borde (rojo para "sinAsignar")
-                fillColor: '#ff4444', // Color de relleno
-                fillOpacity: 1,    // Transparencia
-                radius: 10           // Radio en metros
-            }).addTo(mapAdd);
+            const coordenadas = [parseFloat(ubicacion.longitud),parseFloat(ubicacion.latitud)];
+
+            // Crea un marcador con el icono predeterminado de Leaflet
+            const circleMarker = L.circleMarker(coordenadas, {
+                color: 'green',
+                radius: 10
+              }).addTo(mapAdd);
+
 
             // Agrega un popup con información del reporte
-            circle.bindPopup(`
+            circleMarker.bindPopup(`
                 <b>Reporte #${reporte.id}</b><br>
                 ${reporte.descripcion}<br>
                 Estado: ${reporte.status}
