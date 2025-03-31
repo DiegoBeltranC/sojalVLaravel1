@@ -13,6 +13,10 @@ use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\evaluarController;
 use App\Http\Controllers\configuracionController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AdminConfController;
+use App\Http\Controllers\PerfilController;
+
+
 
 // Ruta principal
 Route::get('/', function () {
@@ -30,8 +34,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         return view('adminPages.estadisticas');
     })->name('admin.estadisticas');
 
-
-
     // Usuarios
     Route::get('/ciudadanos/api', [CiudadanoController::class, 'data'])
          ->name('admin.ciudadanos.data');
@@ -45,6 +47,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
              'update'  => 'admin.ciudadanos.update',
              'destroy' => 'admin.ciudadanos.destroy',
          ]);
+
+    // Administradores
 
     Route::get('/administradores/api', [AdministradorController::class, 'data'])
          ->name('admin.administradores.data');
@@ -87,6 +91,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             'destroy' => 'admin.trucks.destroy',
         ]);
 
+    // Rutas
     Route::get('/rutas/api', [RutasController::class, 'getRutas'])
         ->name('admin.rutas.getRutas');
     Route::resource('rutas', RutasController::class)
@@ -141,7 +146,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'show'    => 'admin.asignacion.show',
            'update' => 'admin.asignacion.update',
            'destroy' => 'admin.asignacion.destroy'
-    ]);
+        ]);
 
         Route::get('/evaluar/cambiarProgreso/{id}', [evaluarController::class, 'cambiarProgreso'])
         ->name('admin.evaluar.cambiarProgreso');
@@ -155,6 +160,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         'store' => 'admin.evaluar.store',
         'destroy' => 'admin.evaluar.destroy'
     ]);
+
+    Route::get('perfil', [PerfilController::class, 'show'])->name('perfil.show');
+    Route::get('perfil/editar', [PerfilController::class, 'edit'])->name('perfil.edit');
+    Route::put('/perfil/actualizar', [PerfilController::class, 'update'])->name('perfil.update');
+    Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('admin.configuracion');
 });
 
 

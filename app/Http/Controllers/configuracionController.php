@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Configuracion;
 use Illuminate\Http\Request;
 
 class configuracionController extends Controller
@@ -10,5 +10,4 @@ class configuracionController extends Controller
     {
         return view('adminPages.configuracion');
     }
-
 }

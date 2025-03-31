@@ -4,6 +4,7 @@ namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
 
+
 class Ruta extends Model
 {
     protected $collection = 'rutas';

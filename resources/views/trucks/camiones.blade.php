@@ -22,6 +22,29 @@
     </script>
 @endif
 
+@if(session('truckUpdated'))
+    <script>
+        Swal.fire({
+            title: '¡Éxito!',
+            text: "{{ session('truckUpdated') }}",
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+
+@if(session('truckStored'))
+    <script>
+        Swal.fire({
+            title: '¡Éxito!',
+            text: "{{ session('truckStored') }}",
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
+
+
 <style>
     .content {
         height: 91.5vh;
@@ -64,31 +87,31 @@
 
 @section('scripts')
 <script>
-    const modal = document.getElementById('modal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    closeModalBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    document.addEventListener("DOMContentLoaded", function() {
+        // Referencias a modales de Camiones
+        const modal = document.getElementById('modal');
+        const modalView = document.getElementById('modalView');
+        const modalEdit = document.getElementById('modalEdit');
 
-    const modalView = document.getElementById('modalView');
-    const modalViewclose = document.getElementById('closeModalBtnView');
-    modalViewclose.addEventListener('click', () => {
-        modalView.style.display = 'none';
-    });
+        if(document.getElementById('closeModalBtn')){
+            document.getElementById('closeModalBtn').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+        if(document.getElementById('closeModalBtnView')){
+            document.getElementById('closeModalBtnView').addEventListener('click', () => {
+                modalView.style.display = 'none';
+            });
+        }
+        if(document.getElementById('closeModalBtnEdit')){
+            document.getElementById('closeModalBtnEdit').addEventListener('click', () => {
+                modalEdit.style.display = 'none';
+            });
+        }
 
-    const modalEdit = document.getElementById('modalEdit');
-    const modalEditclose = document.getElementById('closeModalBtnEdit')
-    modalEditclose.addEventListener('click', () => {
-        modalEdit.style.display = 'none';
-    });
-
-    $(document).ready(function () {
-        cargarTabla();
-    });
-
-    function cargarTabla() {
+        // Inicializar DataTable para Camiones
         $('#administradoresTable').DataTable({
-            "ajax": "{{ route('admin.trucks.data') }}", // Llama a la ruta que retorna los datos
+            "ajax": "{{ route('admin.trucks.data') }}",
             "columns": [
                 { "data": "id" },
                 { "data": "plates" },
@@ -98,23 +121,24 @@
                 { "data": "status" },
                 {
                     "data": null,
-                    "render": function (data, type, row) {
+                    "render": function(data, type, row) {
                         return `
                             <div class="action-buttons">
-                                <button class="btn btn-info" title="Visualizar" onclick="ver('${row.id}');"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-warning" title="Editar" onclick="verEdit('${row.id}');"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger" title="Eliminar" onclick="eliminar('${row.id}');"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                        `;
+                                <button class="btn btn-info" title="Visualizar" onclick="viewCamion('${row.id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-warning" title="Editar" onclick="editCamion('${row.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger" title="Eliminar" onclick="deleteCamion('${row.id}')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>`;
                     }
                 }
             ],
             "pageLength": 8,
             "language": {
-                "lengthMenu": "",
-                "info": "",
-                "infoEmpty": "",
-                "infoFiltered": "",
                 "paginate": {
                     "next": "Siguiente",
                     "previous": "Anterior"
@@ -122,88 +146,56 @@
                 "search": "Buscar: "
             },
             "dom": '<"top"f>rt<"bottom"p><"clear">',
-            "initComplete": function (settings, json) {
-                // Agrega un botón "Nuevo Trabajador" antes de la tabla
+            "initComplete": function(settings, json) {
                 var nuevoCamion = $('<button>', {
-                    text: 'Nuevo camion',
+                    text: 'Nuevo Camión',
                     class: 'add-form',
                     id: 'openModalBtn',
                     click: function () {
-                        // Aquí puedes abrir un modal o redirigir a una ruta para crear un nuevo trabajador
                         modal.style.display = 'flex';
                     }
                 });
                 $('#administradoresTable').before(nuevoCamion);
             }
         });
-    }
+    });
 
-    function ver(truckId) {
-        $.ajax({
-            url: 'trucks/' + truckId, // Usamos la ruta de Laravel con el ID
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.error) {
-                    alert('Error: ' + response.error);
-                } else {
-                    // Actualizar el modal con los datos del trabajador
-                    $('#placasView').text(response.data.plates);
-                    $('#marcaView').text(response.data.brand);
-                    $('#modeloView').text(response.data.model);
-                    $('#anoView').text(response.data.year);
-                    $('#estadoView').text(response.data.status);
-
-                    // Mostrar el modal
-                    modalView.style.display = 'flex';
-                }
-            },
-            error: function() {
-
-                alert('Ocurrió un error al cargar los datos.');
-            }
-        });
-    }
-
-    function eliminar(id) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `trucks/${id}`,  // Laravel ya genera esta ruta
-                    type: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Token CSRF
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire('¡Eliminado!', response.message, 'success');
-                            $('#administradoresTable').DataTable().ajax.reload();  // Recargar tabla
-                        } else {
-                            Swal.fire('¡Error!', response.message, 'error');
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('¡Error!', 'No se pudo eliminar el administrador.', 'error');
-                    }
-                });
-            }
-        });
-    }
-
-    function verEdit(truckId) {
+    // Visualizar Camión
+    function viewCamion(truckId) {
         $.ajax({
             url: 'trucks/' + truckId,
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                if (response.error) {
+                if(response.error) {
+                    alert('Error: ' + response.error);
+                } else {
+                    $('#placasView').text(response.data.plates);
+                    $('#marcaView').text(response.data.brand);
+                    $('#modeloView').text(response.data.model);
+                    $('#anoView').text(response.data.year);
+                    $('#estadoView').text(response.data.status);
+                    const rutaImagen = response.data.image 
+                        ? "{{ asset('storage') }}/" + response.data.image 
+                        : "{{ asset('images/default.jpg') }}";
+                    $('#truckImageView').attr('src', rutaImagen);
+                    modalView.style.display = 'flex';
+                }
+            },
+            error: function() {
+                alert('Ocurrió un error al cargar los datos.');
+            }
+        });
+    }
+
+    // Editar Camión
+    function editCamion(truckId) {
+        $.ajax({
+            url: 'trucks/' + truckId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if(response.error) {
                     alert('Error: ' + response.error);
                 } else {
                     $('#placasEdit').val(response.data.plates);
@@ -212,6 +204,14 @@
                     $('#anoEdit').val(response.data.year);
                     $('#estadoEdit').val(response.data.status);
                     $('#id').val(response.data.id);
+                    
+                    // Actualizar la imagen del camión
+                    if(response.data.image){
+                        $('#truckImageEdit').attr('src', '/storage/' + response.data.image);
+                    } else {
+                        $('#truckImageEdit').attr('src', '{{ asset("images/default.jpg") }}');
+                    }
+                    
                     modalEdit.style.display = 'flex';
                     $('#camionFormEdit').attr('action', 'trucks/' + truckId);
                 }
@@ -222,10 +222,42 @@
         });
     }
 
-
-
+    // Eliminar Camión
+    function deleteCamion(truckId) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if(result.isConfirmed) {
+                $.ajax({
+                    url: 'trucks/' + truckId,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            Swal.fire('¡Eliminado!', response.message, 'success');
+                            $('#administradoresTable').DataTable().ajax.reload();
+                        } else {
+                            Swal.fire('¡Error!', response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('¡Error!', 'No se pudo eliminar el camión.', 'error');
+                    }
+                });
+            }
+        });
+    }
 </script>
-
-
-
 @endsection
+
+
+
+
+

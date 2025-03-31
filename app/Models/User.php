@@ -21,6 +21,7 @@ class User extends Authenticatable
         'fecha_nacimiento',
         'curp',
         'rfc',
+        'profile_picture',
         'fecha_creacion'
     ];
 

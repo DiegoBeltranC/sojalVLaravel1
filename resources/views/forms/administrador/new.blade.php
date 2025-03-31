@@ -19,10 +19,13 @@
                 <input type="text" id="name" name="apellidoM" required>
             </div>
             <div class="form-group">
+                <label for="profile_picture">Foto de Perfil:</label>
+                <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+            </div>
+            <div class="form-group">
                 <label for="date">Fecha de Nacimiento:</label>
                 <input type="date" id="date" name="fechaNacimiento" required>
             </div>
-
             <div class="form-group">
                 <label for="name">Número de Teléfono:</label>
                 <input type="tel" id="name" name="telefono" required>

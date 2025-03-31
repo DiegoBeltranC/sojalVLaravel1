@@ -6,12 +6,12 @@ use MongoDB\Laravel\Eloquent\Model;
 use App\Models\User;
 use App\Models\Ruta;
 use App\Models\Truck;
+use App\Casts\ObjectIdCast;
 
 class Asignacion extends Model
 {
-    protected $collection = 'asignacion';
+    protected $collection = 'asignacions';
 
-    // Incluimos el nuevo atributo "nombre" junto con los demás
     protected $fillable = [
         'idUsuario',
         'idRuta',
@@ -19,8 +19,15 @@ class Asignacion extends Model
         'nombreUsuario',
         'nombreRuta',
         'placasCamion',
-        'nombre'  // Este es el nombre de la asignación (formato: usuario-ruta-placas)
+        'nombre'
     ];
+
+    protected $casts = [
+        'idUsuario' => ObjectIdCast::class,
+        'idRuta'    => ObjectIdCast::class,
+        'idCamion'  => ObjectIdCast::class,
+    ];
+
 
     // Si deseas que al convertir a JSON se incluyan también los atributos calculados
     protected $appends = ['nombre_usuario', 'nombre_ruta', 'placas_camion'];

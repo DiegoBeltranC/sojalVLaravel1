@@ -76,10 +76,10 @@
             });
         }
 
-        async function getUserInfo() {
+        async function getUserInfo(idCiudadano) {
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             try {
-                const response = await fetch('/admin/ciudadanos/67e3f9cbcb9758fe44027a02',{
+                const response = await fetch(`/admin/ciudadanos/${idCiudadano}`,{
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -192,7 +192,7 @@
                         customElement.style.borderRadius = '50%'; // Hacerlo circular
                         customElement.style.border = '2px solid white';
 
-                        const userInfo = await getUserInfo();
+                        const userInfo = await getUserInfo(reporte.idUsuario);
                         if (userInfo ) {
                             const user = userInfo.data;
                             console.log(user)
@@ -315,7 +315,7 @@
                         $('#idReporte').val(data.id);
                         cargarMapaView()
                         cargarPunto(data.id)
-                        cargarPerfilCiudadano()
+                        cargarPerfilCiudadano(data.idUsuario)
                         cargarAsignaciones()
                         limpiarPerfil('#nombreNew','#telefonoNew');
                         $('#avancesSection').hide();
@@ -353,7 +353,7 @@
                     $('#idReporte').val(data.id);
                     cargarMapaView();
                     cargarPunto(data.id);
-                    cargarPerfilCiudadano();
+                    cargarPerfilCiudadano(data.idUsuario);
                     cargarAsignaciones(data.conjunto);
                     limpiarPerfil('#nombreNew','#telefonoNew');
                     defaultAsignacion = data.conjunto;
@@ -444,7 +444,7 @@
                         $('#cruzamientosRechazado').text(calles.calle1 + ' y ' + calles.calle2);
                         $('#idReporteRechazado').val(data.id);
                         $('#fechaRechazado').text(data.fechaRechazado);
-                        cargarPerfilCiudadanoRechazado()
+                        cargarPerfilCiudadanoRechazado(data.idUsuario)
                         cargarMapaRechazado()
                         cargarPuntoRechazado(data.id)
 
@@ -549,9 +549,10 @@
                     });
         }
 
-        async function cargarPerfilCiudadano() {
+        async function cargarPerfilCiudadano(idCiudadano) {
+            let ciudadano = idCiudadano.toString();
             $.ajax({
-                url: `ciudadanos/67e3f9cbcb9758fe44027a02`,
+                url: `ciudadanos/${ciudadano}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -569,9 +570,10 @@
             });
         }
 
-        async function cargarPerfilCiudadanoRechazado() {
+        async function cargarPerfilCiudadanoRechazado(idUsuario) {
+            let usuario = idUsuario.toString();
             $.ajax({
-                url: `ciudadanos/67e3f9cbcb9758fe44027a02`,
+                url: `ciudadanos/${usuario}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
