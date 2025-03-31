@@ -136,7 +136,7 @@ abstract class BaseUserController extends Controller
         ];
 
         if (in_array($this->role, ['trabajador', 'administrador'])) {
-            $rules['curp'] = 'required|string|max:18|unique:users,curp,' . $id;
+            $rules['curp '] = 'required|string|max:18|unique:users,curp,' . $id;
             $rules['rfc']  = 'required|string|max:13|unique:users,rfc,' . $id;
         }
 

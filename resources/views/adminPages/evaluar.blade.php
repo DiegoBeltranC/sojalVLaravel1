@@ -162,9 +162,7 @@
                             continue;
                         }
 
-                        if(reporte.status == 'asignado' && reporte.avances != null){
-                            await cambiarEstadoProgreso(reporte.id);
-                        }
+
 
 
                         let color;
@@ -197,13 +195,14 @@
                             const user = userInfo.data;
                             console.log(user)
                             const nombre = `${user.nombre} ${user.apellidoP} ${user.apellidoM}`;
+                            const foto = user.profile_picture;
                             let popupContent;
                             if (reporte.status == 'sinAsignar') {
                                 popupContent = `
                                 <div style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
 
-                                        <img src="" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
+                                        <img src="http://192.168.1.100/api_sojal/storage/app/public/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: bold;">${nombre}</span>
                                         </div>
@@ -223,7 +222,7 @@
                                 popupContent = `
                                 <div style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                        <img src="" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
+                                        <img src="http://192.168.1.100/api_sojal/storage/app/public/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: bold;">${nombre}</span>
                                         </div>
@@ -244,7 +243,7 @@
                                 popupContent = `
                                 <div style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                        <img src="" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
+                                        <img src="http://192.168.1.100/api_sojal/storage/app/public/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: bold;">${nombre}</span>
                                         </div>
@@ -293,7 +292,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                alert('Error al cargar el perfil del trabajador.');
+                alert('holaa.');
             }
         }
 
@@ -378,7 +377,7 @@
                                         <p style="margin-bottom: 14px;"><strong>Fecha de subida:</strong> ${new Date(avance.fecha_subida).toLocaleString()}</p>
                                         <div class="imagenes-avance" style="margin-bottom: 14px;">
                                             ${ avance.imagenes && avance.imagenes.length > 0
-                                                ? avance.imagenes.map(img => `<img src="${img}" alt="Imagen avance" style="width: 100px; margin-right: 5px;">`).join('')
+                                                ? avance.imagenes.map(img => `<img src="http://192.168.1.100/api_sojal/storage/app/public/${img}" alt="Imagen avance" style="width: 100px; margin-right: 5px;">`).join('')
                                                 : '<p>No hay imágenes</p>'
                                             }
                                         </div>
@@ -560,6 +559,7 @@
                         var ciudadano = data.data;
                         $('#nombreView').text(ciudadano.nombre + ' ' + ciudadano.apellidoP + ' ' + ciudadano.apellidoM);
                         $('#fechaView').text('Telefono: ' + ciudadano.telefono);
+                        $('#profilePic').attr('src', 'http://192.168.1.100/api_sojal/storage/app/public/' + ciudadano.profile_picture);
                     } else {
                         alert('No se encontraron datos del ciudadano.');
                     }
