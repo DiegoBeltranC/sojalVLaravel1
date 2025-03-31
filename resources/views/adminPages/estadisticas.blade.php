@@ -6,46 +6,89 @@
 <div class="content" id="content">
     <h2>ESTADÍSTICAS</h2>
 
+    <?php 
+
+    $espera = 0;
+    $proceso = 0;
+    $finalizado = 0;
+    $rechazado = 0;
+
+    foreach ($estadisticas as $estadistica){
+        if($estadistica->status == "sinAsignar") {
+            $espera++;
+        }else if($estadistica->status == "asignado" OR $estadistica->status == "enProgreso"){
+            $proceso++; 
+        }else if($estadistica->status == "finalizado"){
+            $finalizado++; 
+        }else if ($estadistica->status == "rechazado") {
+            $rechazado++; 
+        }
+    }
+    
+    ?>
+            <a href="{{ route('estadisticas.report') }}" class="btn btn-info mt-2 mb-2">Reporte</a>
+
     <div class="content-data">
+
+
         <div class="data espera">
             <h3>En Espera</h3>
-            <p>15</p>
+            <p><?php echo $espera?></p>
         </div>
         <div class="data progreso">
-            <h3>En Proceso</h3>
-            <p>6</p>
+            <h3>En proceso</h3>
+            <p><?php echo $proceso?></p>
         </div>
         <div class="data finalizado">
             <h3>Finalizados</h3>
-            <p>10</p>
+            <p><?php echo $finalizado?></p>
+        </div>
+        <div class="data rechazado">
+            <h3>Rechazado</h3>
+            <p><?php echo $rechazado?></p>
         </div>
     </div>
 
+
     <div class="grid-container">
+
+        <!--<div class="container-graph">
+            <canvas id="myChart"></canvas>
+
+           
+        </div>-->
         <!-- Gráfico 1 -->
         <div class="container-graph">
-            <h3>Gráfico 1</h3>
-            <canvas id="myChart1"></canvas>
+            <h3>{{ $chart->options['chart_title'] }}</h3>
+            {!! $chart->renderHtml() !!}
         </div>
 
         <!-- Gráfico 2 -->
+
         <div class="container-graph">
-            <h3>Gráfico 2</h3>
-            <canvas id="myChart2"></canvas>
+            <h3>{{ $chart2->options['chart_title'] }}</h3>
+            {!! $chart2->renderHtml() !!}
         </div>
 
         <!-- Gráfico 3 -->
         <div class="container-graph">
-            <h3>Gráfico 3</h3>
-            <canvas id="myChart3"></canvas>
+            <h3>{{ $chart3->options['chart_title'] }}</h3>
+            {!! $chart3->renderHtml() !!}
         </div>
+        
 
-        <!-- Gráfico 4 -->
-        <div class="container-graph">
-            <h3>Gráfico 4</h3>
-            <canvas id="myChart4"></canvas>
-        </div>
+      
     </div>
 </div>
+
+
+  
 @endsection
 
+
+@section('scripts')
+{!! $chart->renderChartJsLibrary() !!}
+{!! $chart->renderJs() !!}
+{!! $chart2->renderJs() !!}
+{!! $chart3->renderJs() !!}
+@endsection

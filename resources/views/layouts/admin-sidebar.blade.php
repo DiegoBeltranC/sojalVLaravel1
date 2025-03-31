@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="{{ asset('css/ViewSidebar.css') }}" />
 <div class="sidebar">
     <ol>
-        <a href="{{ route('admin.estadisticas') }}">
-            <li class="option {{ request()->routeIs('admin.estadisticas') ? 'active' : '' }}">
+        <a href="{{ route('admin.estadisticas.index') }}">
+            <li class="option {{ request()->routeIs('admin.estadisticas.index') ? 'active' : '' }}">
               <img class="mi-svg" src="{{ asset('images/Icons/grafico-circular.svg') }}" alt="icon"/>
               <p>Estadísticas</p>
             </li>

@@ -25,4 +25,5 @@ class Reporte extends Model
         'imagenes'      => 'array',  // Asegura que se maneje como un array de imágenes
         'fechaCreacion' => 'datetime',
     ];
+    
 }

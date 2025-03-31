@@ -55,9 +55,6 @@ class ReporteControllerApi extends Controller
          $calle1 = $request->calle1;
          $calle2 = $request->calle2;
 
-         
-         
-
          $reportes = Reporte::create([
             'idUsuario' => $idUsuario,
             'descripcion' => $descripcion,

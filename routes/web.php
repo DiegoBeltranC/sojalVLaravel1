@@ -12,6 +12,8 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\evaluarController;
 use App\Http\Controllers\configuracionController;
+use App\Http\Controllers\estadisticaController;
+
 use Illuminate\Support\Facades\Auth;
 
 // Ruta principal
@@ -26,10 +28,10 @@ Route::get('/login', function () {
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->prefix('admin')->group(function () {
-    Route::get('/estadisticas', function () {
+    /*Route::get('/estadisticas', function () {
         return view('adminPages.estadisticas');
     })->name('admin.estadisticas');
-
+*/
 
 
     // Usuarios
@@ -142,6 +144,17 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('evaluar', evaluarController::class)
     ->names([
         'index'   => 'admin.evaluar.index',
+    ]);
+
+    //estadisticas
+    Route::get('estadisticas/reportPDF', [estadisticaController::class, 'report'])->name('estadisticas.report');
+    Route::resource('estadisticas', estadisticaController::class)
+            ->names([
+           'index'   => 'admin.estadisticas.index',
+           'store' => 'admin.estadisticas.store',
+           'show'    => 'admin.estadisticas.show',
+           'update' => 'admin.estadisticas.update',
+           'destroy' => 'admin.estadisticas.destroy'
     ]);
 });
 
