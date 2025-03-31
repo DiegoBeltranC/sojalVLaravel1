@@ -14,7 +14,7 @@
         </li>
       </a>
       <a href="{{ route('admin.noticias.index') }}">
-          <li li class="option {{ request()->routeIs('admin.noticias.index') ? 'active' : '' }}">
+          <li class="option {{ request()->routeIs('admin.noticias.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/mensajes.svg') }}" alt="Mi SVG feliz"/>
           <p>Noticias</p>
         </li>
@@ -44,10 +44,10 @@
         </li>
       </a>
       <a href="{{ route('admin.trucks.index') }}">
-        <li class="option" {{ request()->routeIs('admin.trucks') ? 'active' : '' }}>
-          <img class="mi-svg" src="{{ asset('images/Icons/camion-de-la-basura.svg') }}" alt="Mi SVG feliz"/>
-          <p>Camiones</p>
-        </li>
+          <li class="option {{ request()->routeIs('admin.trucks.index') ? 'active' : '' }}">
+            <img class="mi-svg" src="{{ asset('images/Icons/camion-de-la-basura.svg') }}" alt="Camión"/>
+            <p>Camiones</p>
+          </li>
       </a>
       <a href="{{ route('admin.administradores.index') }}">
         <li class="option {{ request()->routeIs('admin.administradores.index') ? 'active' : '' }}">

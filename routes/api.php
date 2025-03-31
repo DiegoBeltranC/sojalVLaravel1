@@ -9,5 +9,8 @@ Route::apiResource('ciudadanos', CiudadanoControllerAPI::class);
 Route::apiResource('camiones', TruckControllerApi::class);
 Route::apiResource('reporte', ReporteControllerApi::class);
 Route::apiResource('ruta', RutaControllerApi::class);
+Route::apiResource('trabajadores', CiudadanoControllerAPI::class);
+Route::apiResource('administradores', CiudadanoControllerAPI::class);
+
 
 

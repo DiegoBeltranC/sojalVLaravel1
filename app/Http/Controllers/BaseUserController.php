@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 abstract class BaseUserController extends Controller
 {
-    // Esta propiedad se definirá en el controlador hijo.
+    // Esta propiedad se definirá en el controlador hijo (por ejemplo, 'administrador')
     protected $role;
 
     public function index()
     {
-        if($this->role == 'ciudadano'){
+        if ($this->role == 'ciudadano') {
             return view('adminPages.ciudadanos');
         }
         return view('adminPages.' . $this->role . 'es');
@@ -23,12 +23,12 @@ abstract class BaseUserController extends Controller
     {
         $users = User::where('rol', $this->role)->get()->map(function ($user) {
             return [
-                'id'        => (string)$user->_id,
-                'nombre'    => $user->nombre,
-                'apellidos' => $user->apellidos,
-                'correo'    => $user->correo,
-                'telefono'  => $user->telefono,
-                // Agrega más campos si lo requieres
+                'id'              => (string)$user->_id,
+                'nombre'          => $user->nombre,
+                'apellidos'       => $user->apellidos,
+                'correo'          => $user->correo,
+                'telefono'        => $user->telefono,
+                'profile_picture' => $user->profile_picture, // Se incluye para mostrar la imagen
             ];
         });
         return response()->json(['data' => $users]);
@@ -36,18 +36,17 @@ abstract class BaseUserController extends Controller
 
     public function store(Request $request)
     {
-        // Validación. Nota: si en algún caso (por ejemplo, en ciudadanos) no se requieren
-        // ciertos campos, puedes ajustar la validación según el rol.
         $rules = [
-            'nombre'        => 'required|string|max:255',
-            'apellidoP'     => 'required|string|max:255',
-            'apellidoM'     => 'required|string|max:255',
+            'nombre'          => 'required|string|max:255',
+            'apellidoP'       => 'required|string|max:255',
+            'apellidoM'       => 'required|string|max:255',
             'fechaNacimiento' => 'required|date',
-            'telefono'      => 'required|string|max:15',
-            'correo'        => 'required|email|unique:users,correo',
+            'telefono'        => 'required|string|max:15',
+            'correo'          => 'required|email|unique:users,correo',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validación de imagen
         ];
 
-        // En este ejemplo, tanto trabajadores como administradores usan RFC y CURP.
+        // Reglas adicionales para ciertos roles
         if (in_array($this->role, ['trabajador', 'administrador'])) {
             $rules['curp'] = 'required|string|max:18|unique:users,curp';
             $rules['rfc']  = 'required|string|max:13|unique:users,rfc';
@@ -55,7 +54,7 @@ abstract class BaseUserController extends Controller
 
         $validated = $request->validate($rules);
 
-        // Sanitizar y normalizar los datos
+        // Sanitizar y normalizar datos
         $nombre    = ucwords(strtolower(strip_tags($request->nombre)));
         $apellidoP = ucwords(strtolower(trim(strip_tags($request->apellidoP))));
         $apellidoM = ucwords(strtolower(trim(strip_tags($request->apellidoM))));
@@ -63,6 +62,16 @@ abstract class BaseUserController extends Controller
         $correo    = trim(strip_tags($request->correo));
         $curp      = in_array($this->role, ['trabajador', 'administrador']) ? strtoupper(trim(strip_tags($request->curp))) : null;
         $rfc       = in_array($this->role, ['trabajador', 'administrador']) ? strtoupper(trim(strip_tags($request->rfc))) : null;
+
+        // Procesar la imagen de perfil
+        if ($request->hasFile('profile_picture')) {
+            $imagen = $request->file('profile_picture');
+            $nombreArchivo = time() . '_' . $imagen->getClientOriginalName();
+            // Guarda la imagen en storage/app/public/imagenes_admin
+            $ruta = $imagen->storeAs('imagenes_admin', $nombreArchivo, 'public');
+        } else {
+            $ruta = null;
+        }
 
         User::create([
             'nombre'           => $nombre,
@@ -73,15 +82,16 @@ abstract class BaseUserController extends Controller
             'fecha_nacimiento' => $request->fechaNacimiento,
             'telefono'         => $telefono,
             'correo'           => $correo,
-            'password'         => Hash::make('123'), // Contraseña temporal
+            'password'         => Hash::make('admin123'), // Contraseña temporal
             'rol'              => $this->role,
             'curp'             => $curp,
             'rfc'              => $rfc,
+            'profile_picture'  => $ruta, // Guarda la ruta de la imagen
             'fecha_creacion'   => now(),
         ]);
 
         return redirect()->route('admin.' . $this->role . 'es.index')
-        ->with($this->role . 'Guardado', ucfirst($this->role) . ' registrado exitosamente.');
+            ->with($this->role . 'Guardado', ucfirst($this->role) . ' registrado exitosamente.');
     }
 
     public function show($id)
@@ -94,14 +104,15 @@ abstract class BaseUserController extends Controller
 
         return response()->json([
             'data' => [
-                'nombre'        => $user->nombre,
-                'apellidoP'     => $user->apellidos['paterno'],
-                'apellidoM'     => $user->apellidos['materno'],
-                'fecha_nacimiento' => $user->fecha_nacimiento,
-                'telefono'      => $user->telefono,
-                'correo'        => $user->correo,
-                'rfc'           => $user->rfc,
-                'curp'          => $user->curp,
+                'nombre'          => $user->nombre,
+                'apellidoP'       => $user->apellidos['paterno'],
+                'apellidoM'       => $user->apellidos['materno'],
+                'fecha_nacimiento'=> $user->fecha_nacimiento,
+                'telefono'        => $user->telefono,
+                'correo'          => $user->correo,
+                'rfc'             => $user->rfc,
+                'curp'            => $user->curp,
+                'profile_picture' => $user->profile_picture,
             ]
         ]);
     }
@@ -115,12 +126,13 @@ abstract class BaseUserController extends Controller
         }
 
         $rules = [
-            'nombre'        => 'required|string|max:255',
-            'apellidoP'     => 'required|string|max:255',
-            'apellidoM'     => 'required|string|max:255',
+            'nombre'          => 'required|string|max:255',
+            'apellidoP'       => 'required|string|max:255',
+            'apellidoM'       => 'required|string|max:255',
             'fechaNacimiento' => 'required|date',
-            'telefono'      => 'required|string|max:15',
-            'correo'        => 'required|email|unique:users,correo,' . $id,
+            'telefono'        => 'required|string|max:15',
+            'correo'          => 'required|email|unique:users,correo,' . $id,
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
         if (in_array($this->role, ['trabajador', 'administrador'])) {
@@ -138,24 +150,35 @@ abstract class BaseUserController extends Controller
         $curp      = in_array($this->role, ['trabajador', 'administrador']) ? strtoupper(trim(strip_tags($request->curp))) : null;
         $rfc       = in_array($this->role, ['trabajador', 'administrador']) ? strtoupper(trim(strip_tags($request->rfc))) : null;
 
-        $user->nombre = $nombre;
-        $user->apellidos = [
-            'paterno' => $apellidoP,
-            'materno' => $apellidoM,
-        ];
-        $user->fecha_nacimiento = $request->fechaNacimiento;
-        $user->telefono = $telefono;
-        $user->correo = $correo;
-        $user->curp = $curp;
-        $user->rfc = $rfc;
-
-        $user->save();
-        if($user->rol== 'ciudadano' ){
-            return redirect()->route('admin.ciudadanos.index')
-            ->with($this->role . 'Actualizado', ucfirst($this->role) . ' actualizado correctamente.');
+        // Procesar la imagen de perfil si se actualiza
+        if ($request->hasFile('profile_picture')) {
+            $imagen = $request->file('profile_picture');
+            $nombreArchivo = time() . '_' . $imagen->getClientOriginalName();
+            $ruta = $imagen->storeAs('imagenes_admin', $nombreArchivo, 'public');
+        } else {
+            $ruta = $user->profile_picture;
         }
-        return redirect()->route($this->role . 'es.index')
-                         ->with($this->role . 'Actualizado', ucfirst($this->role) . ' actualizado correctamente.');
+
+        $user->update([
+            'nombre'           => $nombre,
+            'apellidos'        => [
+                'paterno' => $apellidoP,
+                'materno' => $apellidoM,
+            ],
+            'fecha_nacimiento' => $request->fechaNacimiento,
+            'telefono'         => $telefono,
+            'correo'           => $correo,
+            'curp'             => $curp,
+            'rfc'              => $rfc,
+            'profile_picture'  => $ruta,
+        ]);
+
+        if ($user->rol == 'ciudadano') {
+            return redirect()->route('admin.ciudadanos.index')
+                ->with($this->role . 'Actualizado', ucfirst($this->role) . ' actualizado correctamente.');
+        }
+        return redirect()->route('admin.' . $this->role . 'es.index')
+            ->with($this->role . 'Actualizado', ucfirst($this->role) . ' actualizado correctamente.');
     }
 
     public function destroy($id)

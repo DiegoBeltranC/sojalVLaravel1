@@ -16,9 +16,21 @@
 }
 
 .avances, .asignar{
-    display: none;
+
     width: 50%;
     background-color: #3498db; /* Azul claro */
+    color: #fff; /* Texto blanco */
+    padding: 10px 20px; /* Tamaño del botón */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.rechazar{
+    width: 50%;
+    background-color: red; /* Azul claro */
     color: #fff; /* Texto blanco */
     padding: 10px 20px; /* Tamaño del botón */
     border: none;
@@ -39,7 +51,7 @@
 
 .finalizar {
     width: 50%;
-    background-color: #e74c3c; /* Rojo claro */
+    background-color: green; /* Rojo claro */
     color: #fff; /* Texto blanco */
     padding: 10px 20px; /* Tamaño del botón */
     border: none;
@@ -50,7 +62,24 @@
 }
 
 .finalizar:hover {
-    background-color: #c0392b; /* Rojo más oscuro al pasar el cursor */
+    background-color: rgb(red, rgb(128, 207, 10), blue); /* Rojo más oscuro al pasar el cursor */
+}
+.finalizar:disabled {
+    background-color: gray; /* Cambiar el color de fondo */
+    cursor: not-allowed; /* Cambiar el cursor para indicar que no es clickeable */
+    opacity: 0.6; /* Hacerlo más transparente */
+}
+
+.asignar:disabled {
+    background-color: gray; /* Cambiar el color de fondo */
+    cursor: not-allowed; /* Cambiar el cursor para indicar que no es clickeable */
+    opacity: 0.6; /* Hacerlo más transparente */
+}
+
+.rechazar:disabled {
+    background-color: gray; /* Cambiar el color de fondo */
+    cursor: not-allowed; /* Cambiar el cursor para indicar que no es clickeable */
+    opacity: 0.6; /* Hacerlo más transparente */
 }
 
 .profile-pic {
@@ -79,3 +108,34 @@
     color: #666;
     margin: 5px 0 0 0;
 }
+
+.container-asignar {
+    padding: 20px;
+    background-color: #eef5fc; /* Azul claro suave */
+    border: 1px solid #ccc; /* Borde similar a profile-container */
+    border-radius: 8px; /* Esquinas redondeadas */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    margin-top: 20px; /* Separación de los demás elementos */
+}
+#avancesSection{
+    padding: 20px;
+    background-color: #fff1fe; /* Azul claro suave */
+    border: 1px solid #ccc; /* Borde similar a profile-container */
+    border-radius: 8px; /* Esquinas redondeadas */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    margin-top: 20px; /* Separación de los demás elementos */
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    gap: 30px;
+}
+
+.imagenes-avance img {
+    border-radius: 4px;
+}
+

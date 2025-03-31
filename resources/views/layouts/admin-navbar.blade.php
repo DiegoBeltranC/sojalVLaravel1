@@ -18,19 +18,21 @@
         <img class="menu-icon" src="{{ asset('images/Icons/menu.png') }}" alt="Menu Icon" id="menu-toggle"/>
         <img class="logo" src="{{ asset('images/Icons/logo.png') }}" alt="Logo"/>
         <h2 class="title">SOJAL</h2>
-        <img class="notification" src="../images/Icons/notification.svg" alt="Perfil" id="notification"/>
-        <img class="photo" src="https://www.venmond.com/demo/vendroid/img/avatar/big.jpg" alt="Perfil" id="photo"/>
+        <img class="notification" src="{{ asset('images/Icons/notification.svg') }}" alt="Notificaciones" id="notification"/>
+        <!-- Se reemplaza la imagen estática por la foto de perfil del usuario -->
+        <img class="photo" src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default_profile.png') }}" alt="Perfil" id="photo"/>
     </div>
 
     <div class="profile-content">
-        <img class="photo-profile" src="https://www.venmond.com/demo/vendroid/img/avatar/big.jpg" alt="Perfil"/>
+        <!-- Se actualiza la foto de perfil -->
+        <img class="photo-profile" src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default_profile.png') }}" alt="Perfil"/>
         <div class="content-info">
             <strong>{{ Auth::user()->nombre }}</strong>
             <p>{{ Auth::user()->correo }}</p>
             <hr>
         </div>
 
-        <a href="{{ route('admin.configuracion.index') }}" class="enlace-button">
+        <a href="{{ route('admin.configuracion') }}" class="enlace-button">
             <button class="settings">Configuración</button>
         </a>
 

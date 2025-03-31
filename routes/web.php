@@ -15,6 +15,10 @@ use App\Http\Controllers\configuracionController;
 use App\Http\Controllers\estadisticaController;
 
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AdminConfController;
+use App\Http\Controllers\PerfilController;
+
+
 
 // Ruta principal
 Route::get('/', function () {
@@ -47,6 +51,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
              'update'  => 'admin.ciudadanos.update',
              'destroy' => 'admin.ciudadanos.destroy',
          ]);
+
+    // Administradores
 
     Route::get('/administradores/api', [AdministradorController::class, 'data'])
          ->name('admin.administradores.data');
@@ -89,6 +95,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             'destroy' => 'admin.trucks.destroy',
         ]);
 
+    // Rutas
     Route::get('/rutas/api', [RutasController::class, 'getRutas'])
         ->name('admin.rutas.getRutas');
     Route::resource('rutas', RutasController::class)
@@ -101,6 +108,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     Route::get('/reportes/getPoints', [ReporteController::class, 'getPoints'])
        ->name('admin.reportes.getPoints');
+    Route::resource('reportes', ReporteController::class)
+       ->names([
+           'show'    => 'admin.noticias.show',
+       ]);
 
     // Noticias
     Route::get('/noticias/api', [NoticiasController::class, 'data'])
@@ -139,11 +150,19 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'show'    => 'admin.asignacion.show',
            'update' => 'admin.asignacion.update',
            'destroy' => 'admin.asignacion.destroy'
-    ]);
+        ]);
+
+        Route::get('/evaluar/cambiarProgreso/{id}', [evaluarController::class, 'cambiarProgreso'])
+        ->name('admin.evaluar.cambiarProgreso');
+
+        Route::post('/evaluar/finalizarReporte/{id}', [evaluarController::class, 'finalizarReporte'])
+        ->name('admin.evaluar.finalizarReporte');
 
     Route::resource('evaluar', evaluarController::class)
     ->names([
         'index'   => 'admin.evaluar.index',
+        'store' => 'admin.evaluar.store',
+        'destroy' => 'admin.evaluar.destroy'
     ]);
 
     //estadisticas
@@ -156,6 +175,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'update' => 'admin.estadisticas.update',
            'destroy' => 'admin.estadisticas.destroy'
     ]);
+    
+    Route::get('perfil', [PerfilController::class, 'show'])->name('perfil.show');
+    Route::get('perfil/editar', [PerfilController::class, 'edit'])->name('perfil.edit');
+    Route::put('/perfil/actualizar', [PerfilController::class, 'update'])->name('perfil.update');
+    Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('admin.configuracion');
 });
 
 

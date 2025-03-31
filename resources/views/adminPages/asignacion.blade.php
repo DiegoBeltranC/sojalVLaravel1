@@ -90,60 +90,62 @@
 
         function cargarTabla() {
             $('#asignacionTable').DataTable({
-                "ajax": "{{ route('admin.asignaciones.data') }}", // Ruta que retorna las asignaciones en JSON
-                "columns": [
-                    { "data": "id" },
-                    { "data": "nombre" },
-                    {
-                        "data": null,
-                        "render": function (data, type, row) {
-                            return row.nombreUsuario + ' ' + row.apellidoPaterno + ' ' + row.apellidoMaterno;
-                        }
-                    },
-                    {
-                        "data": null,
-                        "render": function (data, type, row) {
-                            return `
-                                <div class="action-buttons">
-                                    <button class="btn btn-info" title="Visualizar" onclick="ver('${row.id}');"><i class="fas fa-eye"></i></button>
-                                    <button class="btn btn-warning" title="Editar" onclick="verEdit('${row.id}');"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger" title="Eliminar" onclick="eliminar('${row.id}');"><i class="fas fa-trash-alt"></i></button>
-                                </div>
-                            `;
-                        }
-                    }
-                ],
-                "pageLength": 8,
-                "language": {
-                    "lengthMenu": "",
-                    "info": "",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                    "paginate": {
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    },
-                    "search": "Buscar: "
-                },
-                "dom": '<"top"f>rt<"bottom"p><"clear">',
-                "initComplete": function (settings, json) {
-                    // Agrega un botón "Nueva Asignación" antes de la tabla
-                    var nuevaAsignacion = $('<button>', {
-                        text: 'Nueva Asignación',
-                        class: 'add-form',
-                        id: 'openModalBtn',
-                        click: function () {
-                            // Aquí puedes abrir un modal o redirigir para crear una nueva asignación
-                            modal.style.display = 'flex';
-                            cargarTrabajadores('#trabajador')
-                            cargarCamiones('#camion')
-                            cargarRutas('#ruta')
-                            cargarMapa()
-                        }
-                    });
-                    $('#asignacionTable').before(nuevaAsignacion);
-                }
-            });
+    "ajax": "{{ route('admin.asignaciones.data') }}", // Ruta que retorna las asignaciones en JSON
+    "columns": [
+        { "data": "id" },
+        { "data": "nombre" },
+        {
+            "data": null,
+            "render": function (data, type, row) {
+                return row.nombreUsuario + ' ' + row.apellidoPaterno + ' ' + row.apellidoMaterno;
+            }
+        },
+        {
+            "data": null,
+            "render": function (data, type, row) {
+                return `
+                    <div class="action-buttons">
+                        <button class="btn btn-info" title="Visualizar" onclick="ver('${row.id}');"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-warning" title="Editar" onclick="verEdit('${row.id}');"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" title="Eliminar" onclick="eliminar('${row.id}');"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+            }
+        }
+    ],
+    "pageLength": 8,
+    "language": {
+        "lengthMenu": "",
+        "info": "",
+        "infoEmpty": "",
+        "infoFiltered": "",
+        "emptyTable": "No hay asignaciones disponibles", // Mensaje para cuando no hay datos
+        "paginate": {
+            "next": "Siguiente",
+            "previous": "Anterior"
+        },
+        "search": "Buscar: "
+    },
+    "dom": '<"top"f>rt<"bottom"p><"clear">',
+    "initComplete": function (settings, json) {
+        // Agrega un botón "Nueva Asignación" antes de la tabla
+        var nuevaAsignacion = $('<button>', {
+            text: 'Nueva Asignación',
+            class: 'add-form',
+            id: 'openModalBtn',
+            click: function () {
+                // Aquí puedes abrir un modal o redirigir para crear una nueva asignación
+                modal.style.display = 'flex';
+                cargarTrabajadores('#trabajador');
+                cargarCamiones('#camion');
+                cargarRutas('#ruta');
+                cargarMapa();
+            }
+        });
+        $('#asignacionTable').before(nuevaAsignacion);
+    }
+});
+
         }
 
         function cargarTrabajadores(section, defaultValue = '') {

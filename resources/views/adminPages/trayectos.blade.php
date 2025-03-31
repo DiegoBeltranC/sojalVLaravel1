@@ -3,8 +3,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet" />
 <link rel="stylesheet" href="{{ asset('css/modalRuta.css') }}">
 <style>
-    #map { height: 40rem; width: 100%; z-index: 1; }
-
+    #map { height: 30rem; width: 100%; z-index: 1; }
 </style>
 @section('content')
 <div class="content">

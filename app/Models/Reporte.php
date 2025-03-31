@@ -12,18 +12,21 @@ class Reporte extends Model
         'idUsuario',
         'descripcion',
         'location',
-        'colonia',    // Corregido de 'colonias' a 'colonia' (string)
-        'calle',      // Corregido de 'calles' a 'calle' (string)
+        'colonia',
+        'calle',
+        'cruzamientos',   // Agregado
+        'referencias',    // Agregado
+        'imagenes',
+        'conjunto',
         'status',
-        'imagenes',   // Agregado para manejar imágenes
         'fechaCreacion',
     ];
 
     protected $casts = [
-        // Decodificar location si está guardado como JSON string
-        'location'      => 'string', // Se procesará en el controlador
-        'imagenes'      => 'array',  // Asegura que se maneje como un array de imágenes
+        'location'      => 'string', // Se procesa en el controlador si es necesario
+        'imagenes'      => 'array',  // Se manejará como array de imágenes
         'fechaCreacion' => 'datetime',
     ];
     
 }
+

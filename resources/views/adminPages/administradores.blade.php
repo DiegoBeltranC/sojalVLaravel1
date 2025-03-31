@@ -62,94 +62,94 @@
 
 @section('scripts')
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Referencias a modales
     const modal = document.getElementById('modal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    closeModalBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
     const modalView = document.getElementById('modalView');
-    const modalViewclose = document.getElementById('closeModalBtnView');
-    modalViewclose.addEventListener('click', () => {
-        modalView.style.display = 'none';
-    });
-
     const modalEdit = document.getElementById('modalEdit');
-    const modalEditclose = document.getElementById('closeModalBtnEdit')
-    modalEditclose.addEventListener('click', () => {
-        modalEdit.style.display = 'none';
-    });
 
-    $(document).ready(function () {
-        cargarTabla();
-    });
-
-    function cargarTabla() {
-        $('#administradoresTable').DataTable({
-            "ajax": "{{ route('admin.administradores.data') }}", // Llama a la ruta que retorna los datos
-            "columns": [
-                { "data": "id" },
-                {
-                    "data": null,
-                    "render": function (data, type, row) {
-                        // Combina el nombre con los apellidos
-                        return `${row.nombre} ${row.apellidos.paterno} ${row.apellidos.materno}`;
-                    }
-                },
-                { "data": "correo" },
-                { "data": "telefono" },
-                {
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return `
-                            <div class="action-buttons">
-                                <button class="btn btn-info" title="Visualizar" onclick="ver('${row.id}');"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-warning" title="Editar" onclick="verEdit('${row.id}');"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger" title="Eliminar" onclick="eliminar('${row.id}');"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                        `;
-                    }
-                }
-            ],
-            "pageLength": 8,
-            "language": {
-                "lengthMenu": "",
-                "info": "",
-                "infoEmpty": "",
-                "infoFiltered": "",
-                "paginate": {
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-                "search": "Buscar: "
-            },
-            "dom": '<"top"f>rt<"bottom"p><"clear">',
-            "initComplete": function (settings, json) {
-                // Agrega un botón "Nuevo Trabajador" antes de la tabla
-                var nuevoAdministrador = $('<button>', {
-                    text: 'Nuevo Administrador',
-                    class: 'add-form',
-                    id: 'openModalBtn',
-                    click: function () {
-                        // Aquí puedes abrir un modal o redirigir a una ruta para crear un nuevo trabajador
-                        modal.style.display = 'flex';
-                    }
-                });
-                $('#administradoresTable').before(nuevoAdministrador);
-            }
+    // Asignar eventos si los elementos existen
+    if(document.getElementById('closeModalBtn')){
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+    if(document.getElementById('closeModalBtnView')){
+        document.getElementById('closeModalBtnView').addEventListener('click', () => {
+            modalView.style.display = 'none';
+        });
+    }
+    if(document.getElementById('closeModalBtnEdit')){
+        document.getElementById('closeModalBtnEdit').addEventListener('click', () => {
+            modalEdit.style.display = 'none';
         });
     }
 
-    function ver(userId) {
+    // Cargar DataTable para Administradores
+    $('#administradoresTable').DataTable({
+        "ajax": "{{ route('admin.administradores.data') }}",
+        "columns": [
+            { "data": "id" },
+            {
+                "data": null,
+                "render": function(data, type, row) {
+                    return `${row.nombre} ${row.apellidos.paterno} ${row.apellidos.materno}`;
+                }
+            },
+            { "data": "correo" },
+            { "data": "telefono" },
+            {
+                "data": null,
+                "render": function(data, type, row) {
+                    return `
+                        <div class="action-buttons">
+                            <button class="btn btn-info" title="Visualizar" onclick="viewAdministrador('${row.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-warning" title="Editar" onclick="editAdministrador('${row.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" title="Eliminar" onclick="deleteAdministrador('${row.id}')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>`;
+                }
+            }
+        ],
+        "pageLength": 8,
+        "language": {
+            "paginate": {
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+            "search": "Buscar: "
+        },
+        "dom": '<"top"f>rt<"bottom"p><"clear">',
+        "initComplete": function (settings, json) {
+            var nuevoAdministrador = $('<button>', {
+                text: 'Nuevo Administrador',
+                class: 'add-form',
+                id: 'openModalBtn',
+                click: function () {
+                    // Muestra el modal (puedes adaptar la lógica según corresponda)
+                    modal.style.display = 'flex';
+                }
+            });
+            $('#administradoresTable').before(nuevoAdministrador);
+        }
+    });
+});
+
+// Función para visualizar datos de un administrador
+function viewAdministrador(userId) {
     $.ajax({
-        url: 'administradores/' + userId, // Usamos la ruta de Laravel con el ID
+        url: 'administradores/' + userId,
         type: 'GET',
         dataType: 'json',
         success: function(response) {
-            if (response.error) {
+            if(response.error) {
                 alert('Error: ' + response.error);
             } else {
-                // Actualizar el modal con los datos del administrador
                 $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
                 $('#fechaView').text(response.data.fecha_nacimiento);
                 $('#telefonoView').text(response.data.telefono);
@@ -157,7 +157,12 @@
                 $('#rfcView').text(response.data.rfc ? response.data.rfc : 'Vacio');
                 $('#curpView').text(response.data.curp ? response.data.curp : 'Vacio');
 
-                // Mostrar el modal
+                // Actualiza la imagen de perfil
+                if(response.data.profile_picture) {
+                    $('#profilePictureView').attr('src', '/storage/' + response.data.profile_picture);
+                } else {
+                    $('#profilePictureView').attr('src', '/images/default_profile.png');
+                }
                 $('#modalView').css('display', 'flex');
             }
         },
@@ -167,71 +172,77 @@
     });
 }
 
+// Función para editar datos de un administrador
+function editAdministrador(userId) {
+    $.ajax({
+        url: 'administradores/' + userId,
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if(response.error) {
+                alert('Error: ' + response.error);
+            } else {
+                $('#nombreEdit').val(response.data.nombre);
+                $('#apellidoPEdit').val(response.data.apellidoP);
+                $('#apellidoMEdit').val(response.data.apellidoM);
+                $('#fechaEdit').val(response.data.fecha_nacimiento);
+                $('#telefonoEdit').val(response.data.telefono);
+                $('#correoEdit').val(response.data.correo);
+                $('#rfcEdit').val(response.data.rfc);
+                $('#curpEdit').val(response.data.curp);
+                $('#id').val(response.data.id);
 
-    function eliminar(id) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `administradores/${id}`,  // Laravel ya genera esta ruta
-                    type: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Token CSRF
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire('¡Eliminado!', response.message, 'success');
-                            $('#administradoresTable').DataTable().ajax.reload();  // Recargar tabla
-                        } else {
-                            Swal.fire('¡Error!', response.message, 'error');
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('¡Error!', 'No se pudo eliminar el administrador.', 'error');
-                    }
-                });
-            }
-        });
-    }
-
-    function verEdit(userId) {
-        $.ajax({
-            url: 'administradores/' + userId,
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.error) {
-                    alert('Error: ' + response.error);
+                if(response.data.profile_picture){
+                    $('#profilePictureEdit').attr('src', '/storage/' + response.data.profile_picture);
                 } else {
-                    $('#nombreEdit').val(response.data.nombre);
-                    $('#apellidoPEdit').val(response.data.apellidoP);
-                    $('#apellidoMEdit').val(response.data.apellidoM);
-                    $('#fechaEdit').val(response.data.fecha_nacimiento);
-                    $('#telefonoEdit').val(response.data.telefono);
-                    $('#correoEdit').val(response.data.correo);
-                    $('#rfcEdit').val(response.data.rfc);
-                    $('#id').val(response.data.id);
-                    $('#curpEdit').val(response.data.curp);
-                    modalEdit.style.display = 'flex';
-                    $('#trabajadorFormEdit').attr('action', 'administradores/' + userId);
+                    $('#profilePictureEdit').attr('src', '/images/default_profile.png');
                 }
-            },
-            error: function() {
-                alert('Ocurrió un error al cargar los datos.');
+                $('#modalEdit').css('display', 'flex');
+                $('#trabajadorFormEdit').attr('action', 'administradores/' + userId);
             }
-        });
-    }
+        },
+        error: function() {
+            alert('Ocurrió un error al cargar los datos.');
+        }
+    });
+}
 
-
-
+// Función para eliminar un administrador
+function deleteAdministrador(userId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if(result.isConfirmed) {
+            $.ajax({
+                url: 'administradores/' + userId,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if(response.success) {
+                        Swal.fire('¡Eliminado!', response.message, 'success');
+                        $('#administradoresTable').DataTable().ajax.reload();
+                    } else {
+                        Swal.fire('¡Error!', response.message, 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('¡Error!', 'No se pudo eliminar el administrador.', 'error');
+                }
+            });
+        }
+    });
+}
 </script>
-
-
-
 @endsection
+
+
+
+
+

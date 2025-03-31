@@ -15,23 +15,31 @@ class AsignacionController extends Controller
 
     public function data()
     {
-        $asignaciones = Asignacion::get()->map(function ($asignacion) {
+        $asignaciones = Asignacion::get();
+
+        if ($asignaciones->isEmpty()) {
+            // Retornamos un arreglo vacío en la clave data
+            return response()->json(['data' => []]);
+        }
+
+        $mapped = $asignaciones->map(function ($asignacion) {
             return [
-                'id'        => (string)$asignacion->_id,
-                'idUsuario'    => (string)$asignacion->idUsuario,
-                'idRuta' => (string)$asignacion->idRuta,
-                'idCamion'    => (string)$asignacion->idCamion,
-                'nombreUsuario'  => $asignacion->nombreUsuario,
-                'apellidoPaterno'  => $asignacion->apellidoPaterno,
-                'apellidoMaterno'  => $asignacion->apellidoMaterno,
-                'nombreRuta' => $asignacion->nombreRuta,
-                'placasCamion' =>$asignacion->placasCamion,
-                'nombre' => $asignacion->nombre
-                // Agrega más campos si lo requieres
+                'id'              => (string)$asignacion->_id,
+                'idUsuario'       => (string)$asignacion->idUsuario,
+                'idRuta'          => (string)$asignacion->idRuta,
+                'idCamion'        => (string)$asignacion->idCamion,
+                'nombreUsuario'   => $asignacion->nombreUsuario,
+                'apellidoPaterno' => $asignacion->apellidoPaterno,
+                'apellidoMaterno' => $asignacion->apellidoMaterno,
+                'nombreRuta'      => $asignacion->nombreRuta,
+                'placasCamion'    => $asignacion->placasCamion,
+                'nombre'          => $asignacion->nombre,
             ];
         });
-        return response()->json(['data' => $asignaciones]);
+
+        return response()->json(['data' => $mapped]);
     }
+
 
     public function store(Request $request)
     {
@@ -70,9 +78,9 @@ class AsignacionController extends Controller
                 'nombreRuta' => $asignacion->nombreRuta,
                 'placasCamion' =>$asignacion->placasCamion,
                 'nombre' => $asignacion->nombre,
-                'idRuta' => $asignacion->idRuta,
-                'idUsuario' => $asignacion->idUsuario,
-                'idCamion' => $asignacion->idCamion
+                'idRuta' => (string)$asignacion->idRuta,
+                'idUsuario' => (string)$asignacion->idUsuario,
+                'idCamion' => (string)$asignacion->idCamion
         ]);
     }
 

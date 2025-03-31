@@ -13,6 +13,7 @@ class Truck extends Model
         'brand',
         'model',
         'status',
+        'image',
         'year',
     ];
 

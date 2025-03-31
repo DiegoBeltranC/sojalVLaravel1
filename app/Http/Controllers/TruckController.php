@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Truck;
+use Illuminate\Validation\Rule;
+
 
 class TruckController extends Controller
 {
-    // Esta propiedad se definirá en el controlador hijo.
-
     public function index()
     {
         return view('trucks.camiones');
@@ -18,13 +18,13 @@ class TruckController extends Controller
     {
         $trucks = Truck::get()->map(function ($truck) {
             return [
-                'id'        => (string)$truck->_id,
-                'plates'    => $truck->plates,
-                'brand' => $truck->brand,
-                'model'    => $truck->model,
-                'year'  => $truck->year,
-                'status'  => $truck->status,
-                // Agrega más campos si lo requieres
+                'id'     => (string)$truck->_id,
+                'plates' => $truck->plates,
+                'brand'  => $truck->brand,
+                'model'  => $truck->model,
+                'year'   => $truck->year,
+                'status' => $truck->status,
+                'image'  => $truck->image,
             ];
         });
         return response()->json(['data' => $trucks]);
@@ -32,92 +32,126 @@ class TruckController extends Controller
 
     public function store(Request $request)
     {
-        // Validación. Nota: si en algún caso (por ejemplo, en ciudadanos) no se requieren
-        // ciertos campos, puedes ajustar la validación según el rol.
         $rules = [
-           'plates' => 'required',
-            'brand' => 'required',
-            'model' => 'required',
-            'year' => 'required|integer',
+            'plates' => [
+                'required',
+                'regex:/^[A-Za-z]{3}-?\d{3,4}$/i',
+                'unique:trucks,plates'
+            ],
+            'brand'  => ['required', 'max:15', 'regex:/^[A-Za-z\s]+$/'],
+            'model'  => ['required', 'max:15', 'regex:/^[A-Za-z\s]+$/'],
+            'year'   => 'required|integer',
             'status' => 'required',
+            'image'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
-
 
         $validated = $request->validate($rules);
 
-        $plates    = $request->plates;
-        $brand = $request->brand;
-        $model = $request->model;
-        $status = $request->status;
-        $year = $request->year;
+        // Procesar la imagen del camión
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $ruta = $image->storeAs('imagenes_camiones', $imageName, 'public');
+        } else {
+            $ruta = null;
+        }
 
         Truck::create([
-            'plates' => $plates,
-            'brand' => $brand,
-            'model' => $model,
-            'status' => $status,
-            'year' => $year,
+            'plates' => $request->plates,
+            'brand'  => $request->brand,
+            'model'  => $request->model,
+            'status' => $request->status,
+            'year'   => $request->year,
+            'image'  => $ruta,
         ]);
 
-        return redirect()->route('admin.trucks.index');
+        return redirect()->route('admin.trucks.index')
+            ->with('truckStored', 'Camión registrado correctamente.');
     }
+
+
 
     public function show($id)
     {
         $truck = Truck::find($id);
 
+        if (!$truck) {
+            return response()->json(['error' => 'Camión no encontrado'], 404);
+        }
+
         return response()->json([
             'data' => [
-                'plates'        => $truck->plates,
-                'brand' => $truck->brand,
-                'model'      => $truck->model,
-                'status'        => $truck->status,
-                'year'           => $truck->year,
+                'plates' => $truck->plates,
+                'brand'  => $truck->brand,
+                'model'  => $truck->model,
+                'year'   => $truck->year,
+                'status' => $truck->status,
+                'image'  => $truck->image,
             ]
         ]);
     }
+
 
     public function update(Request $request, $id)
     {
         $truck = Truck::find($id);
 
+        if (!$truck) {
+            return redirect()->back()->with('error', 'Camión no encontrado');
+        }
+
         $rules = [
-            'plates' => 'required',
-             'brand' => 'required',
-             'model' => 'required',
-             'year' => 'required|integer',
-             'status' => 'required',
-         ];
+            'plates'  => [
+                'required',
+                'regex:/^[A-Za-z]{3}-?\d{3,4}$/i',
+                Rule::unique('trucks', 'plates')->ignore($truck->_id, '_id') // Ignorar el documento actual
+            ],
+            'brand'   => ['required', 'max:15', 'regex:/^[A-Za-z\s]+$/'],
+            'model'   => ['required', 'max:15', 'regex:/^[A-Za-z\s]+$/'],
+            'year'    => 'required|integer',
+            'status'  => 'required',
+            'image'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ];
 
         $validated = $request->validate($rules);
 
-        $plates    = $request->plates;
-        $brand = $request->brand;
-        $model = $request->model;
-        $status = $request->status;
-        $year = $request->year;
+        // Procesar la imagen si se actualiza
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $ruta = $image->storeAs('imagenes_camiones', $imageName, 'public');
+        } else {
+            $ruta = $truck->image;
+        }
 
-        $truck->plates = $plates;       
-        $truck->brand = $brand;
-        $truck->model = $model;
-        $truck->status = $status;
-        $truck->year = $year;
+        $truck->plates = $request->plates;
+        $truck->brand  = $request->brand;
+        $truck->model  = $request->model;
+        $truck->year   = $request->year;
+        $truck->status = $request->status;
+        $truck->image  = $ruta;
 
         $truck->save();
-        
-        return redirect()->route('admin.trucks.index');    
+
+        return redirect()->route('admin.trucks.index')
+            ->with('truckUpdated', 'Camión actualizado correctamente.');
     }
+
+    
+    
 
     public function destroy($id)
     {
         $truck = Truck::find($id);
 
+        if (!$truck) {
+            return response()->json(['success' => false, 'message' => 'Camión no encontrado'], 404);
+        }
+
         $truck->delete();
 
-        return response()->json(['success' => true, 'message' => ' eliminado correctamente']);
+        return response()->json(['success' => true, 'message' => 'Camión eliminado correctamente']);
     }
 }
-
-
 
 

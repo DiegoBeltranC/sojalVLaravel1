@@ -140,48 +140,48 @@
 <body>
     <div class="container">
         <div class="banner">
-           
+            <h1>Configuración del Perfil</h1>
         </div>
         <div class="profile-section">
-            <img src="" alt="Foto de Perfil">
+            <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default_profile.png') }}" alt="Foto de Perfil">
             <div class="profile-info">
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" value="Jonathan" disabled>
+                <input type="text" id="nombre" value="{{ Auth::user()->nombre }}" disabled>
                 <label for="correo">Correo Electrónico</label>
-                <input type="email" id="correo" value="jonathan.cherriz@example.com" disabled>
+                <input type="email" id="correo" value="{{ Auth::user()->correo }}" disabled>
             </div>
         </div>
         <div class="form-section">
             <div class="form-group">
                 <div class="input-container">
                     <label for="apellido-paterno">Apellido Paterno</label>
-                    <input type="text" id="apellido-paterno" value="Cherriz" disabled>
+                    <input type="text" id="apellido-paterno" value="{{ Auth::user()->apellidos['paterno'] }}" disabled>
                 </div>
                 <div class="input-container">
                     <label for="apellido-materno">Apellido Materno</label>
-                    <input type="text" id="apellido-materno" value="Lopez" disabled>
+                    <input type="text" id="apellido-materno" value="{{ Auth::user()->apellidos['materno'] }}" disabled>
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-container">
                     <label for="curp">CURP</label>
-                    <input type="text" id="curp" value="CHL***" disabled>
+                    <input type="text" id="curp" value="{{ Auth::user()->curp }}" disabled>
                 </div>
                 <div class="input-container">
                     <label for="rfc">RFC</label>
-                    <input type="text" id="rfc" value="CHR***" disabled>
+                    <input type="text" id="rfc" value="{{ Auth::user()->rfc }}" disabled>
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-container">
                     <label for="contrasena">Contraseña</label>
-                    <input type="password" id="contrasena" value="*****" disabled>
+                    <input type="password" id="contrasena" value="{{ Auth::user()->password }}" disabled>
                 </div>
             </div>
         </div>
         <div class="buttons-container">
-            <button class="btn edit-btn">Editar Perfil</button>
-            <a href="{{ url()->previous() }}"><button class="btn home-btn">Volver al Inicio</button></a>
+            <a href="{{ route('perfil.edit') }}" class="btn edit-btn">Editar Perfil</a>
+            <a href="{{ route('admin.estadisticas') }}" class="btn home-btn">Volver al inicio</a>
         </div>
     </div>
 </body>

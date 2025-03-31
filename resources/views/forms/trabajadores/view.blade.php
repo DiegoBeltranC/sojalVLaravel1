@@ -1,3 +1,4 @@
+<!-- resources/views/forms/trabajadores/view.blade.php -->
 <link rel="stylesheet" href="{{ asset('css/forms/viewForm.css') }}">
 
 <div id="modalView" class="modal">
@@ -5,7 +6,11 @@
       <span id="closeModalBtnView" class="close-btn">&times;</span>
       <h2>Información del Trabajador</h2>
       <div id="workerInfo">
-
+        <!-- Bloque para mostrar la foto de perfil -->
+        <div class="form-group">
+          <label>Foto de Perfil:</label>
+          <img id="profileImageView" src="{{ asset('images/default_profile.png') }}" alt="Foto de Perfil" style="max-width: 150px;">
+        </div>
         <div class="form-group">
           <label>Nombre:</label>
           <p id="nombreView">Juan Pérez</p>
@@ -24,12 +29,13 @@
         </div>
         <div class="form-group">
           <label>RFC:</label>
-          <p id="rfcView">Vacio</p>
+          <p id="rfcView">Vacío</p>
         </div>
         <div class="form-group">
           <label>CURP:</label>
-          <p id="curpView">Vacio</p>
+          <p id="curpView">Vacío</p>
         </div>
       </div>
     </div>
 </div>
+

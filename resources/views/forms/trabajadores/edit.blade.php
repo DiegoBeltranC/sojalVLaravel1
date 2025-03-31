@@ -20,6 +20,14 @@
                 <input type="text" id="apellidoMEdit" name="apellidoM" required>
             </div>
             <div class="form-group">
+                <label>Foto de Perfil:</label>
+                <img id="profileImageEdit" src="{{ asset('images/default_profile.png') }}" alt="Foto de Perfil" style="max-width: 150px;">
+            </div>
+            <div class="form-group">
+                <label for="profile_picture_edit">Cambiar Foto de Perfil (opcional):</label>
+                <input type="file" id="profile_picture_edit" name="profile_picture" accept="image/*">
+            </div>
+            <div class="form-group">
                 <label for="date">Fecha de Nacimiento:</label>
                 <input type="date" id="fechaEdit" name="fechaNacimiento" required>
             </div>

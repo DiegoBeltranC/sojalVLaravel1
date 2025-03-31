@@ -1,238 +1,147 @@
-@extends('layouts.admin-navbar')
 <link rel="stylesheet" href="{{ asset('css/ViewNotifiacion.css') }}" />
 
+
+@extends('layouts.admin-navbar')
+
 @section('content')
-@if(session('administradorGuardado'))
+  @if(session('success'))
     <script>
-        Swal.fire({
-            title: '¡Éxito!',
-            text: "{{ session('administradorGuardado') }}",
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-        });
+      Swal.fire({
+        title: '¡Éxito!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      });
     </script>
-@endif
-@if(session('administradorActualizado'))
-    <script>
-        Swal.fire({
-            title: '¡Éxito!',
-            text: "{{ session('administradorActualizado') }}",
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-        });
-    </script>
-@endif
+  @endif
 
-<style>
-  #content {
-    padding-left: 0px;
-    padding-right: 0px;
-  }
- </style>
- <!-- Contenido-->
- <div class="content" id="content">
+  <!-- Contenedor principal de la sección de noticias -->
+  <div class="content">
+    <!-- Botón para abrir el formulario de nueva noticia -->
     <div class="content-button">
-      <h2>NOTIFICACIONES</h2>
-      <button class="add">
-      <span class="button-text" id="Agregar-Notificacion">Agregar</span>
-     <img src="../images/Icons/boton-mas.svg" alt="Icono" class="button-icon">
-    </button>
+      <h2>NOTICIAS</h2>
+      <button class="add" onclick="toggleForm()">
+        <span class="button-text">Agregar</span>
+        <img src="{{ asset('images/Icons/boton-mas.svg') }}" alt="Icono" class="button-icon">
+      </button>
+    </div>
 
-      </div>
-      <div class="container-cards">
-    <div class="card">
-        <img src="../images/RecolectorBasura.jpg" alt="Imagen de la noticia" class="news-image">
-        <div class="card-content">
-            <h2>Título de la Noticia</h2>
-            <p class="mini-description">Esta es una breve descripción de la noticia que explica de qué trata.</p>
+    <!-- Contenedor de las cards de noticias -->
+    <div class="container-cards">
+      @foreach($noticias as $noticia)
+        <div class="card">
+          <img src="{{ $noticia->url_imagen ? asset('storage/' . $noticia->url_imagen) : asset('images/default.jpg') }}" 
+               alt="Imagen de la noticia" 
+               class="news-image">
+          <div class="card-content">
+            <h2>{{ $noticia->titulo }}</h2>
+            <p class="mini-description">{{ $noticia->descripcion }}</p>
             <div class="dates">
-                <p class="start-date">01/01/2024</p>
-                <p class="end-date">07/01/2024</p>
+              <p class="start-date">
+                {{ \Carbon\Carbon::parse($noticia->fecha_inicio)->format('d/m/Y') }}
+              </p>
+              <p class="end-date">
+                {{ \Carbon\Carbon::parse($noticia->fecha_fin)->format('d/m/Y') }}
+              </p>
             </div>
             <div class="creator-info">
-                <img src="../package/image/photos/UserHunter.jpg" alt="Imagen de perfil" class="profile-image">
-                <p>Jonathan Cherriz</p>
+              <img src="{{ $noticia->usuario && $noticia->usuario->profile_picture ? asset('storage/' . $noticia->usuario->profile_picture) : asset('images/default_profile.png') }}" 
+                  alt="Imagen de perfil" 
+                  class="profile-image">
+              <p>{{ $noticia->usuario->nombre ?? 'Sin usuario' }}</p>
             </div>
             <div class="news-footer">
-                <span class="likes">120 Likes</span>
-                <div class="actions">
-                    <button class="edit-btn">Editar</button>
-                    <button class="details-btn">Ver Más</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <img src="../images/RecolectorBasura.jpg" alt="Imagen de la noticia" class="news-image">
-        <div class="card-content">
-            <h2>Título de la Noticia</h2>
-            <p class="mini-description">Esta es una breve descripción de la noticia que explica de qué trata.</p>
-            <div class="dates">
-                <p class="start-date">01/01/2024</p>
-                <p class="end-date">07/01/2024</p>
-            </div>
-            <div class="creator-info">
-                <img src="../package/image/photos/UserHunter.jpg" alt="Imagen de perfil" class="profile-image">
-                <p>Jonathan Cherriz</p>
-            </div>
-            <div class="news-footer">
-                <span class="likes">120 Likes</span>
-                <div class="actions">
-                    <button class="edit-btn">Editar</button>
-                    <button class="details-btn">Ver Más</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <img src="../images/RecolectorBasura.jpg" alt="Imagen de la noticia" class="news-image">
-        <div class="card-content">
-            <h2>Título de la Noticia</h2>
-            <p class="mini-description">Esta es una breve descripción de la noticia que explica de qué trata.</p>
-            <div class="dates">
-                <p class="start-date">01/01/2024</p>
-                <p class="end-date">07/01/2024</p>
-            </div>
-            <div class="creator-info">
-                <img src="../package/image/photos/UserHunter.jpg" alt="Imagen de perfil" class="profile-image">
-                <p>Jonathan Cherriz</p>
-            </div>
-            <div class="news-footer">
-                <span class="likes">120 Likes</span>
-                <div class="actions">
-                    <button class="edit-btn">Editar</button>
-                    <button class="details-btn">Ver Más</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-    </div>
-</div>
+              <span class="likes">{{ $noticia->likes }} Likes</span>
+              <div class="btn-container">
+                <button class="btn btn-edit"
+                        data-id="{{ $noticia->id }}"
+                        data-titulo="{{ $noticia->titulo }}"
+                        data-descripcion="{{ $noticia->descripcion }}"
+                        data-url_imagen="{{ $noticia->url_imagen }}"
+                        data-fecha_inicio="{{ \Carbon\Carbon::parse($noticia->fecha_inicio)->format('Y-m-d') }}"
+                        data-hora_inicio="{{ \Carbon\Carbon::parse($noticia->fecha_inicio)->format('H:i') }}"
+                        data-fecha_fin="{{ \Carbon\Carbon::parse($noticia->fecha_fin)->format('Y-m-d') }}"
+                        data-hora_fin="{{ \Carbon\Carbon::parse($noticia->fecha_fin)->format('H:i') }}"
+                        onclick="obtenerDatos(this)">
+                  Editar
+                </button>
 
+                <button class="btn btn-details"
+                        data-titulo="{{ $noticia->titulo }}"
+                        data-descripcion="{{ $noticia->descripcion }}"
+                        data-url_imagen="{{ $noticia->url_imagen }}"
+                        data-fecha_inicio="{{ \Carbon\Carbon::parse($noticia->fecha_inicio)->format('Y-m-d') }}"
+                        data-hora_inicio="{{ \Carbon\Carbon::parse($noticia->fecha_inicio)->format('H:i') }}"
+                        data-fecha_fin="{{ \Carbon\Carbon::parse($noticia->fecha_fin)->format('Y-m-d') }}"
+                        data-hora_fin="{{ \Carbon\Carbon::parse($noticia->fecha_fin)->format('H:i') }}"
+                        onclick="verDatos(this)">
+                  Ver Más
+                </button>
+                <form class="form-delete" action="{{ route('admin.noticias.destroy', $noticia->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-delete">Eliminar</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      @endforeach
     </div>
   </div>
+
+  <!-- Incluir los partials -->
+  @include('forms.noticias.new')
+  @include('forms.noticias.edit')
+  @include('forms.noticias.view')
 @endsection
 
 @section('scripts')
-<script>
-    const modal = document.getElementById('modal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    closeModalBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+  <script>
+    // Función para abrir el modal de edición ya definida en el partial de edición (obtenerDatos la llamará)
+    // Función para mostrar el modal de visualización (se asume toggleFormView() ya está definida en su partial)
+    function verDatos(btn) {
+      const titulo      = btn.getAttribute('data-titulo');
+      const descripcion = btn.getAttribute('data-descripcion');
+      const urlImagen   = btn.getAttribute('data-url_imagen');
+      const fechaInicio = btn.getAttribute('data-fecha_inicio');
+      const horaInicio  = btn.getAttribute('data-hora_inicio');
+      const fechaFin    = btn.getAttribute('data-fecha_fin');
+      const horaFin     = btn.getAttribute('data-hora_fin');
 
-    const modalView = document.getElementById('modalView');
-    const modalViewclose = document.getElementById('closeModalBtnView');
-    modalViewclose.addEventListener('click', () => {
-        modalView.style.display = 'none';
-    });
+      document.getElementById('titulo_view').value = titulo;
+      document.getElementById('descripcion_view').value = descripcion;
+      document.getElementById('fecha_inicio_view').value = fechaInicio;
+      document.getElementById('hora_inicio_view').value = horaInicio;
+      document.getElementById('fecha_fin_view').value = fechaFin;
+      document.getElementById('hora_fin_view').value = horaFin;
 
-    const modalEdit = document.getElementById('modalEdit');
-    const modalEditclose = document.getElementById('closeModalBtnEdit')
-    modalEditclose.addEventListener('click', () => {
-        modalEdit.style.display = 'none';
-    });
+      const rutaImagen = urlImagen ? `/storage/${urlImagen}` : "{{ asset('images/default.jpg') }}";
+      document.getElementById('imagen_view').src = rutaImagen;
 
-    $(document).ready(function () {
-        cargarTabla();
-    });
-
-    
-
-    function ver(userId) {
-        $.ajax({
-            url: 'administradores/' + userId, // Usamos la ruta de Laravel con el ID
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.error) {
-                    alert('Error: ' + response.error);
-                } else {
-                    // Actualizar el modal con los datos del trabajador
-                    $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
-                    $('#fechaView').text(response.data.fechaNacimiento);
-                    $('#telefonoView').text(response.data.telefono);
-                    $('#correoView').text(response.data.correo);
-                    $('#rfcView').text(response.data.rfc);
-                    $('#fechaView').text(response.data.fecha_nacimiento);
-                    $('#curpView').text(response.data.curp);
-
-                    // Mostrar el modal
-                    modalView.style.display = 'flex';
-                }
-            },
-            error: function() {
-
-                alert('Ocurrió un error al cargar los datos.');
-            }
-        });
+      toggleFormView();
     }
 
-    function eliminar(id) {
+    document.querySelectorAll('.form-delete').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevenir el envío inmediato
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
+          title: '¿Estás seguro?',
+          text: "Esta acción no se puede deshacer",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Eliminar',
+          cancelButtonText: 'Cancelar'
         }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `administradores/${id}`,  // Laravel ya genera esta ruta
-                    type: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Token CSRF
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire('¡Eliminado!', response.message, 'success');
-                            $('#administradoresTable').DataTable().ajax.reload();  // Recargar tabla
-                        } else {
-                            Swal.fire('¡Error!', response.message, 'error');
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('¡Error!', 'No se pudo eliminar el administrador.', 'error');
-                    }
-                });
-            }
+          if (result.isConfirmed) {
+            // Si el usuario confirma, envía el formulario
+            form.submit();
+          }
         });
-    }
+      });
+    });
 
-    function verEdit(userId) {
-        $.ajax({
-            url: 'administradores/' + userId,
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.error) {
-                    alert('Error: ' + response.error);
-                } else {
-                    $('#nombreEdit').val(response.data.nombre);
-                    $('#apellidoPEdit').val(response.data.apellidoP);
-                    $('#apellidoMEdit').val(response.data.apellidoM);
-                    $('#fechaEdit').val(response.data.fecha_nacimiento);
-                    $('#telefonoEdit').val(response.data.telefono);
-                    $('#correoEdit').val(response.data.correo);
-                    $('#rfcEdit').val(response.data.rfc);
-                    $('#id').val(response.data.id);
-                    $('#curpEdit').val(response.data.curp);
-                    modalEdit.style.display = 'flex';
-                    $('#trabajadorFormEdit').attr('action', 'administradores/' + userId);
-                }
-            },
-            error: function() {
-                alert('Ocurrió un error al cargar los datos.');
-            }
-        });
-    }
-
-
-
-</script>
-
-
-
+  </script>
 @endsection
