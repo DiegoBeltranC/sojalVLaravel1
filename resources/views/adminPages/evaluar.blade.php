@@ -373,7 +373,7 @@
                             data.avances.forEach(function(avance) {
                                 avancesHTML += `
                                     <div class="card" style="padding: 16px;">
-                                        <p style="margin-bottom: 14px;"><strong>Descripción:</strong> ${avance.descripcion}</p>
+                                        <p style="margin-bottom: 14px;"><strong>Descripciónavanc:</strong> ${avance.descripcion}</p>
                                         <p style="margin-bottom: 14px;"><strong>Fecha de subida:</strong> ${new Date(avance.fecha_subida).toLocaleString()}</p>
                                         <div class="imagenes-avance" style="margin-bottom: 14px;">
                                             ${ avance.imagenes && avance.imagenes.length > 0
