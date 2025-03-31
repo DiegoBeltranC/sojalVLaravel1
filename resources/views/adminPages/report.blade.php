@@ -70,7 +70,7 @@
                         <td>{{ $estadistica->idUsuario }}</td>
                         <td>{{ $estadistica->descripcion }}</td>
                         <td>{{ $estadistica->colonia }}</td>
-                        <td>{{ $estadistica->fechaCreacion }}</td>
+                        <td>{{ $estadistica->created_at }}</td>
                         <td>{{ $estadistica->status }}</td>
                     </tr>
                     @endforeach
