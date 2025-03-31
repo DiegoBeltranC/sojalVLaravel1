@@ -423,7 +423,7 @@
 
         function verEdit(userId) {
             $.ajax({
-                url: '/' + userId, // Ruta de Laravel con el ID
+                url: 'asignacion/' + userId, // Ruta de Laravel con el ID
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {

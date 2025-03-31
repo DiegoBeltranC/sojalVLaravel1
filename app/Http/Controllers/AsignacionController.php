@@ -70,9 +70,9 @@ class AsignacionController extends Controller
                 'nombreRuta' => $asignacion->nombreRuta,
                 'placasCamion' =>$asignacion->placasCamion,
                 'nombre' => $asignacion->nombre,
-                'idRuta' => $asignacion->idRuta,
-                'idUsuario' => $asignacion->idUsuario,
-                'idCamion' => $asignacion->idCamion
+                'idRuta' => (string)$asignacion->idRuta,
+                'idUsuario' => (string)$asignacion->idUsuario,
+                'idCamion' => (string)$asignacion->idCamion
         ]);
     }
 
