@@ -89,15 +89,26 @@ class Asignacion extends Model
             $asignacion->apellidoPaterno = $usuario ? $usuario->apellidos['paterno'] : null;
             $asignacion->apellidoMaterno = $usuario ? $usuario->apellidos['materno'] : null;
             $asignacion->telefono = $usuario ? $usuario->telefono : null;
-            $asignacion->nombreRuta = $ruta ? $ruta->nombre : null; 
+            $asignacion->nombreRuta = $ruta ? $ruta->nombre : null;
             $asignacion->placasCamion = $camion ? $camion->plates : null;
 
-            // Extrae la primera palabra de cada dato
-            $firstUserName = $usuario ? explode(' ', trim($usuario->nombre))[0] : 'sinUsuario';
+            // Construir el nombre completo del trabajador
+            if ($usuario) {
+                // Se concatena el nombre y los apellidos, asegurando espacios adecuados
+                $nombreCompleto = trim($usuario->nombre . ' ' . ($usuario->apellidos['paterno'] ?? '') . ' ' . ($usuario->apellidos['materno'] ?? ''));
+            } else {
+                $nombreCompleto = 'SIN_USUARIO';
+            }
 
-            // Construir el nombre de la asignación con el formato: primerNombreUsuario-primerNombreRuta-placas
-            $asignacion->nombre = $firstUserName . '-' . $ruta->nombre . '-' . $camion->plates;
+            // Valores por defecto en caso de que no se encuentren la ruta o el camión
+            $rutaNombre = $ruta ? $ruta->nombre : 'SIN_RUTA';
+            $camionPlacas = $camion ? $camion->plates : 'SIN_CAMION';
+
+            // Construir el nombre de la asignación con el formato deseado
+            // Ejemplo: "Juan Pérez (Ruta Central - ABC123)"
+            $asignacion->nombre = "{$nombreCompleto} ({$rutaNombre} - {$camionPlacas})";
         });
+
     }
 
 }

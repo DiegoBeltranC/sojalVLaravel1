@@ -99,6 +99,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     Route::get('/reportes/getPoints', [ReporteController::class, 'getPoints'])
        ->name('admin.reportes.getPoints');
+    Route::resource('reportes', ReporteController::class)
+       ->names([
+           'show'    => 'admin.noticias.show',
+       ]);
 
     // Noticias
     Route::get('/noticias/api', [NoticiasController::class, 'data'])
@@ -139,9 +143,17 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'destroy' => 'admin.asignacion.destroy'
     ]);
 
+        Route::get('/evaluar/cambiarProgreso/{id}', [evaluarController::class, 'cambiarProgreso'])
+        ->name('admin.evaluar.cambiarProgreso');
+
+        Route::post('/evaluar/finalizarReporte/{id}', [evaluarController::class, 'finalizarReporte'])
+        ->name('admin.evaluar.finalizarReporte');
+
     Route::resource('evaluar', evaluarController::class)
     ->names([
         'index'   => 'admin.evaluar.index',
+        'store' => 'admin.evaluar.store',
+        'destroy' => 'admin.evaluar.destroy'
     ]);
 });
 
