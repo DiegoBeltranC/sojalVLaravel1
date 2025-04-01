@@ -172,16 +172,10 @@
                     <input type="text" id="rfc" value="{{ Auth::user()->rfc }}" disabled>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="input-container">
-                    <label for="contrasena">Contraseña</label>
-                    <input type="password" id="contrasena" value="{{ Auth::user()->password }}" disabled>
-                </div>
-            </div>
         </div>
         <div class="buttons-container">
             <a href="{{ route('perfil.edit') }}" class="btn edit-btn">Editar Perfil</a>
-            <a href="{{ route('admin.estadisticas') }}" class="btn home-btn">Volver al inicio</a>
+            <a href="{{ route('admin.estadisticas.index') }}" class="btn home-btn">Volver al inicio</a>
         </div>
     </div>
 </body>

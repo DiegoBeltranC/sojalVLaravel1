@@ -69,6 +69,16 @@
     formulario.style.display = (currentDisplay === "none") ? "flex" : "none";
   }
 
+    // Actualiza el atributo "min" de la fecha de cierre en función de la fecha de inicio seleccionada
+    document.getElementById('fecha_inicio').addEventListener('change', function() {
+    document.getElementById('fecha_fin').min = this.value;
+  });
+
+  // De igual forma, para la hora, ya lo tenías implementado:
+  document.getElementById('hora_inicio').addEventListener('change', function() {
+    document.getElementById('hora_fin').min = this.value;
+  });
+  
   // Actualiza la vista previa para el formulario nuevo cuando se seleccione una imagen
   document.getElementById('url_imagen').addEventListener('change', function(event) {
     const [file] = this.files;

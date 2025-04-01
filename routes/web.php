@@ -13,7 +13,6 @@ use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\evaluarController;
 use App\Http\Controllers\configuracionController;
 use App\Http\Controllers\estadisticaController;
-
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminConfController;
 use App\Http\Controllers\PerfilController;

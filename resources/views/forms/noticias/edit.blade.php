@@ -64,6 +64,16 @@
   function closeEditModal() {
     document.getElementById('content-form-update').style.display = "none";
   }
+
+    // Actualiza el atributo "min" de la fecha de cierre en función de la fecha de inicio seleccionada
+    document.getElementById('fecha_inicio_update').addEventListener('change', function() {
+    document.getElementById('fecha_fin_update').min = this.value;
+  });
+
+  // Para la hora:
+  document.getElementById('hora_inicio_update').addEventListener('change', function() {
+    document.getElementById('hora_fin_update').min = this.value;
+  });
   
   // Actualiza la vista previa cuando se selecciona una nueva imagen en el input de edición.
   document.getElementById('url_imagen_update').addEventListener('change', function(event) {

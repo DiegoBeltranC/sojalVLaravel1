@@ -10,10 +10,11 @@ class NoticiasController extends Controller
 {
     public function index()
     {
-        // Obtiene todas las noticias junto con el usuario relacionado
-        $noticias = Noticia::with('usuario')->get();
+        // Obtiene todas las noticias y las ordena de más reciente a más antigua
+        $noticias = Noticia::with('usuario')->orderBy('created_at', 'desc')->get();
         return view('adminPages.noticias', compact('noticias'));
     }
+    
 
     public function show($id)
     {

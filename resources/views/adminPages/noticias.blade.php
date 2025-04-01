@@ -35,7 +35,7 @@
                class="news-image">
           <div class="card-content">
             <h2>{{ $noticia->titulo }}</h2>
-            <p class="mini-description">{{ $noticia->descripcion }}</p>
+            <p class="mini-description" style="text-align: justify">{{ $noticia->descripcion }}</p>
             <div class="dates">
               <p class="start-date">
                 {{ \Carbon\Carbon::parse($noticia->fecha_inicio)->format('d/m/Y') }}
