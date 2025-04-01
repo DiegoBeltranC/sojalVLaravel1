@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Truck;
 use Illuminate\Validation\Rule;
+use App\Models\Asignacion;
+use MongoDB\BSON\ObjectId;
 
 
 class TruckController extends Controller
@@ -137,8 +139,8 @@ class TruckController extends Controller
             ->with('truckUpdated', 'Camión actualizado correctamente.');
     }
 
-    
-    
+
+
 
     public function destroy($id)
     {
@@ -148,9 +150,41 @@ class TruckController extends Controller
             return response()->json(['success' => false, 'message' => 'Camión no encontrado'], 404);
         }
 
+        $truckIdObject = new ObjectId($truck->getKey());
+
+        // Comprobar si el camión tiene asignaciones activas
+        if (Asignacion::where('idCamion', $truckIdObject)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede eliminar el camión porque tiene asignaciones activas.'
+            ], 400);
+        }
+
         $truck->delete();
 
         return response()->json(['success' => true, 'message' => 'Camión eliminado correctamente']);
+    }
+
+    public function camionesActivos()
+    {
+        // 1. Query only for trucks with 'activo' status
+        $activeTrucks = Truck::where('status', 'Activo')->get();
+
+        // 2. Map the results to the desired structure (same as in data() method)
+        $structuredTrucks = $activeTrucks->map(function ($truck) {
+            return [
+                'id'     => (string)$truck->_id, // Cast _id to string
+                'plates' => $truck->plates,
+                'brand'  => $truck->brand,
+                'model'  => $truck->model,
+                'year'   => $truck->year,
+                'status' => $truck->status, // This will always be 'activo' due to the query
+                'image'  => $truck->image,
+            ];
+        });
+
+        // 3. Return the response wrapped in a 'data' key
+        return response()->json(['data' => $structuredTrucks]);
     }
 }
 

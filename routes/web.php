@@ -82,6 +82,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     ]);
 
     // Rutas para camiones
+    Route::get('/trucks/camionesActivos', [TruckController::class, 'camionesActivos'])
+    ->name('admin.trucks.camionesActivos');
     Route::get('/trucks/api', [TruckController::class, 'data'])
         ->name('admin.trucks.data');
     Route::resource('trucks', TruckController::class)
@@ -175,7 +177,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'update' => 'admin.estadisticas.update',
            'destroy' => 'admin.estadisticas.destroy'
     ]);
-    
+
     Route::get('perfil', [PerfilController::class, 'show'])->name('perfil.show');
     Route::get('perfil/editar', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil/actualizar', [PerfilController::class, 'update'])->name('perfil.update');

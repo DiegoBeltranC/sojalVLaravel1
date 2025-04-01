@@ -9,7 +9,7 @@
         <!-- Bloque para mostrar la foto de perfil -->
         <div class="form-group">
           <label>Foto de Perfil:</label>
-          <img id="profileImageView" src="{{ asset('images/default_profile.png') }}" alt="Foto de Perfil" style="max-width: 150px;">
+          <img id="profileImageView" src="" alt="Foto de Perfil" style="max-width: 150px;">
         </div>
         <div class="form-group">
           <label>Nombre:</label>

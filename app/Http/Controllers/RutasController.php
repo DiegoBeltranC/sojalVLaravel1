@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Ruta;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use MongoDB\BSON\ObjectId;
+use App\Models\Asignacion;
 
 class RutasController extends Controller
 {
@@ -42,11 +44,24 @@ class RutasController extends Controller
         return response()->json(['message' => 'Ruta creada con éxito', 'ruta' => $ruta], 201);
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $ruta = Ruta::find($id);
+
         if (!$ruta) {
             return response()->json(['success' => false, 'message' => 'Ruta no encontrada'], 404);
         }
+
+        $rutaIdObject = new ObjectId($ruta->getKey());
+
+        // Comprobar si la ruta tiene asignaciones activas
+        if (Asignacion::where('idRuta', $rutaIdObject)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede eliminar la ruta porque tiene asignaciones activas.'
+            ], 400);
+        }
+
         $ruta->delete();
 
         return response()->json(['success' => true, 'message' => 'Ruta eliminada correctamente']);
