@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserCreatedMail;
+
 
 abstract class BaseUserController extends Controller
 {
@@ -43,7 +46,7 @@ abstract class BaseUserController extends Controller
             'fechaNacimiento' => 'required|date',
             'telefono'        => 'required|string|max:15',
             'correo'          => 'required|email|unique:users,correo',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validación de imagen
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
         // Reglas adicionales para ciertos roles
@@ -67,13 +70,18 @@ abstract class BaseUserController extends Controller
         if ($request->hasFile('profile_picture')) {
             $imagen = $request->file('profile_picture');
             $nombreArchivo = time() . '_' . $imagen->getClientOriginalName();
-            // Guarda la imagen en storage/app/public/imagenes_admin
             $ruta = $imagen->storeAs('imagenes_admin', $nombreArchivo, 'public');
         } else {
             $ruta = null;
         }
 
-        User::create([
+        // Define la contraseña temporal (o genera una aleatoria)
+        $plainPassword = 'admin123';
+        // Si prefieres generar una contraseña aleatoria, puedes usar:
+        // $plainPassword = \Illuminate\Support\Str::random(8);
+
+        // Crear el usuario y asignarlo a una variable
+        $user = User::create([
             'nombre'           => $nombre,
             'apellidos'        => [
                 'paterno' => $apellidoP,
@@ -82,17 +90,21 @@ abstract class BaseUserController extends Controller
             'fecha_nacimiento' => $request->fechaNacimiento,
             'telefono'         => $telefono,
             'correo'           => $correo,
-            'password'         => Hash::make('admin123'), // Contraseña temporal
+            'password'         => Hash::make($plainPassword), // Almacena la contraseña de forma segura
             'rol'              => $this->role,
             'curp'             => $curp,
             'rfc'              => $rfc,
-            'profile_picture'  => $ruta, // Guarda la ruta de la imagen
+            'profile_picture'  => $ruta,
             'fecha_creacion'   => now(),
         ]);
+
+        // Enviar el correo de verificación o bienvenida con las credenciales
+        Mail::to($user->correo)->send(new UserCreatedMail($user, $plainPassword));
 
         return redirect()->route('admin.' . $this->role . 'es.index')
             ->with($this->role . 'Guardado', ucfirst($this->role) . ' registrado exitosamente.');
     }
+
 
     public function show($id)
     {
@@ -136,7 +148,7 @@ abstract class BaseUserController extends Controller
         ];
 
         if (in_array($this->role, ['trabajador', 'administrador'])) {
-            $rules['curp '] = 'required|string|max:18|unique:users,curp,' . $id;
+            $rules['curp'] = 'required|string|max:18|unique:users,curp,' . $id;
             $rules['rfc']  = 'required|string|max:13|unique:users,rfc,' . $id;
         }
 

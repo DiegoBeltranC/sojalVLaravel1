@@ -31,7 +31,7 @@ body {
 /* El li dentro de cada enlace se expande al 100% */
 .sidebar ol a li.option {
     width: 100%;
-    height: 4.45rem;
+    height: 4.7rem;
     display: flex;
     align-items: center;
     transition: background-color 0.3s ease;
@@ -64,7 +64,7 @@ body {
 }
 
 .sidebar.active ol a li.option {
-    height: 4.45rem;
+    height: 4.7rem;
     justify-content: center;
 }
 

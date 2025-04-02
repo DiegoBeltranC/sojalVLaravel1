@@ -16,6 +16,7 @@ use App\Http\Controllers\estadisticaController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminConfController;
 use App\Http\Controllers\PerfilController;
+use App\Mail\ValidarCorreo;
 
 
 
@@ -175,10 +176,13 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'destroy' => 'admin.estadisticas.destroy'
     ]);
     
+
+    // Perfil
     Route::get('perfil', [PerfilController::class, 'show'])->name('perfil.show');
     Route::get('perfil/editar', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil/actualizar', [PerfilController::class, 'update'])->name('perfil.update');
     Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('admin.configuracion');
+
 });
 
 

@@ -52,11 +52,6 @@
 
     <div class="grid-container">
 
-        <!--<div class="container-graph">
-            <canvas id="myChart"></canvas>
-
-           
-        </div>-->
         <!-- Gráfico 1 -->
         <div class="container-graph">
             <h3>{{ $chart->options['chart_title'] }}</h3>
