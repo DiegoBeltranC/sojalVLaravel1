@@ -174,7 +174,7 @@
         // Función para cargar las rutas en el select
     function cargarCamiones(section, defaultValue = '') {
             $.ajax({
-                url: '{{ route('admin.trucks.data') }}',
+                url: '{{ route('admin.trucks.camionesActivos') }}',
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {

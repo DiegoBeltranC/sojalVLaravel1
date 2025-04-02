@@ -175,8 +175,8 @@
                     $('#modeloView').text(response.data.model);
                     $('#anoView').text(response.data.year);
                     $('#estadoView').text(response.data.status);
-                    const rutaImagen = response.data.image 
-                        ? "{{ asset('storage') }}/" + response.data.image 
+                    const rutaImagen = response.data.image
+                        ? "{{ asset('storage') }}/" + response.data.image
                         : "{{ asset('images/default.jpg') }}";
                     $('#truckImageView').attr('src', rutaImagen);
                     modalView.style.display = 'flex';
@@ -204,14 +204,14 @@
                     $('#anoEdit').val(response.data.year);
                     $('#estadoEdit').val(response.data.status);
                     $('#id').val(response.data.id);
-                    
+
                     // Actualizar la imagen del camión
                     if(response.data.image){
                         $('#truckImageEdit').attr('src', '/storage/' + response.data.image);
                     } else {
                         $('#truckImageEdit').attr('src', '{{ asset("images/default.jpg") }}');
                     }
-                    
+
                     modalEdit.style.display = 'flex';
                     $('#camionFormEdit').attr('action', 'trucks/' + truckId);
                 }
@@ -232,7 +232,7 @@
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-            if(result.isConfirmed) {
+            if (result.isConfirmed) {
                 $.ajax({
                     url: 'trucks/' + truckId,
                     type: 'DELETE',
@@ -240,20 +240,25 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        if(response.success) {
+                        if (response.success) {
                             Swal.fire('¡Eliminado!', response.message, 'success');
-                            $('#administradoresTable').DataTable().ajax.reload();
+                            $('#camionesTable').DataTable().ajax.reload();
                         } else {
                             Swal.fire('¡Error!', response.message, 'error');
                         }
                     },
-                    error: function() {
-                        Swal.fire('¡Error!', 'No se pudo eliminar el camión.', 'error');
+                    error: function(xhr) {
+                        let errorMessage = 'No se pudo eliminar el camión.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        Swal.fire('¡Error!', errorMessage, 'error');
                     }
                 });
             }
         });
     }
+
 </script>
 @endsection
 

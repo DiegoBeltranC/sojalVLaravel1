@@ -117,7 +117,7 @@ async function cargarReportes() {
 
                 // Crea un marcador con el icono predeterminado de Leaflet
                 const circleMarker = L.circleMarker(coordenadas, {
-                    color: 'green',
+                    color: 'red',
                     radius: 10
                   }).addTo(map);
 
@@ -154,7 +154,7 @@ async function cargarReportesAdd() {
 
             // Crea un marcador con el icono predeterminado de Leaflet
             const circleMarker = L.circleMarker(coordenadas, {
-                color: 'green',
+                color: 'red',
                 radius: 10
               }).addTo(mapAdd);
 
@@ -319,15 +319,16 @@ function confirmarEliminacion(rutaId) {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 }
             })
-            .then(response => {
-                if (response.ok) {
-                    Swal.fire('Eliminada', 'La ruta ha sido eliminada.', 'success');
+            .then(response => response.json()) // Asegúrate de que se maneje la respuesta JSON
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Eliminada', data.message, 'success');
                     // Opcional: refrescar el mapa para quitar la ruta eliminada
                     setTimeout(() => {
                         cargarRutas(); // Asegúrate de que esta función recargue correctamente las rutas en el mapa
                     }, 1000);
                 } else {
-                    Swal.fire('Error', 'No se pudo eliminar la ruta.', 'error');
+                    Swal.fire('Error', data.message, 'error');
                 }
             })
             .catch(error => {

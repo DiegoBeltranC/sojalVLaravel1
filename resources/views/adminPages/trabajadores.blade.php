@@ -161,11 +161,11 @@
                     $('#curpView').text(response.data.curp);
 
                     // Actualizar imagen de perfil
-                    const rutaImagen = response.data.profile_picture 
-                        ? "{{ asset('storage') }}/" + response.data.profile_picture 
+                    const rutaImagen = response.data.profile_picture
+                        ? "{{ asset('storage') }}/" + response.data.profile_picture
                         : "{{ asset('images/default_profile.png') }}";
                     $('#profileImageView').attr('src', rutaImagen);
-
+                    alert(rutaImagen);
                     modalView.style.display = 'flex';
                 }
             },
@@ -195,8 +195,8 @@
                     $('#curpEdit').val(response.data.curp);
                     $('#id').val(response.data.id);
 
-                    const rutaImagen = response.data.profile_picture 
-                        ? "{{ asset('storage') }}/" + response.data.profile_picture 
+                    const rutaImagen = response.data.profile_picture
+                        ? "{{ asset('storage') }}/" + response.data.profile_picture
                         : "{{ asset('images/default_profile.png') }}";
                     document.getElementById('profileImageEdit').src = rutaImagen;
 
@@ -220,28 +220,33 @@
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 $.ajax({
                     url: 'trabajadores/' + userId,
                     type: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function(response){
-                        if(response.success){
+                    success: function(response) {
+                        if (response.success) {
                             Swal.fire('¡Eliminado!', response.message, 'success');
                             $('#trabajadoresTable').DataTable().ajax.reload();
                         } else {
                             Swal.fire('¡Error!', response.message, 'error');
                         }
                     },
-                    error: function(){
-                        Swal.fire('¡Error!', 'No se pudo eliminar el trabajador.', 'error');
+                    error: function(xhr) {
+                        let errorMessage = 'No se pudo eliminar el trabajador.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        Swal.fire('¡Error!', errorMessage, 'error');
                     }
                 });
             }
         });
     }
+
 </script>
 @endsection
 

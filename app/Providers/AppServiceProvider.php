@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Providers;
+use App\Models\User;
+use App\Models\Truck;
+use App\Observers\UserObserver;
+use App\Observers\TruckObserver;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        User::observe(UserObserver::class);
+        Truck::observe(TruckObserver::class);
     }
 }
