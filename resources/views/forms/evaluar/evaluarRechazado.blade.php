@@ -7,7 +7,7 @@
 <div id="modalRechazado" class="modalView">
     <div class="modal-content">
     <span id="closeModalBtnRechazado" class="close-btn">&times;</span>
-      <h2>Información del Reporte</h2>
+      <h2 style="color: red;">Información del Reporte</h2>
         <input type="hidden" name="idReporte" id="idReporteRechazado" value="">
         <div class="form-group">
           <label>Fotos:</label>

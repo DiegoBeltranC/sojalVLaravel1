@@ -75,7 +75,6 @@
         modalEditclose.addEventListener('click', () => {
             modalEdit.style.display = 'none';
         });
-
         let map;
         let mapView;
         let mapEdit;
@@ -86,6 +85,7 @@
 
         $(document).ready(function () {
             cargarTabla();
+
         });
 
         function cargarTabla() {
@@ -134,12 +134,14 @@
             class: 'add-form',
             id: 'openModalBtn',
             click: function () {
+                $('#loading').show();
                 // Aquí puedes abrir un modal o redirigir para crear una nueva asignación
                 modal.style.display = 'flex';
                 cargarTrabajadores('#trabajador');
                 cargarCamiones('#camion');
                 cargarRutas('#ruta');
                 cargarMapa();
+                limpiarPerfil('#nombreNew','#telefonoNew');
             }
         });
         $('#asignacionTable').before(nuevaAsignacion);
@@ -197,6 +199,7 @@
 
         // Función para cargar las rutas en el select
         function cargarRutas(section, defaultValue = '') {
+            $('#loading').show();
             $.ajax({
                 url: '{{ route('admin.rutas.getRutas') }}',
                 method: 'GET',
@@ -212,9 +215,11 @@
                     if(defaultValue){
                         $(section).val(defaultValue)
                     }
+                    $('#loading').hide();
                 },
                 error: function () {
                     alert('Error al cargar las rutas.');
+                    $('#loading').hide();
                 }
             });
         }
@@ -253,7 +258,22 @@
             }
         }
 
+        async function consultaTrabajador(trabajador) {
+            const response = await fetch(`trabajadores/${trabajador}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al cargar la asignacion');
+            }
+            return response.json();
+        }
+
         function cargarRuta(idRuta) {
+            $('#loading').show();
             $.ajax({
                 url: `rutas/${idRuta}`,
                 method: 'GET',
@@ -286,9 +306,11 @@
 
                     // Ajustar el mapa para que se vea la ruta completa
                     map.fitBounds(routeLayer.getBounds());
+                    $('#loading').hide();
                 },
                 error: function () {
                     alert('Error al cargar la ruta.');
+                    $('#loading').hide();
                 }
             });
         }
@@ -299,33 +321,28 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    // Verificar si el mapa ya está inicializado
                     if (!mapView) {
-                        cargarMapaView();  // Si el mapa no está creado, lo inicializamos
+                        cargarMapaView();
                     }
-
-                    // Eliminar la ruta anterior si existe
                     if (routeLayerView) {
-                        mapView.removeLayer(routeLayerView);  // Eliminar la capa anterior
+                        mapView.removeLayer(routeLayerView);
                     }
 
-                    // Extraer la ruta seleccionada
-                    const ruta = data // Asumiendo que la respuesta es un solo objeto
-                    const puntos = ruta.puntos; // Convertir la cadena JSON de puntos a un array
-
-                    // Crear una nueva capa de línea para la ruta
+                    const ruta = data;
+                    const puntos = ruta.puntos;
                     const latLngs = puntos.map(function (point) {
-                        return [point[0], point[1]]; // Convertir cada punto en una coordenada [lat, lng]
+                        return [point[0], point[1]];
                     });
 
-                    // Crear una capa de línea para la ruta
                     routeLayerView = L.polyline(latLngs, {
-                        color: ruta.color,  // Usar el color de la ruta
+                        color: ruta.color,
                         weight: 5
                     }).addTo(mapView);
 
-                    // Ajustar el mapa para que se vea la ruta completa
-                    mapView.fitBounds(routeLayerView.getBounds());
+                    // Si el modal ya está visible, centra el mapa en la ruta
+                    if (modalView.style.display === 'flex') {
+                        mapView.fitBounds(routeLayerView.getBounds());
+                    }
                 },
                 error: function () {
                     alert('Error al cargar la ruta.');
@@ -334,7 +351,9 @@
         }
 
         function cargarRutaEdit(idRuta) {
+            $('#loading').show();
             $.ajax({
+
                 url: `rutas/${idRuta}`,
                 method: 'GET',
                 dataType: 'json',
@@ -366,14 +385,17 @@
 
                     // Ajustar el mapa para que se vea la ruta completa
                     mapEdit.fitBounds(routeLayerEdit.getBounds());
+                    $('#loading').hide();
                 },
                 error: function () {
                     alert('Error al cargar la ruta.');
+                    $('#loading').hide();
                 }
             });
         }
 
-        function cargarPerfilTrabajador(id,section1,section2) {
+        function cargarPerfilTrabajador(id,section1,section2,section3) {
+            $('#loading').show();
             $.ajax({
                 url: `trabajadores/${id}`,
                 method: 'GET',
@@ -383,8 +405,12 @@
                         var trabajador = data.data;
                         $(section1).text(trabajador.nombre + ' ' + trabajador.apellidoP + ' ' + trabajador.apellidoM);
                         $(section2).text('Teléfono: ' + trabajador.telefono);
+                        const rutaImagen = "{{ asset('storage') }}/" + trabajador.profile_picture
+                        document.getElementById(`${section3}`).src = rutaImagen;
+                        $('#loading').hide();
                     } else {
                         alert('No se encontraron datos del trabajador.');
+                        $('#loading').hide();
                     }
                 },
                 error: function () {
@@ -393,37 +419,56 @@
             });
         }
 
-        function ver(userId) {
-            $.ajax({
-                url: 'asignacion/' + userId, // Ruta de Laravel con el ID
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.error) {
-                        alert('Error: ' + response.error);
-                    } else {
-                        // Inicializa el mapa de vista y carga la ruta
-                        cargarMapaView();
-                        cargarRutaView(response.idRuta);
-
-                        $('#nombreView').text(response.nombreUsuario + ' ' + response.apellidoPaterno + ' ' + response.apellidoMaterno);
-                        $('#telefonoView').text('Teléfono: ' + response.telefono);
-                        $('#camionView').text('Camion: ' + response.placasCamion);
-
-                        // Muestra el modal y, una vez visible, forzamos el recálculo del tamaño del mapa
-                        modalView.style.display = 'flex';
-                        setTimeout(function() {
-                            mapView.invalidateSize();
-                        }, 200); // Ajusta el tiempo si es necesario
+        async function ver(userId) {
+            $('#loading').show();
+            try {
+                const res = await fetch('asignacion/' + userId, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-                },
-                error: function() {
-                    alert('Ocurrió un error al cargar los datos.');
+                });
+                const response = await res.json();
+
+                if (response.error) {
+                    alert('Error: ' + response.error);
+                } else {
+                    // Inicializa el mapa de vista solo si aún no existe
+                    if (!mapView) {
+                        cargarMapaView();
+                    }
+                    // Carga la ruta
+                    cargarRutaView(response.idRuta);
+
+                    $('#nombreView').text(response.nombreUsuario + ' ' + response.apellidoPaterno + ' ' + response.apellidoMaterno);
+                    $('#telefonoView').text('Teléfono: ' + response.telefono);
+                    $('#camionView').text('Camion: ' + response.placasCamion);
+                    const trabajador = await consultaTrabajador(response.idUsuario);
+                    const rutaImagen = "{{ asset('storage') }}/" + trabajador.data.profile_picture;
+                    document.getElementById('profilePicView').src = rutaImagen;
+
+                    // Muestra el modal
+                    modalView.style.display = 'flex';
+
+                    // Después de que el modal se muestre, recalcula el tamaño y centra el mapa
+                    setTimeout(function() {
+                        mapView.invalidateSize();
+                        if (routeLayerView) {
+                            mapView.fitBounds(routeLayerView.getBounds());
+                        }
+                    }, 1000); // El tiempo puede necesitar ajustes según tu implementación
+
+                    $('#loading').hide();
                 }
-            });
+            } catch (error) {
+                alert('Ocurrió un error al cargar los datos.');
+                $('#loading').hide();
+            }
         }
 
+
         function verEdit(userId) {
+            $('#loading').show();
             $.ajax({
                 url: 'asignacion/' + userId, // Ruta de Laravel con el ID
                 type: 'GET',
@@ -438,14 +483,14 @@
                         cargarRutas('#rutaEdit',response.idRuta)
                         cargarMapaEdit();
                         cargarRutaEdit(response.idRuta)
-                        cargarPerfilTrabajador(response.idUsuario,'#nombreEdit','#telefonoEdit');
+                        cargarPerfilTrabajador(response.idUsuario,'#nombreEdit','#telefonoEdit','profilePicEdit');
                         // Dentro de la función verEdit() después de recibir la respuesta AJAX:
                         $('#CamionFormEdit').attr('action', 'asignacion/' + response.id);
-
                     }
                 },
                 error: function() {
                     alert('Ocurrió un error al cargar los datos.');
+                    $('#loading').hide();
                 }
             });
         }
@@ -493,7 +538,7 @@
         $('#trabajador').change(function () {
             var trabajadorId = $(this).val();
             if (trabajadorId) {
-                cargarPerfilTrabajador(trabajadorId,'#nombreNew','#telefonoNew');
+                cargarPerfilTrabajador(trabajadorId,'#nombreNew','#telefonoNew','profilePic');
             } else {
                 limpiarPerfil('#nombreNew','#telefonoNew');
             }
@@ -510,7 +555,7 @@
         $('#trabajadorEdit').change(function () {
             var trabajadorId = $(this).val();
             if (trabajadorId) {
-                cargarPerfilTrabajador(trabajadorId,'#nombreEdit','#telefonoEdit');
+                cargarPerfilTrabajador(trabajadorId,'#nombreEdit','#telefonoEdit','profilePicEdit');
             } else {
                 limpiarPerfil('#nombreEdit', '#telefonoEdit');
             }

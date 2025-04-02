@@ -142,6 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Función para visualizar datos de un administrador
 function viewAdministrador(userId) {
+    $('#loading').show();
     $.ajax({
         url: 'administradores/' + userId,
         type: 'GET',
@@ -149,6 +150,7 @@ function viewAdministrador(userId) {
         success: function(response) {
             if(response.error) {
                 alert('Error: ' + response.error);
+                $('#loading').hide();
             } else {
                 $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
                 $('#fechaView').text(response.data.fecha_nacimiento);
@@ -164,16 +166,19 @@ function viewAdministrador(userId) {
                     $('#profilePictureView').attr('src', '/images/default_profile.png');
                 }
                 $('#modalView').css('display', 'flex');
+                $('#loading').hide();
             }
         },
         error: function() {
             alert('Ocurrió un error al cargar los datos.');
+            $('#loading').hide();
         }
     });
 }
 
 // Función para editar datos de un administrador
 function editAdministrador(userId) {
+    $('#loading').show();
     $.ajax({
         url: 'administradores/' + userId,
         type: 'GET',
@@ -181,6 +186,7 @@ function editAdministrador(userId) {
         success: function(response) {
             if(response.error) {
                 alert('Error: ' + response.error);
+                $('#loading').hide();
             } else {
                 $('#nombreEdit').val(response.data.nombre);
                 $('#apellidoPEdit').val(response.data.apellidoP);
@@ -199,10 +205,12 @@ function editAdministrador(userId) {
                 }
                 $('#modalEdit').css('display', 'flex');
                 $('#trabajadorFormEdit').attr('action', 'administradores/' + userId);
+                $('#loading').hide();
             }
         },
         error: function() {
             alert('Ocurrió un error al cargar los datos.');
+            $('#loading').hide();
         }
     });
 }
@@ -218,6 +226,7 @@ function deleteAdministrador(userId) {
         cancelButtonText: 'Cancelar',
     }).then((result) => {
         if(result.isConfirmed) {
+            $('#loading').show();
             $.ajax({
                 url: 'administradores/' + userId,
                 type: 'DELETE',
@@ -225,7 +234,9 @@ function deleteAdministrador(userId) {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
+                    $('#loading').hide();
                     if(response.success) {
+
                         Swal.fire('¡Eliminado!', response.message, 'success');
                         $('#administradoresTable').DataTable().ajax.reload();
                     } else {
@@ -233,6 +244,7 @@ function deleteAdministrador(userId) {
                     }
                 },
                 error: function() {
+                    $('#loading').hide();
                     Swal.fire('¡Error!', 'No se pudo eliminar el administrador.', 'error');
                 }
             });

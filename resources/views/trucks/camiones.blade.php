@@ -64,7 +64,7 @@
     <h2>Camiones</h2>
 
     <!-- Tabla de camiones -->
-    <table id="administradoresTable" style="width: 100%;">
+    <table id="camionesTable" style="width: 100%;">
         <thead>
             <tr>
                 <th>ID</th>
@@ -110,7 +110,7 @@
         }
 
         // Inicializar DataTable para Camiones
-        $('#administradoresTable').DataTable({
+        $('#camionesTable').DataTable({
             "ajax": "{{ route('admin.trucks.data') }}",
             "columns": [
                 { "data": "id" },
@@ -155,13 +155,14 @@
                         modal.style.display = 'flex';
                     }
                 });
-                $('#administradoresTable').before(nuevoCamion);
+                $('#camionesTable').before(nuevoCamion);
             }
         });
     });
 
     // Visualizar Camión
     function viewCamion(truckId) {
+        $('#loading').show();
         $.ajax({
             url: 'trucks/' + truckId,
             type: 'GET',
@@ -169,6 +170,7 @@
             success: function(response) {
                 if(response.error) {
                     alert('Error: ' + response.error);
+                    $('#loading').hide();
                 } else {
                     $('#placasView').text(response.data.plates);
                     $('#marcaView').text(response.data.brand);
@@ -180,16 +182,19 @@
                         : "{{ asset('images/default.jpg') }}";
                     $('#truckImageView').attr('src', rutaImagen);
                     modalView.style.display = 'flex';
+                    $('#loading').hide();
                 }
             },
             error: function() {
                 alert('Ocurrió un error al cargar los datos.');
+                $('#loading').hide();
             }
         });
     }
 
     // Editar Camión
     function editCamion(truckId) {
+        $('#loading').show();
         $.ajax({
             url: 'trucks/' + truckId,
             type: 'GET',
@@ -197,6 +202,7 @@
             success: function(response) {
                 if(response.error) {
                     alert('Error: ' + response.error);
+                    $('#loading').hide();
                 } else {
                     $('#placasEdit').val(response.data.plates);
                     $('#marcaEdit').val(response.data.brand);
@@ -214,10 +220,12 @@
 
                     modalEdit.style.display = 'flex';
                     $('#camionFormEdit').attr('action', 'trucks/' + truckId);
+                    $('#loading').hide();
                 }
             },
             error: function() {
                 alert('Ocurrió un error al cargar los datos.');
+                $('#loading').hide();
             }
         });
     }
@@ -233,6 +241,7 @@
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
+                $('#loading').show();
                 $.ajax({
                     url: 'trucks/' + truckId,
                     type: 'DELETE',
@@ -240,6 +249,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
+                        $('#loading').hide();
                         if (response.success) {
                             Swal.fire('¡Eliminado!', response.message, 'success');
                             $('#camionesTable').DataTable().ajax.reload();
@@ -253,6 +263,7 @@
                             errorMessage = xhr.responseJSON.message;
                         }
                         Swal.fire('¡Error!', errorMessage, 'error');
+                        $('#loading').hide();
                     }
                 });
             }

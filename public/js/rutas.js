@@ -21,9 +21,11 @@ function nuevaRuta() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    $('#loading').show();
     cargarMapa();
     cargarRutas();
     cargarReportes()
+
 });
 
 async function cargarMapa (){
@@ -105,22 +107,23 @@ async function cargarReportes() {
         const response = await fetch('/admin/reportes/getPoints');
         const reportes = await response.json();
 
-        reportes.forEach(reporte => {
+        // Filtrar solo reportes con status "sinAsignar"
+        const reportesFiltrados = reportes.filter(reporte => reporte.status === "sinAsignar");
+
+        reportesFiltrados.forEach(reporte => {
             try {
                 // Asegurar que location es un objeto y no una cadena JSON
                 let ubicacion = reporte.location;
-
                 ubicacion = JSON.parse(ubicacion); // Decodifica si viene como string JSON
 
                 // Extrae las coordenadas en formato [latitud, longitud]
-                const coordenadas = [parseFloat(ubicacion.longitud),parseFloat(ubicacion.latitud)];
+                const coordenadas = [parseFloat(ubicacion.longitud), parseFloat(ubicacion.latitud)];
 
                 // Crea un marcador con el icono predeterminado de Leaflet
                 const circleMarker = L.circleMarker(coordenadas, {
                     color: 'red',
                     radius: 10
-                  }).addTo(map);
-
+                }).addTo(map);
 
                 // Agrega un popup con información del reporte
                 circleMarker.bindPopup(`
@@ -128,15 +131,20 @@ async function cargarReportes() {
                     ${reporte.descripcion}<br>
                     Estado: ${reporte.status}
                 `);
+
+                $('#loading').hide();
             } catch (error) {
                 console.error(`Error procesando el reporte ${reporte._id}:`, error);
+                $('#loading').hide();
             }
         });
 
     } catch (error) {
         console.error("Error cargando reportes:", error);
+        $('#loading').hide();
     }
 }
+
 
 
 
@@ -144,8 +152,8 @@ async function cargarReportesAdd() {
     try {
         const response = await fetch('/admin/reportes/getPoints');
         const reportes = await response.json();
-
-        reportes.forEach(reporte => {
+        const reportesFiltrados = reportes.filter(reporte => reporte.status === "sinAsignar");
+        reportesFiltrados.forEach(reporte => {
             // Parsea la ubicación (si está como string)
             let ubicacion = reporte.location; // Ej: [18.53474, -88.29878]
             ubicacion = JSON.parse(ubicacion);
@@ -166,14 +174,15 @@ async function cargarReportesAdd() {
                 Estado: ${reporte.status}
             `);
         });
-
+        $('#loading').hide();
     } catch (error) {
         console.error("Error cargando reportes:", error);
+        $('#loading').hide();
     }
 }
 async function cargarRutasAdd() {
     try {
-
+        $('#loading').show();
         limpiarRutasModal()
         const response = await fetch('/admin/rutas/api'); // Llamamos a la API de Laravel
         const rutas = await response.json();
@@ -194,6 +203,7 @@ async function cargarRutasAdd() {
 
     } catch (error) {
         console.error("Error cargando las rutas:", error);
+
     }
 }
 
@@ -246,6 +256,7 @@ async function cargarRutas() {
 }
 
 document.getElementById('rutaForm').addEventListener('submit', function (e) {
+    $('#loading').show();
     e.preventDefault(); // Evita el envío tradicional del formulario
 
     let nombre = document.getElementById('nombre').value;
@@ -273,6 +284,7 @@ document.getElementById('rutaForm').addEventListener('submit', function (e) {
     })
     .then(response => response.json())
     .then(data => {
+        $('#loading').hide();
         Swal.fire({
             title: '¡Éxito!',
             text: "Ruta Guardada Exitosamente",
@@ -292,6 +304,7 @@ document.getElementById('rutaForm').addEventListener('submit', function (e) {
 
     })
     .catch(error => {
+        $('#loading').hide();
         Swal.fire({
             icon: 'error',
             title: 'Eror',
@@ -312,6 +325,7 @@ function confirmarEliminacion(rutaId) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
+            $('#loading').show();
             // Realiza la solicitud DELETE a la API para eliminar la ruta
             fetch(`/admin/rutas/${rutaId}`, {
                 method: 'DELETE',
@@ -321,6 +335,7 @@ function confirmarEliminacion(rutaId) {
             })
             .then(response => response.json()) // Asegúrate de que se maneje la respuesta JSON
             .then(data => {
+                $('#loading').hide();
                 if (data.success) {
                     Swal.fire('Eliminada', data.message, 'success');
                     // Opcional: refrescar el mapa para quitar la ruta eliminada
@@ -332,6 +347,7 @@ function confirmarEliminacion(rutaId) {
                 }
             })
             .catch(error => {
+                $('#loading').hide();
                 console.error('Error:', error);
                 Swal.fire('Error', 'Ocurrió un error al eliminar la ruta.', 'error');
             });

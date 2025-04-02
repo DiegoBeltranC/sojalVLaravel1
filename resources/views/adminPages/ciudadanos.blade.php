@@ -65,7 +65,7 @@
     modalEditclose.addEventListener('click', () => {
         modalEdit.style.display = 'none';
     });
-    
+
     $(document).ready(function () {
         cargarTabla();
         $('#searchInput').on('keyup', function() {
@@ -115,6 +115,7 @@
     }
 
     function ver(userId) {
+        $('#loading').show();
         $.ajax({
             url: 'ciudadanos/' + userId, // Usamos la ruta de Laravel con el ID
             type: 'GET',
@@ -122,6 +123,7 @@
             success: function(response) {
                 if (response.error) {
                     alert('Error: ' + response.error);
+                    $('#loading').hide();
                 } else {
                     // Actualizar el modal con los datos del trabajador
                     $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
@@ -133,10 +135,11 @@
 
                     // Mostrar el modal
                     modalView.style.display = 'flex';
+                    $('#loading').hide();
                 }
             },
             error: function() {
-
+                $('#loading').hide();
                 alert('Ocurrió un error al cargar los datos.');
             }
         });
@@ -152,6 +155,7 @@
             cancelButtonText: 'Cancelar',
         }).then((result) => {
             if (result.isConfirmed) {
+                $('#loading').show();
                 $.ajax({
                     url: `ciudadanos/${id}`,  // Laravel ya genera esta ruta
                     type: "DELETE",
@@ -159,6 +163,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Token CSRF
                     },
                     success: function (response) {
+                        $('#loading').hide();
                         if (response.success) {
                             Swal.fire('¡Eliminado!', response.message, 'success');
                             $('#ciudadanosTable').DataTable().ajax.reload();  // Recargar tabla
@@ -167,6 +172,7 @@
                         }
                     },
                     error: function () {
+                        $('#loading').hide();
                         Swal.fire('¡Error!', 'No se pudo eliminar el ciudadano.', 'error');
                     }
                 });
@@ -175,6 +181,7 @@
     }
 
     function verEdit(userId) {
+        $('#loading').show();
         $.ajax({
             url: 'ciudadanos/' + userId,
             type: 'GET',
@@ -182,20 +189,24 @@
             success: function(response) {
                 if (response.error) {
                     alert('Error: ' + response.error);
+                    $('#loading').hide();
                 } else {
                     $('#nombreEdit').val(response.data.nombre);
                     $('#apellidoPEdit').val(response.data.apellidoP);
                     $('#apellidoMEdit').val(response.data.apellidoM);
+                    alert(response.data.fecha_nacimiento);
                     $('#fechaEdit').val(response.data.fecha_nacimiento);
                     $('#telefonoEdit').val(response.data.telefono);
                     $('#correoEdit').val(response.data.correo);
                     $('#id').val(response.data.id);
                     modalEdit.style.display = 'flex';
                     $('#trabajadorFormEdit').attr('action', 'ciudadanos/' + userId);
+                    $('#loading').hide();
                 }
             },
             error: function() {
                 alert('Ocurrió un error al cargar los datos.');
+                $('#loading').hide();
             }
         });
     }

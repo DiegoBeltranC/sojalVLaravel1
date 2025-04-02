@@ -96,7 +96,7 @@
             </div>
 
             <div class="profile-container">
-                <img src="http://via.placeholder.com/50" alt="Foto de perfil" class="profile-pic" id="profilePic">
+                <img src="{{ asset('images/profile.png') }}" alt="Foto de perfil" class="profile-pic"  id="profilePicEdit">
                 <div class="profile-info">
                     <p class="profile-name" id="nombreEdit">Nombre del trabajador</p>
                     <p class="profile-date" id="telefonoEdit">Teléfono:</p>

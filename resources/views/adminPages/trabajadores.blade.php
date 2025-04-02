@@ -145,6 +145,7 @@
 
     // Visualizar Trabajador
     function viewTrabajador(userId) {
+        $('#loading').show();
         $.ajax({
             url: 'trabajadores/' + userId,
             type: 'GET',
@@ -152,6 +153,7 @@
             success: function(response) {
                 if(response.error){
                     alert('Error: ' + response.error);
+                    $('#loading').hide();
                 } else {
                     $('#nombreView').text(response.data.nombre + ' ' + response.data.apellidoP + ' ' + response.data.apellidoM);
                     $('#fechaView').text(response.data.fecha_nacimiento);
@@ -167,16 +169,19 @@
                     $('#profileImageView').attr('src', rutaImagen);
                     alert(rutaImagen);
                     modalView.style.display = 'flex';
+                    $('#loading').hide();
                 }
             },
             error: function(){
                 alert('Ocurrió un error al cargar los datos.');
+                $('#loading').hide();
             }
         });
     }
 
     // Editar Trabajador
     function editTrabajador(userId) {
+        $('#loading').show();
         $.ajax({
             url: 'trabajadores/' + userId,
             type: 'GET',
@@ -184,6 +189,7 @@
             success: function(response) {
                 if(response.error){
                     alert('Error: ' + response.error);
+                    $('#loading').hide();
                 } else {
                     $('#nombreEdit').val(response.data.nombre);
                     $('#apellidoPEdit').val(response.data.apellidoP);
@@ -202,10 +208,12 @@
 
                     modalEdit.style.display = 'flex';
                     $('#trabajadorFormEdit').attr('action', 'trabajadores/' + userId);
+                    $('#loading').hide();
                 }
             },
             error: function(){
                 alert('Ocurrió un error al cargar los datos.');
+                $('#loading').hide();
             }
         });
     }
@@ -221,6 +229,7 @@
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
+                $('#loading').show();
                 $.ajax({
                     url: 'trabajadores/' + userId,
                     type: 'DELETE',
@@ -228,6 +237,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
+                        $('#loading').hide();
                         if (response.success) {
                             Swal.fire('¡Eliminado!', response.message, 'success');
                             $('#trabajadoresTable').DataTable().ajax.reload();
@@ -236,6 +246,7 @@
                         }
                     },
                     error: function(xhr) {
+                        $('#loading').hide();
                         let errorMessage = 'No se pudo eliminar el trabajador.';
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             errorMessage = xhr.responseJSON.message;

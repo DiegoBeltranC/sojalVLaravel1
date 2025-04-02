@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use MongoDB\BSON\ObjectId;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -151,7 +152,9 @@ abstract class BaseUserController extends Controller
 
         if (in_array($this->role, ['trabajador', 'administrador'])) {
             $rules['curp'] = 'required|string|max:18|unique:users,curp,' . $id;
+            $rules['curp'] = 'required|string|max:18|unique:users,curp,' . $id;
             $rules['rfc']  = 'required|string|max:13|unique:users,rfc,' . $id;
+
 
         }
 
@@ -202,6 +205,16 @@ abstract class BaseUserController extends Controller
 
         if (!$user || $user->rol !== $this->role) {
             return response()->json(['success' => false, 'message' => ucfirst($this->role) . ' no encontrado'], 404);
+        }
+
+        $userIdObject = new ObjectId($user->getKey());
+
+        // Comprobar si el usuario tiene asignaciones activas
+        if (Asignacion::where('idUsuario', $userIdObject)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede eliminar el trabajador porque tiene asignaciones activas.'
+            ], 400);
         }
 
         $userIdObject = new ObjectId($user->getKey());
