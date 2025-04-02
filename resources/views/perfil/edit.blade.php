@@ -115,6 +115,21 @@
         .home-btn:hover {
             opacity: 0.9;
         }
+
+        .change-pass-btn {
+            background-color: #ff8c00; /* Color naranja */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .change-pass-btn:hover {
+            opacity: 0.9;
+        }
+
     </style>
 </head>
 <body>
@@ -165,7 +180,7 @@
                 <div class="buttons-container">
                     <button type="submit" class="btn edit-btn">Guardar Cambios</button>
                     <a href="{{ route('admin.configuracion') }}" class="btn home-btn">Cancelar</a>
-
+                    <a href="{{ route('perfil.editPassword') }}" class="btn change-pass-btn">Cambiar Contraseña</a>
                 </div>
             </form>
         </div>

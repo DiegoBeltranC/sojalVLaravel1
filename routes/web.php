@@ -183,6 +183,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::put('/perfil/actualizar', [PerfilController::class, 'update'])->name('perfil.update');
     Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('admin.configuracion');
 
+     // Rutas para cambiar la contraseña
+    Route::get('/perfil/password', [PerfilController::class, 'editPassword'])->name('perfil.editPassword');
+    Route::post('/perfil/password', [PerfilController::class, 'updatePassword'])->name('perfil.updatePassword');
+
+
 });
 
 
