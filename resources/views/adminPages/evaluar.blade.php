@@ -23,10 +23,13 @@
     <h2>EVALUAR INFORMES</h2>
     <div id="map"></div>
 </div>
-
-@include('forms.evaluar.evaluarRechazado')
-@endsection
+@include('forms.evaluar.formRechazo')
 @include('forms.evaluar.evaluarView')
+@include('forms.evaluar.evaluarRechazado')
+
+@endsection
+
+
 
 
 @section('scripts')
@@ -44,12 +47,14 @@
 
         let defaultAsignacion = '';
 
+        const formRechazo = document.getElementById('formRechazo');
+
         const modal = document.getElementById('modalView');
         const closeModalBtn = document.getElementById('closeModalBtn');
         closeModalBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
             defaultAsignacion = ''
             $('#asignar').prop('disabled', true);
+            modal.style.display = 'none';
         });
 
         const modalRechazado = document.getElementById('modalRechazado');
@@ -59,6 +64,8 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            formRechazo.style.display = 'none';
+            $('#loading').show();
             mapboxgl.accessToken = 'pk.eyJ1IjoiYWxpc3RhcmRldiIsImEiOiJjbTFyOHlseXowOHRzMnhxMm9tdnBwcTR5In0.D5D_X4S6CB4FdAyeTIL0GQ';
             cargarMapa();
             // Wait for map to load before adding markers
@@ -129,6 +136,7 @@
 
 
         async function cargarReportes() {
+            $('#loading').show();
             try {
                 const response = await fetch('/admin/reportes/getPoints');
                 const reportes = await response.json();
@@ -262,15 +270,20 @@
                                 `;
                             }
                             addMarker(coordenadas, popupContent, { customElement });
+
                         } else {
                             console.error('No se encontró información del usuario para el reporte:', reporte.idUsuario);
+                            $('#loading').hide();
                         }
                     } catch (error) {
                         console.error('Error processing reporte:', error, reporte);
+                        $('#loading').hide();
                     }
                 }
+                $('#loading').hide();
             } catch (error) {
                 console.error('Error fetching reports:', error);
+                $('#loading').hide();
             }
         }
 
@@ -297,6 +310,7 @@
         }
 
         function visualizarReporte(idReporte) {
+            $('#loading').show();
             $.ajax({
                 url: `reportes/${idReporte}`,
                 method: 'GET',
@@ -321,18 +335,22 @@
                         $('#asignacion').prop('disabled', false);
                         $('#rechazar').prop('disabled', false);
                         $('.alert-finalizado').remove();
+
                     } else {
                         alert('No se encontraron datos del trabajador.');
+                        $('#loading').hide();
                     }
                 },
                 error: function () {
                     alert('Error al cargar el perfil del trabajador.');
+                    $('#loading').hide();
                 }
             });
         }
 
         async function editarReporte(idReporte) {
             try {
+                $('#loading').show();
                 // Usamos await en la llamada ajax (se asume que $.ajax se resuelve como una promesa)
                 const data = await $.ajax({
                     url: `reportes/${idReporte}`,
@@ -366,7 +384,6 @@
                     // Sección Avances:
                     if (data.status !== 'sinAsignar') {
                         $('#avancesSection').show(); // Muestra la sección de avances
-
                         // Si existen avances, se muestran en cards; de lo contrario, se muestra un mensaje
                         if (data.avances && data.avances.length > 0) {
                             let avancesHTML = '';
@@ -387,10 +404,12 @@
                             });
                             $('#avancesContent').html(avancesHTML);
                             $('#finalizar').prop('disabled', false);
+
                         } else {
                             // Si el arreglo de avances está vacío
                             $('#avancesContent').html('<p>No hay avances disponibles</p>');
                             $('#finalizar').prop('disabled', true);
+
                         }
                     }
 
@@ -414,12 +433,15 @@
                         $('.alert-finalizado').remove();
                         $('#rechazar').prop('disabled', false);
                     }
+                    $('#loading').hide();
                 } else {
                     alert('No se encontraron datos del trabajador.');
+                    $('#loading').hide();
                 }
             } catch (error) {
                 console.error(error);
                 alert('Error al cargar el perfil del trabajador.');
+                $('#loading').hide();
             }
         }
 
@@ -560,6 +582,7 @@
                         $('#nombreView').text(ciudadano.nombre + ' ' + ciudadano.apellidoP + ' ' + ciudadano.apellidoM);
                         $('#fechaView').text('Telefono: ' + ciudadano.telefono);
                         $('#profilePic').attr('src', 'http://192.168.1.100/api_sojal/storage/app/public/' + ciudadano.profile_picture);
+                        $('#correoView').text('Correo: ' + ciudadano.correo);
                     } else {
                         alert('No se encontraron datos del ciudadano.');
                     }
@@ -594,6 +617,7 @@
         }
 
         function cargarAsignaciones(defaultValue='') {
+            $('#loading').show();
             $.ajax({
                 url: '{{ route('admin.asignaciones.data') }}',
                 method: 'GET',
@@ -609,18 +633,20 @@
                     if(defaultValue){
                         $('#asignacion').val(defaultValue);
                     }
+                    $('#loading').hide();
                 },
                 error: function () {
                     alert('Error al cargar las asignaciones.');
+                    $('#loading').hide();
                 }
             });
         }
 
         $('#asignacion').change(async function () {
-            console.log('cambio');
             var idAsignacion = $(this).val();
             if (idAsignacion) {
                 try {
+                    $('#loading').show();
                     const asignacion = await consultaAsignacionId(idAsignacion);
                     cargarRutaNew(asignacion.idRuta)
                     cargarPerfilTrabajador(asignacion.idUsuario, '#nombreNew', '#telefonoNew')
@@ -632,6 +658,7 @@
                 } catch (error) {
                     limpiarPerfil('#nombreNew','#telefonoNew');
                     alert('Error al cargar la asignacion.');
+                    $('#loading').hide();
                 }
             }
         });
@@ -654,8 +681,8 @@
                         },
                         success: function (response) {
                             if (response.success) {
-                                cargarReportes();
                                 modal.style.display = 'none';
+                                cargarReportes();
                                 Swal.fire('Reporte confirmado!', response.message, 'success');
                             } else {
                                 Swal.fire('¡Error!', response.message, 'error');
@@ -688,8 +715,9 @@
                         },
                         success: function (response) {
                             if (response.success) {
-                                cargarReportes();
-                                modal.style.display = 'none';  // Recargar la página
+                                $('#idFormRechazo').val(idReporte);
+                                modal.style.display = 'none';
+                                formRechazo.style.display = 'block';  // Recargar la página
                                 Swal.fire('Reporte rechazado!', response.message, 'success');
                             } else {
                                 Swal.fire('¡Error!', response.message, 'error');
@@ -774,6 +802,7 @@
         }
 
         function cargarPerfilTrabajador(id,section1,section2) {
+
             $.ajax({
                 url: `trabajadores/${id}`,
                 method: 'GET',
@@ -783,12 +812,18 @@
                         var trabajador = data.data;
                         $(section1).text(trabajador.nombre + ' ' + trabajador.apellidoP + ' ' + trabajador.apellidoM);
                         $(section2).text('Teléfono: ' + trabajador.telefono);
+                        const rutaImagen = "{{ asset('storage') }}/" + trabajador.profile_picture
+                        document.getElementById('profilePicTrabajador').src = rutaImagen;
+
+                        $('#loading').hide();
                     } else {
                         alert('No se encontraron datos del trabajador.');
+                        $('#loading').hide();
                     }
                 },
                 error: function () {
                     alert('Error al cargar el perfil del trabajador.');
+                    $('#loading').hide();
                 }
             });
         }
@@ -796,6 +831,7 @@
         function limpiarPerfil(section1,section2) {
             $(section1).text('Nombre del trabajador');
             $(section2).text('Teléfono:');
+            document.getElementById('profilePicTrabajador').src = "{{ asset('images/profile.png') }}";
         }
 
     </script>

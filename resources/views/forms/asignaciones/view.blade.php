@@ -79,13 +79,13 @@
         <form id="CamionForm">
             @csrf
             <div class="profile-container">
-                <img src="http://via.placeholder.com/50" alt="Foto de perfil" class="profile-pic" id="profilePic">
+                <img src="" alt="Foto de perfil" class="profile-pic" id="profilePicView">
                 <div class="profile-info">
                     <p class="profile-name" id="nombreView">Nombre del trabajador</p>
                     <p class="profile-date" id="telefonoView">Teléfono:</p>
                 </div>
             </div>
-            
+
             <div class="profile-container">
                 <div class="profile-info">
                     <p class="profile-name" id="camionView">Camion: </p>

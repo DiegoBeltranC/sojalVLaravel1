@@ -154,18 +154,18 @@ Route::middleware('auth')->prefix('admin')->group(function () {
            'destroy' => 'admin.asignacion.destroy'
         ]);
 
-        Route::get('/evaluar/cambiarProgreso/{id}', [evaluarController::class, 'cambiarProgreso'])
-        ->name('admin.evaluar.cambiarProgreso');
 
         Route::post('/evaluar/finalizarReporte/{id}', [evaluarController::class, 'finalizarReporte'])
         ->name('admin.evaluar.finalizarReporte');
-
-    Route::resource('evaluar', evaluarController::class)
-    ->names([
-        'index'   => 'admin.evaluar.index',
-        'store' => 'admin.evaluar.store',
-        'destroy' => 'admin.evaluar.destroy'
-    ]);
+        
+        Route::post('/evaluar/enviarCorreoRechazo', [evaluarController::class, 'enviarCorreoRechazo'])
+        ->name('admin.evaluar.enviarCorreoRechazo');
+        Route::resource('evaluar', evaluarController::class)
+        ->names([
+            'index'   => 'admin.evaluar.index',
+            'store' => 'admin.evaluar.store',
+            'destroy' => 'admin.evaluar.destroy'
+        ]);
 
     //estadisticas
     Route::get('estadisticas/reportPDF', [estadisticaController::class, 'report'])->name('estadisticas.report');

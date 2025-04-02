@@ -43,6 +43,7 @@
     </div>
 
     <div class="home-container">
+        @include('adminPages.carga')
         @include('layouts.admin-sidebar')
         @yield('content')
     </div>

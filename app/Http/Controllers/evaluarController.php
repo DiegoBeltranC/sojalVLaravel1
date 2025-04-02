@@ -6,6 +6,9 @@ use MongoDB\BSON\ObjectId;
 use Illuminate\Http\Request;
 use App\Models\Reporte;
 use App\Models\Asignacion;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RechazoReporte;
 
 class evaluarController extends Controller
 {
@@ -56,5 +59,22 @@ class evaluarController extends Controller
         $reporte->status = 'finalizado';
         $reporte->save();
         return response()->json(['success' => true, 'message' => 'Reporte finalizado correctamente.']);
+    }
+
+    public function enviarCorreoRechazo(Request $request)
+    {
+        // Obtener el id del reporte y el motivo del formulario
+        $idReporte = $request->input('idFormRechazo');
+        $motivo = $request->input('motivo');
+
+        // Buscar el reporte y obtener al usuario
+        $reporte = Reporte::findOrFail($idReporte);
+        $usuario = User::findOrFail($reporte->idUsuario);
+        $correo = $usuario->correo;
+        
+        // Enviar el correo
+        Mail::to($correo)->send(new RechazoReporte($motivo, $reporte));
+        return redirect()->route('admin.evaluar.index')
+                         ->with('formRechazado', 'Reporte rechazado correctamente.');
     }
 }

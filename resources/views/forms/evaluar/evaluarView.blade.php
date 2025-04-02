@@ -25,6 +25,7 @@
             <div class="profile-info">
                 <p class="profile-name" id="nombreView">Nombre del Usuario</p>
                 <p class="profile-date"  id="fechaView">Fecha de creación:</p>
+                <p class="profile-date"  id="correoView"></p>
             </div>
           </div>
         <div class="form-group">
@@ -57,7 +58,7 @@
             </div>
         </div>
         <div class="profile-container">
-            <img src="http://via.placeholder.com/50" alt="Foto de perfil" class="profile-pic" id="profilePic">
+            <img src="{{ asset('images/profile.png') }}" alt="Foto de perfil" class="profile-pic" id="profilePicTrabajador">
             <div class="profile-info">
                 <p class="profile-name" id="nombreNew">Nombre del trabajador</p>
                 <p class="profile-date" id="telefonoNew">Teléfono:</p>
