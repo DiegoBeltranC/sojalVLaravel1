@@ -63,7 +63,6 @@
             <p><strong>Correo:</strong> {{ $user->correo }}</p>
             <p><strong>Contraseña temporal:</strong> {{ $plainPassword }}</p>
             <p>Te recomendamos cambiar tu contraseña la primera vez que ingreses.</p>
-            <a href="{{ url('/login') }}" class="button">Iniciar Sesión</a>
         </div>
         <div class="footer">
             Saludos,<br>

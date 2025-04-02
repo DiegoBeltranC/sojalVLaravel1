@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use MongoDB\BSON\ObjectId;
 use App\Models\Asignacion;
 use App\Http\Controllers\TrabajadorController;
 use Illuminate\Http\Request;
+use App\Models\Reporte;
+
 
 class AsignacionController extends Controller
 {
@@ -114,13 +115,23 @@ class AsignacionController extends Controller
 
 
     public function destroy($id)
-    {
-        $asignacion = Asignacion::find($id);
+        {
+
+            $asignacion = Asignacion::find($id);
 
 
-        $asignacion->delete();
+            $asignacionIdObject = new ObjectId($asignacion->getKey());
 
-        return response()->json(['success' => true, 'message' =>'Asignacion eliminada correctamente']);
-    }
+            // Comprobar si el usuario tiene asignaciones activas
+            if (Reporte::where('conjunto', $asignacionIdObject)->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se puede eliminar la asignacion porque tiene asignaciones activas.'
+                ], 400);
+            }
 
+            $asignacion->delete();
+
+            return response()->json(['success' => true, 'message' => 'Asignacion eliminada correctamente']);
+        }
 }

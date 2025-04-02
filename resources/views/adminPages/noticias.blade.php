@@ -30,8 +30,8 @@
     <div class="container-cards">
       @foreach($noticias as $noticia)
         <div class="card">
-          <img src="{{ $noticia->url_imagen ? asset('storage/' . $noticia->url_imagen) : asset('images/default.jpg') }}" 
-               alt="Imagen de la noticia" 
+          <img src="{{ $noticia->url_imagen ? asset('storage/' . $noticia->url_imagen) : asset('images/default.jpg') }}"
+               alt="Imagen de la noticia"
                class="news-image">
           <div class="card-content">
             <h2>{{ $noticia->titulo }}</h2>
@@ -45,8 +45,8 @@
               </p>
             </div>
             <div class="creator-info">
-              <img src="{{ $noticia->usuario && $noticia->usuario->profile_picture ? asset('storage/' . $noticia->usuario->profile_picture) : asset('images/default_profile.png') }}" 
-                  alt="Imagen de perfil" 
+              <img src="{{ $noticia->usuario && $noticia->usuario->profile_picture ? asset('storage/' . $noticia->usuario->profile_picture) : asset('images/default_profile.png') }}"
+                  alt="Imagen de perfil"
                   class="profile-image">
               <p>{{ $noticia->usuario->nombre ?? 'Sin usuario' }}</p>
             </div>
@@ -135,9 +135,13 @@
           confirmButtonText: 'Eliminar',
           cancelButtonText: 'Cancelar'
         }).then((result) => {
+            $('#loading').show()
           if (result.isConfirmed) {
             // Si el usuario confirma, envía el formulario
             form.submit();
+            setTimeout(() => {
+                $('#loading').hide()
+            }, 2000);
           }
         });
       });

@@ -138,6 +138,7 @@ async function cargarReportes() {
                 $('#loading').hide();
             }
         });
+        $('#loading').hide()
 
     } catch (error) {
         console.error("Error cargando reportes:", error);

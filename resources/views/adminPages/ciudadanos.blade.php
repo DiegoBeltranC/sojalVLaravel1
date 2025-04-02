@@ -194,7 +194,6 @@
                     $('#nombreEdit').val(response.data.nombre);
                     $('#apellidoPEdit').val(response.data.apellidoP);
                     $('#apellidoMEdit').val(response.data.apellidoM);
-                    alert(response.data.fecha_nacimiento);
                     $('#fechaEdit').val(response.data.fecha_nacimiento);
                     $('#telefonoEdit').val(response.data.telefono);
                     $('#correoEdit').val(response.data.correo);

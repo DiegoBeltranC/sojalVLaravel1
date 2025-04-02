@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\FinalizarReporte;
 use MongoDB\BSON\ObjectId;
 use Illuminate\Http\Request;
 use App\Models\Reporte;
@@ -58,7 +59,11 @@ class evaluarController extends Controller
         $reporte->fechaFinalizado = now();
         $reporte->status = 'finalizado';
         $reporte->save();
-        return response()->json(['success' => true, 'message' => 'Reporte finalizado correctamente.']);
+
+        $usuario = User::findOrFail($reporte->idUsuario);
+        $correo = $usuario->correo;
+        Mail::to($correo)->send(new FinalizarReporte($reporte, $usuario));
+        return response()->json(['success' => true, 'message' => 'Se envio un correo al ciudadano.']);
     }
 
     public function enviarCorreoRechazo(Request $request)
@@ -71,7 +76,7 @@ class evaluarController extends Controller
         $reporte = Reporte::findOrFail($idReporte);
         $usuario = User::findOrFail($reporte->idUsuario);
         $correo = $usuario->correo;
-        
+
         // Enviar el correo
         Mail::to($correo)->send(new RechazoReporte($motivo, $reporte));
         return redirect()->route('admin.evaluar.index')

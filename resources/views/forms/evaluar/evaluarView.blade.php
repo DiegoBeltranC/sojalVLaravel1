@@ -9,7 +9,7 @@
     <div class="modal-content">
     <span id="closeModalBtn" class="close-btn">&times;</span>
       <h2>Información del Reporte</h2>
-        <input type="hidden" name="idReporte" id="idReporte" value="">
+        <input type="hidden" name="idReporte" id="idReporte">
         <div class="form-group">
           <label>Fotos:</label>
           <div class="content-img" id="content-img"></div>

@@ -210,12 +210,12 @@
                                 <div style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
 
-                                        <img src="http://192.168.1.100/api_sojal/storage/app/public/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
+                                        <img src="https://sojalut.com/storage/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: bold;">${nombre}</span>
                                         </div>
                                     </div>
-                                    <p id="idReporte" hidden>${reporte.id}</p>
+                                    <p id="idReporteVisual" hidden>${reporte.id}</p>
                                     <div>
                                         <strong>Descripción:</strong>
                                         <p style="margin: 5px 0;">${reporte.descripcion}</p>
@@ -230,12 +230,12 @@
                                 popupContent = `
                                 <div style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                        <img src="http://192.168.1.100/api_sojal/storage/app/public/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
+                                        <img src="https://sojalut.com/storage/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: bold;">${nombre}</span>
                                         </div>
                                     </div>
-                                    <p id="idReporte" hidden>${reporte.id}</p>
+                                    <p id="idReporteVisual" hidden>${reporte.id}</p>
                                     <div>
                                         <strong>Descripción:</strong>
                                         <p style="margin: 5px 0;">${reporte.descripcion}</p>
@@ -251,12 +251,12 @@
                                 popupContent = `
                                 <div style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                        <img src="http://192.168.1.100/api_sojal/storage/app/public/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
+                                        <img src="https://sojalut.com/storage/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: bold;">${nombre}</span>
                                         </div>
                                     </div>
-                                    <p id="idReporte" hidden>${reporte.id}</p>
+                                    <p id="idReporteVisual" hidden>${reporte.id}</p>
                                     <div>
                                         <strong>Descripción:</strong>
                                         <p style="margin: 5px 0;">${reporte.descripcion}</p>
@@ -287,66 +287,58 @@
             }
         }
 
-
-        async function cambiarEstadoProgreso(idReporte) {
-            try {
-                // Usamos await en la llamada ajax (asumiendo que $.ajax se resuelve como una promesa)
-                const data = await $.ajax({
-                    url: `/evaluar/cambiarProgreso/${idReporte}`,
-                    method: 'GET',
-                    dataType: 'json'
-                });
-
-                if (data) {
-                    alert('Reporte en progreso');
-                    return;
-                } else {
-                    alert('No se encontraron datos del trabajador.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('holaa.');
-            }
-        }
-
         function visualizarReporte(idReporte) {
-            $('#loading').show();
-            $.ajax({
-                url: `reportes/${idReporte}`,
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    if (data) {
-                        modal.style.display = 'flex';
-                        console.log(data);
-                        $('#decripcionView').text(data.descripcion);
-                        $('#coloniaView').text(data.colonia);
-                        $('#calleView').text(data.calle);
-                        $('#referenciasView').text(data.referencias);
-                        let calles = JSON.parse(data.cruzamientos);
-                        $('#cruzamientosView').text(calles.calle1 + ' y ' + calles.calle2);
-                        $('#idReporte').val(data.id);
-                        cargarMapaView()
-                        cargarPunto(data.id)
-                        cargarPerfilCiudadano(data.idUsuario)
-                        cargarAsignaciones()
-                        limpiarPerfil('#nombreNew','#telefonoNew');
-                        $('#avancesSection').hide();
-                        $('#asignacion').prop('disabled', false);
-                        $('#rechazar').prop('disabled', false);
-                        $('.alert-finalizado').remove();
+    $.ajax({
+        url: `reportes/${idReporte}`,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            if (data) {
+                modal.style.display = 'flex';
+                console.log(data);
+                $('#decripcionView').text(data.descripcion);
+                $('#coloniaView').text(data.colonia);
+                $('#calleView').text(data.calle);
+                $('#referenciasView').text(data.referencias);
+                let calles = JSON.parse(data.cruzamientos);
+                $('#cruzamientosView').text(calles.calle1 + ' y ' + calles.calle2);
+                $('#idReporte').val(data.id);
+                cargarMapaView();
+                cargarPunto(data.id);
+                cargarPerfilCiudadano(data.idUsuario);
+                cargarAsignaciones();
+                limpiarPerfil('#nombreNew', '#telefonoNew');
+                $('#avancesSection').hide();
+                $('#asignacion').prop('disabled', false);
+                $('#rechazar').prop('disabled', false);
+                $('.alert-finalizado').remove();
 
-                    } else {
-                        alert('No se encontraron datos del trabajador.');
-                        $('#loading').hide();
-                    }
-                },
-                error: function () {
-                    alert('Error al cargar el perfil del trabajador.');
-                    $('#loading').hide();
+                // Procesar las imágenes
+                if(data.imagenes) {
+                    // Convertir el string JSON a un array
+                    let imagenesArray = JSON.parse(data.imagenes);
+                    let contentImg = $('#content-img');
+                    contentImg.empty(); // Limpiar el contenedor
+                    // Suponiendo que las rutas son relativas y necesitas el asset base, puedes hacerlo así:
+                    let baseURL = "{{ asset('') }}";
+                    imagenesArray.forEach(function(img) {
+                        // Agrega una imagen al contenedor
+                        contentImg.append('<img src="' + baseURL + img + '" alt="Foto del reporte" style="width:100px; margin-right:10px;">');
+                    });
                 }
-            });
+
+            } else {
+                alert('No se encontraron datos del trabajador.');
+                $('#loading').hide();
+            }
+        },
+        error: function () {
+            alert('Error al cargar el perfil del trabajador.');
+            $('#loading').hide();
         }
+    });
+}
+
 
         async function editarReporte(idReporte) {
             try {
@@ -394,7 +386,7 @@
                                         <p style="margin-bottom: 14px;"><strong>Fecha de subida:</strong> ${new Date(avance.fecha_subida).toLocaleString()}</p>
                                         <div class="imagenes-avance" style="margin-bottom: 14px;">
                                             ${ avance.imagenes && avance.imagenes.length > 0
-                                                ? avance.imagenes.map(img => `<img src="http://192.168.1.100/api_sojal/storage/app/public/${img}" alt="Imagen avance" style="width: 100px; margin-right: 5px;">`).join('')
+                                                ? avance.imagenes.map(img => `<img src="https://sojalut.com/storage/${img}" alt="Imagen avance" style="width: 100px; margin-right: 5px;">`).join('')
                                                 : '<p>No hay imágenes</p>'
                                             }
                                         </div>
@@ -449,6 +441,7 @@
 
 
         function visualizarReporteRechazado(idReporte) {
+            $('#loading').show()
             $.ajax({
                 url: `reportes/${idReporte}`,
                 method: 'GET',
@@ -468,8 +461,6 @@
                         cargarPerfilCiudadanoRechazado(data.idUsuario)
                         cargarMapaRechazado()
                         cargarPuntoRechazado(data.id)
-
-
                     } else {
                         alert('No se encontraron datos del trabajador.');
                     }
@@ -563,11 +554,14 @@
 
                     // Ajustar la vista al nuevo punto con zoom adecuado
                     mapRechazado.setView(coordenadas, 15);
+                    $('#loading').hide()
                 },
                         error: function () {
                             alert('Error al cargar el punto.');
+                            $('#loading').hide()
                         }
                     });
+                    $('#loading').hide()
         }
 
         async function cargarPerfilCiudadano(idCiudadano) {
@@ -581,7 +575,7 @@
                         var ciudadano = data.data;
                         $('#nombreView').text(ciudadano.nombre + ' ' + ciudadano.apellidoP + ' ' + ciudadano.apellidoM);
                         $('#fechaView').text('Telefono: ' + ciudadano.telefono);
-                        $('#profilePic').attr('src', 'http://192.168.1.100/api_sojal/storage/app/public/' + ciudadano.profile_picture);
+                        $('#profilePic').attr('src', 'https://sojalut.com/storage/' + ciudadano.profile_picture);
                         $('#correoView').text('Correo: ' + ciudadano.correo);
                     } else {
                         alert('No se encontraron datos del ciudadano.');
@@ -673,7 +667,9 @@
                 cancelButtonText: 'Cancelar',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    $('#loading').show();
                     $.ajax({
+
                         url: `evaluar/finalizarReporte/${idReporte}`,  // Ajusta la ruta según Laravel
                         type: "POST",
                         headers: {
@@ -687,9 +683,11 @@
                             } else {
                                 Swal.fire('¡Error!', response.message, 'error');
                             }
+                            $('#loading').hide();
                         },
                         error: function () {
                             Swal.fire('¡Error!', 'No se pudo confirmar el reporte.', 'error');
+                            $('#loading').hide();
                         }
                     });
                 }

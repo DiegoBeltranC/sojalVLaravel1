@@ -167,7 +167,6 @@
                         ? "{{ asset('storage') }}/" + response.data.profile_picture
                         : "{{ asset('images/default_profile.png') }}";
                     $('#profileImageView').attr('src', rutaImagen);
-                    alert(rutaImagen);
                     modalView.style.display = 'flex';
                     $('#loading').hide();
                 }

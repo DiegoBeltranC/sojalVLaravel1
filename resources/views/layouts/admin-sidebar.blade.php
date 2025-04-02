@@ -22,7 +22,7 @@
       <a href="{{ route('admin.rutas.index') }}">
         <li class="option {{ request()->routeIs('admin.rutas.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/RutaIcon.svg') }}" alt="Mi SVG feliz"/>
-          <p>Rutas</p>
+          <p>Trayectos</p>
         </li>
       </a>
       <a href="{{ route('admin.ciudadanos.index') }}">

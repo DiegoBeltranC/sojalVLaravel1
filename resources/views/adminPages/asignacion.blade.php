@@ -495,6 +495,7 @@
             });
         }
 
+
         function eliminar(id) {
         Swal.fire({
             title: '¿Estás seguro?',
@@ -520,7 +521,7 @@
                         }
                     },
                     error: function () {
-                        Swal.fire('¡Error!', 'No se pudo eliminar el administrador.', 'error');
+                        Swal.fire('¡Error!', 'No se pudo eliminar la asignacion. Hay asignaciones activas', 'error');
                     }
                 });
             }

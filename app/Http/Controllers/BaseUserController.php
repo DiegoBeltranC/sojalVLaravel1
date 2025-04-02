@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use MongoDB\BSON\ObjectId;
-
+use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -79,9 +79,7 @@ abstract class BaseUserController extends Controller
         }
 
         // Define la contraseña temporal (o genera una aleatoria)
-        $plainPassword = 'admin123';
-        // Si prefieres generar una contraseña aleatoria, puedes usar:
-        // $plainPassword = \Illuminate\Support\Str::random(8);
+        $plainPassword = Str::random(8); // Genera una contraseña aleatoria de 8 caracteres
 
         // Crear el usuario y asignarlo a una variable
         $user = User::create([
@@ -202,21 +200,7 @@ abstract class BaseUserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-
-        if (!$user || $user->rol !== $this->role) {
-            return response()->json(['success' => false, 'message' => ucfirst($this->role) . ' no encontrado'], 404);
-        }
-
-        $userIdObject = new ObjectId($user->getKey());
-
-        // Comprobar si el usuario tiene asignaciones activas
-        if (Asignacion::where('idUsuario', $userIdObject)->exists()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No se puede eliminar el trabajador porque tiene asignaciones activas.'
-            ], 400);
-        }
-
+        
         $userIdObject = new ObjectId($user->getKey());
 
         // Comprobar si el usuario tiene asignaciones activas
