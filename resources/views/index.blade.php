@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="contenedor-principal" id="inicio">
-        <div class="contenedor-inf">
+        <div class="contenedor-inf" style="text-align: justify">
             <h1>¿Qué es SOJAL?</h1>
             <p>Sojal es un innovador proyecto diseñado para abordar
             la problemática de la acumulación de basura en la ciudad

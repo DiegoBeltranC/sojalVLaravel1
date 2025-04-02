@@ -18,7 +18,7 @@
         <img class="menu-icon" src="{{ asset('images/Icons/menu.png') }}" alt="Menu Icon" id="menu-toggle"/>
         <img class="logo" src="{{ asset('images/Icons/logo.png') }}" alt="Logo"/>
         <h2 class="title">SOJAL</h2>
-        <img class="notification" src="{{ asset('images/Icons/notification.svg') }}" alt="Notificaciones" id="notification"/>
+        <div class="notification"  id="notification"></div>
         <!-- Se reemplaza la imagen estática por la foto de perfil del usuario -->
         <img class="photo" src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default_profile.png') }}" alt="Perfil" id="photo"/>
     </div>
