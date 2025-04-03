@@ -54,7 +54,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="{{ asset('/public/images/Icons/logo.png') }}" class="logo" alt="Logo de Tu Aplicación">
+        <img src="cid:logo.png" class="logo" alt="Logo de Tu Aplicación">
         <div class="header">
             ¡Bienvenido, {{ $user->nombre }}!
         </div>

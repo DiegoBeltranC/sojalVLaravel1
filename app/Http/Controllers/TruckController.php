@@ -37,7 +37,7 @@ class TruckController extends Controller
         $rules = [
             'plates' => [
                 'required',
-                'regex:/^[A-Za-z]{3}-?\d{3,4}$/i',
+                'regex:/^[A-Za-z]{3}-\d{3}-[A-Za-z]{1}$/',
                 'unique:trucks,plates'
             ],
             'brand'  => ['required', 'max:15', 'regex:/^[A-Za-z\s]+$/'],
@@ -49,6 +49,13 @@ class TruckController extends Controller
 
         $validated = $request->validate($rules);
 
+        // Convertir las placas a mayúsculas
+        $plates = strtoupper($request->input('plates'));
+
+        // Formatear marca y modelo para que cada palabra inicie en mayúsculas
+        $brand = ucwords(strtolower($request->input('brand')));
+        $model = ucwords(strtolower($request->input('model')));
+
         // Procesar la imagen del camión
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -59,17 +66,19 @@ class TruckController extends Controller
         }
 
         Truck::create([
-            'plates' => $request->plates,
-            'brand'  => $request->brand,
-            'model'  => $request->model,
-            'status' => $request->status,
-            'year'   => $request->year,
+            'plates' => $plates,
+            'brand'  => $brand,
+            'model'  => $model,
+            'status' => $request->input('status'),
+            'year'   => $request->input('year'),
             'image'  => $ruta,
         ]);
 
         return redirect()->route('admin.trucks.index')
             ->with('truckStored', 'Camión registrado correctamente.');
     }
+
+
 
 
 
@@ -105,8 +114,9 @@ class TruckController extends Controller
         $rules = [
             'plates'  => [
                 'required',
-                'regex:/^[A-Za-z]{3}-?\d{3,4}$/i',
-                Rule::unique('trucks', 'plates')->ignore($truck->_id, '_id') // Ignorar el documento actual
+                // Se fuerza el formato: 3 letras, un guion, 3 números, un guion, 1 letra.
+                'regex:/^[A-Za-z]{3}-\d{3}-[A-Za-z]{1}$/',
+                Rule::unique('trucks', 'plates')->ignore($truck->_id, '_id')
             ],
             'brand'   => ['required', 'max:15', 'regex:/^[A-Za-z\s]+$/'],
             'model'   => ['required', 'max:15', 'regex:/^[A-Za-z\s]+$/'],
@@ -126,11 +136,18 @@ class TruckController extends Controller
             $ruta = $truck->image;
         }
 
-        $truck->plates = $request->plates;
-        $truck->brand  = $request->brand;
-        $truck->model  = $request->model;
-        $truck->year   = $request->year;
-        $truck->status = $request->status;
+        // Convertir placas a mayúsculas
+        $plates = strtoupper($request->input('plates'));
+
+        // Formatear marca y modelo: cada palabra con la primera letra en mayúsculas y el resto en minúsculas
+        $brand = ucwords(strtolower($request->input('brand')));
+        $model = ucwords(strtolower($request->input('model')));
+
+        $truck->plates = $plates;
+        $truck->brand  = $brand;
+        $truck->model  = $model;
+        $truck->year   = $request->input('year');
+        $truck->status = $request->input('status');
         $truck->image  = $ruta;
 
         $truck->save();
@@ -138,6 +155,7 @@ class TruckController extends Controller
         return redirect()->route('admin.trucks.index')
             ->with('truckUpdated', 'Camión actualizado correctamente.');
     }
+
 
 
 

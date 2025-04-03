@@ -43,7 +43,7 @@
                     <label for="name">Motivo:</label>
                     <textarea id="motivo" name="motivo" required></textarea>
                 </div>
-                <button type="submit" class="register">Rechazar</button>
+                <button type="submit" class="register" id='btnRechazoForm'>Rechazar</button>
             </form>
         </div>
 </div>

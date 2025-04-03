@@ -48,6 +48,7 @@
         let defaultAsignacion = '';
 
         const formRechazo = document.getElementById('formRechazo');
+        const btnRechazo = document.getElementById('btnRechazoForm')
 
         const modal = document.getElementById('modalView');
         const closeModalBtn = document.getElementById('closeModalBtn');
@@ -314,16 +315,14 @@
                 $('.alert-finalizado').remove();
 
                 // Procesar las imágenes
+                let contentImg = $('#content-img');
+                contentImg.empty();
                 if(data.imagenes) {
-                    // Convertir el string JSON a un array
-                    let imagenesArray = JSON.parse(data.imagenes);
-                    let contentImg = $('#content-img');
-                    contentImg.empty(); // Limpiar el contenedor
+                    let imagenesArray = data.imagenes;
                     // Suponiendo que las rutas son relativas y necesitas el asset base, puedes hacerlo así:
-                    let baseURL = "{{ asset('') }}";
                     imagenesArray.forEach(function(img) {
                         // Agrega una imagen al contenedor
-                        contentImg.append('<img src="' + baseURL + img + '" alt="Foto del reporte" style="width:100px; margin-right:10px;">');
+                        contentImg.append('<img src="https://sojalut.com/storage/' + img + '" alt="Foto del reporte" style="width:100px; margin-right:10px;">');
                     });
                 }
 
@@ -352,6 +351,17 @@
 
                 if (data) {
                     modal.style.display = 'flex';
+                    let contentImg = $('#content-img');
+                    contentImg.empty();
+                    if(data.imagenes) {
+                        let imagenesArray = data.imagenes;
+
+                        // Suponiendo que las rutas son relativas y necesitas el asset base, puedes hacerlo así:
+                        imagenesArray.forEach(function(img) {
+                            // Agrega una imagen al contenedor
+                            contentImg.append('<img src="https://sojalut.com/storage/' + img + '" alt="Foto del reporte" style="width:100px; margin-right:10px;">');
+                        });
+                    }
                     console.log(data);
                     $('#decripcionView').text(data.descripcion);
                     $('#coloniaView').text(data.colonia);
@@ -382,7 +392,7 @@
                             data.avances.forEach(function(avance) {
                                 avancesHTML += `
                                     <div class="card" style="padding: 16px;">
-                                        <p style="margin-bottom: 14px;"><strong>Descripciónavanc:</strong> ${avance.descripcion}</p>
+                                        <p style="margin-bottom: 14px;"><strong>Descripción:</strong> ${avance.descripcion}</p>
                                         <p style="margin-bottom: 14px;"><strong>Fecha de subida:</strong> ${new Date(avance.fecha_subida).toLocaleString()}</p>
                                         <div class="imagenes-avance" style="margin-bottom: 14px;">
                                             ${ avance.imagenes && avance.imagenes.length > 0
@@ -438,8 +448,6 @@
         }
 
 
-
-
         function visualizarReporteRechazado(idReporte) {
             $('#loading').show()
             $.ajax({
@@ -450,6 +458,18 @@
                     if (data) {
                         modalRechazado.style.display = 'flex';
                         console.log(data);
+
+                        let contentImg = $('#content-imgRechazado');
+                        contentImg.empty();
+                        if(data.imagenes) {
+                            let imagenesArray = data.imagenes;
+
+                            // Suponiendo que las rutas son relativas y necesitas el asset base, puedes hacerlo así:
+                            imagenesArray.forEach(function(img) {
+                                // Agrega una imagen al contenedor
+                                contentImg.append('<img src="https://sojalut.com/storage/' + img + '" alt="Foto del reporte" style="width:100px; margin-right:10px;">');
+                            });
+                        }
                         $('#decripcionRechazado').text(data.descripcion);
                         $('#coloniaRechazado').text(data.colonia);
                         $('#calleRechazado').text(data.calle);
@@ -832,6 +852,10 @@
             document.getElementById('profilePicTrabajador').src = "{{ asset('images/profile.png') }}";
         }
 
+        // Add click event listener for the rejection button
+        btnRechazo.addEventListener('click', function() {
+            $('#loading').show();
+        });
     </script>
 @endsection
 

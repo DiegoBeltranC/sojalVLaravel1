@@ -9,10 +9,10 @@
             @method('PUT')
             <div class="form-group">
                 <label for="plates">Placas:</label>
-                <!-- Se permite el formato: 3 letras y 3 o 4 dígitos, con guion opcional -->
+                <!-- Formato: 3 letras, un guion, 3 números, un guion, 1 letra -->
                 <input type="text" id="placasEdit" name="plates" required
-                    pattern="[A-Za-z]{3}-?\d{3,4}" 
-                    title="Ingresa 3 letras seguidas de 3 o 4 dígitos (ej: ABC123 o ABC-1234)">
+                    pattern="[A-Za-z]{3}-\d{3}-[A-Za-z]{1}"
+                    title="Ingresa 3 letras, un guion, 3 números, un guion y 1 letra (ej: ABC-123-D)">
             </div>
             <div class="form-group">
                 <label for="brand">Marca:</label>
@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
                 <label for="image_edit">Cambiar Imagen (opcional):</label>
-                <input type="file" id="image_edit" name="image" accept="image/*" require>
+                <input type="file" id="image_edit" name="image" accept="image/*">
             </div>
             <input type="hidden" name="id" id="id">
             <button type="submit" class="register">Actualizar</button>

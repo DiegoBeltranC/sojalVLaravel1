@@ -22,6 +22,11 @@ class UserCreatedMail extends Mailable
     public function build()
     {
         return $this->subject('Confirmación de cuenta y datos de acceso')
-                    ->markdown('emails.user_created');
+                    ->markdown('emails.user_created')
+                    ->attach(public_path('images/Icons/logo.png'), [
+                        'as' => 'logo.png',
+                        'mime' => 'image/png',
+                    ]);
     }
+
 }
