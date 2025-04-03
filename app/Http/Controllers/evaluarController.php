@@ -76,6 +76,8 @@ class evaluarController extends Controller
         $reporte = Reporte::findOrFail($idReporte);
         $usuario = User::findOrFail($reporte->idUsuario);
         $correo = $usuario->correo;
+        $reporte->motivoRechazo = $motivo;
+        $reporte->save();
 
         // Enviar el correo
         Mail::to($correo)->send(new RechazoReporte($motivo, $reporte));

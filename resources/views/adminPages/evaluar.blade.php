@@ -18,16 +18,57 @@
         width: 100%;
         height: 500px; /* Ajusta la altura según lo necesites */
     }
+    /* Estilos para la leyenda de colores */
+    .color-legend {
+        margin-top: 30px;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+    }
+    .color-legend h3 {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+    .color-legend ul {
+        list-style: none;
+        padding: 0;
+    }
+    .color-legend li {
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+    .legend-color {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+        border-radius: 50%;
+    }
 </style>
 <div class="content">
     <h2>EVALUAR INFORMES</h2>
     <div id="map"></div>
+    <div class="color-legend">
+        <h3>Leyenda de Colores</h3>
+        <ul>
+            <li><span class="legend-color" style="background-color: gray;"></span> sinAsignar - Requiere atención</li>
+            <li><span class="legend-color" style="background-color: #1E90FF;"></span> asignado - Tiene un responsable asignado</li>
+            <li><span class="legend-color" style="background-color: #FFD700;"></span> enProgreso - Está en curso</li>
+            <li><span class="legend-color" style="background-color: #008000;"></span> finalizado - Completado</li>
+            <li><span class="legend-color" style="background-color: #DC143C;"></span> rechazado - Fue rechazado</li>
+        </ul>
+    </div>
 </div>
+
 @include('forms.evaluar.formRechazo')
 @include('forms.evaluar.evaluarView')
 @include('forms.evaluar.evaluarRechazado')
 
+<!-- Leyenda de colores -->
+
 @endsection
+
 
 
 
@@ -42,6 +83,7 @@
 
         let mapView;
 
+
         let mapRechazado;
         let puntoMarcadorRechazado;
 
@@ -49,6 +91,7 @@
 
         const formRechazo = document.getElementById('formRechazo');
         const btnRechazo = document.getElementById('btnRechazoForm')
+        const btnAsignar = document.getElementById('asignar')
 
         const modal = document.getElementById('modalView');
         const closeModalBtn = document.getElementById('closeModalBtn');
@@ -250,7 +293,7 @@
                                 `;
                             }else{
                                 popupContent = `
-                                <div style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+                                <div id="popupFinalizado" style="display: flex; flex-direction: column; gap: 10px; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
                                         <img src="https://sojalut.com/storage/${foto}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #ccc;" />
                                         <div style="display: flex; flex-direction: column;">
@@ -478,7 +521,8 @@
                         $('#cruzamientosRechazado').text(calles.calle1 + ' y ' + calles.calle2);
                         $('#idReporteRechazado').val(data.id);
                         $('#fechaRechazado').text(data.fechaRechazado);
-                        cargarPerfilCiudadanoRechazado(data.idUsuario)
+                        cargarPerfilCiudadanoRechazado(data.idUsuario);
+                        $('#motivoRechazado').text(data.motivoRechazo);
                         cargarMapaRechazado()
                         cargarPuntoRechazado(data.id)
                     } else {
@@ -700,6 +744,7 @@
                                 modal.style.display = 'none';
                                 cargarReportes();
                                 Swal.fire('Reporte confirmado!', response.message, 'success');
+                                $('#popupFinalizado').hide();
                             } else {
                                 Swal.fire('¡Error!', response.message, 'error');
                             }
@@ -856,6 +901,12 @@
         btnRechazo.addEventListener('click', function() {
             $('#loading').show();
         });
+
+        btnAsignar.addEventListener('click', function() {
+            $('#loading').show();
+        });
+
+
     </script>
 @endsection
 

@@ -13,10 +13,10 @@
           <p>Evaluar informes</p>
         </li>
       </a>
-      <a href="{{ route('admin.noticias.index') }}">
-          <li class="option {{ request()->routeIs('admin.noticias.index') ? 'active' : '' }}">
-          <img class="mi-svg" src="{{ asset('images/Icons/mensajes.svg') }}" alt="Mi SVG feliz"/>
-          <p>Noticias</p>
+      <a href="{{ route('admin.asignacion.index') }}">
+        <li class="option {{ request()->routeIs('admin.asignacion.index') ? 'active' : '' }}">
+          <img class="mi-svg" src="{{ asset('images/Icons/conjunto-de-habilidades.svg') }}" alt="Mi SVG feliz"/>
+          <p>Asignación</p>
         </li>
       </a>
       <a href="{{ route('admin.rutas.index') }}">
@@ -25,16 +25,22 @@
           <p>Trayectos</p>
         </li>
       </a>
+      <a href="{{ route('admin.noticias.index') }}">
+        <li class="option {{ request()->routeIs('admin.noticias.index') ? 'active' : '' }}">
+        <img class="mi-svg" src="{{ asset('images/Icons/mensajes.svg') }}" alt="Mi SVG feliz"/>
+        <p>Noticias</p>
+      </li>
+    </a>
+    <a href="{{ route('admin.trucks.index') }}">
+        <li class="option {{ request()->routeIs('admin.trucks.index') ? 'active' : '' }}">
+          <img class="mi-svg" src="{{ asset('images/Icons/camion-de-la-basura.svg') }}" alt="Camión"/>
+          <p>Camiones</p>
+        </li>
+    </a>
       <a href="{{ route('admin.ciudadanos.index') }}">
         <li class="option {{ request()->routeIs('admin.ciudadanos.index') ? 'active' : '' }}">
           <img class="mi-svg" src="{{ asset('images/Icons/usuarios.svg') }}" alt="Mi SVG feliz"/>
           <p>Ciudadanos</p>
-        </li>
-      </a>
-      <a href="{{ route('admin.asignacion.index') }}">
-        <li class="option {{ request()->routeIs('admin.asignacion.index') ? 'active' : '' }}">
-          <img class="mi-svg" src="{{ asset('images/Icons/conjunto-de-habilidades.svg') }}" alt="Mi SVG feliz"/>
-          <p>Asignación</p>
         </li>
       </a>
       <a href="{{ route('admin.trabajadores.index') }}">
@@ -42,12 +48,6 @@
           <img class="mi-svg" src="{{ asset('images/Icons/trabajador.svg') }}" alt="icon"/>
           <p>Trabajadores</p>
         </li>
-      </a>
-      <a href="{{ route('admin.trucks.index') }}">
-          <li class="option {{ request()->routeIs('admin.trucks.index') ? 'active' : '' }}">
-            <img class="mi-svg" src="{{ asset('images/Icons/camion-de-la-basura.svg') }}" alt="Camión"/>
-            <p>Camiones</p>
-          </li>
       </a>
       <a href="{{ route('admin.administradores.index') }}">
         <li class="option {{ request()->routeIs('admin.administradores.index') ? 'active' : '' }}">

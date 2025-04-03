@@ -45,6 +45,10 @@
           <label>Fecha de rechazo:</label>
           <p id="fechaRechazado"></p>
         </div>
+        <div class="form-group">
+            <label>Motivo de rechazo:</label>
+            <textarea id="motivoRechazado" readonly></textarea>
+          </div>
         <br>
         <div id="mapRechazado"></div>
 </div>
